@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/poster_margin">
+    <ImageView
+        android:id = "@+id/poster_image_view"
+        tool:ignore="ContentDescription"
+        android:layout_margin="0dp"
+        android:background="@color/background"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content" />
+</FrameLayout>
