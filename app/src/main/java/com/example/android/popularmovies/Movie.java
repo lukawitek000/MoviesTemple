@@ -12,6 +12,8 @@ public class Movie {
     private String overview;
     private float voteAverage;
     private String releaseDate;
+    private String[] videoUrls;
+    private Review[] reviews;
 
 
     public Movie(){}
@@ -74,4 +76,19 @@ public class Movie {
     }
 
 
+    public String[] getVideoUrls() {
+        return videoUrls;
+    }
+
+    public void setVideoUrls(String[] videoUrls) {
+        this.videoUrls = videoUrls;
+    }
+
+    public Review[] getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Review[] reviews) {
+        this.reviews = reviews;
+    }
 }

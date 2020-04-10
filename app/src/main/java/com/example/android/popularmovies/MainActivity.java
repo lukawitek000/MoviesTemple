@@ -98,9 +98,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
             URL movieUrl = NetworkUtil.buildUrl(selectedSorting);
 
+
             try {
                 String answer = NetworkUtil.getResponseFromHttpUrl(movieUrl);
-                return MovieJsonConvert.getMovieFromJson(answer);
+                Movie[] fetchedMovies = MovieJsonConvert.getMovieFromJson(answer);
+                getVideosFromApi(fetchedMovies);
+                getReviewsFromApi(fetchedMovies);
+                return fetchedMovies;
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
@@ -108,7 +112,26 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             return null;
         }
 
-        @Override
+         private void getReviewsFromApi(Movie[] fetchedMovies) throws IOException, JSONException {
+             for(Movie movie : fetchedMovies){
+                 URL movieUrl = NetworkUtil.buildUrl((movie.getId()) + "/reviews");
+                 String answer = NetworkUtil.getResponseFromHttpUrl(movieUrl);
+                 Review[] review = (MovieJsonConvert.getReviewsFromJson(answer));
+                 movie.setReviews(review);
+             }
+
+
+         }
+
+         private void getVideosFromApi(Movie[] fetchedMovies) throws IOException, JSONException {
+            for(Movie movie : fetchedMovies){
+                URL movieUrl = NetworkUtil.buildUrl((movie.getId()) + "/videos");
+                String answer = NetworkUtil.getResponseFromHttpUrl(movieUrl);
+                movie.setVideoUrls(MovieJsonConvert.getVideoUrlFromJson(answer));
+            }
+         }
+
+         @Override
         protected void onPostExecute(Movie[] movies) {
             progressBar.setVisibility(View.INVISIBLE);
             if(movies != null){

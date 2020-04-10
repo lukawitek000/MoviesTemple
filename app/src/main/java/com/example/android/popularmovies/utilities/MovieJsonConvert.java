@@ -1,7 +1,11 @@
 package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
+import android.util.Log;
+
 import com.example.android.popularmovies.Movie;
+import com.example.android.popularmovies.Review;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +21,8 @@ public class MovieJsonConvert {
     private static final String VOTE_AVERAGE = "vote_average";
     private static final String RELEASE_DATE = "release_date";
     private static final String ID = "id";
+
+    private static final String KEY="key";
 
 
 
@@ -67,10 +73,48 @@ public class MovieJsonConvert {
     }
 
 
+    public static String[] getVideoUrlFromJson(String videoResponse) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject(videoResponse);
+
+        String[] videos = null;
+
+        if(jsonObject.has(RESULTS)) {
+            JSONArray resultsArray = jsonObject.getJSONArray(RESULTS);
+            videos = new String[resultsArray.length()];
+            for(int i=0; i<resultsArray.length(); i++){
+                JSONObject result = resultsArray.getJSONObject(i);
+                if(result.has(KEY)){
+                    videos[i] = result.getString(KEY);
+                }
+            }
+        }
+
+        return videos;
+    }
 
 
+    private static final String AUTHOR = "author";
+    private static final String CONTENT = "content";
 
 
-
-
+    public static Review[] getReviewsFromJson(String reviewResponse) throws JSONException {
+        Review[] reviews = null;
+        JSONObject jsonObject = new JSONObject(reviewResponse);
+        if(jsonObject.has(RESULTS)) {
+            JSONArray resultsArray = jsonObject.getJSONArray(RESULTS);
+            reviews = new Review[resultsArray.length()];
+            for(int i=0; i<resultsArray.length(); i++){
+                reviews[i] = new Review();
+                JSONObject result = resultsArray.getJSONObject(i);
+                if(result.has(AUTHOR)){
+                    reviews[i].setAuthor(result.getString(AUTHOR));
+                }
+                if(result.has(CONTENT)){
+                    reviews[i].setContent(result.getString(CONTENT));
+                }
+            }
+        }
+        return reviews;
+    }
 }

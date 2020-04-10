@@ -2,46 +2,51 @@ package com.example.android.popularmovies;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.databinding.ActivityDetailInfromationBinding;
+import com.example.android.popularmovies.utilities.MovieJsonConvert;
+import com.example.android.popularmovies.utilities.NetworkUtil;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URL;
+
 public class DetailInformation extends AppCompatActivity {
-
-
-    private TextView title;
-    private ImageView poster;
-    private TextView originalTitle;
-    private TextView overview;
-    private TextView voteAverage;
-    private TextView releaseDate;
-
     private Movie selectedMovie;
-    private ImageView starRate;
-
+    private ActivityDetailInfromationBinding binding;
+    private ReviewsAdapter reviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_infromation);
-        setTitle(R.string.movie_detail_title);
-        title = findViewById(R.id.title);
-        originalTitle = findViewById(R.id.original_title);
-        overview = findViewById(R.id.overview);
-        poster = findViewById(R.id.poster);
-        voteAverage = findViewById(R.id.vote_average);
-        releaseDate = findViewById(R.id.release_date);
-        starRate = findViewById(R.id.stars_image_view);
-
+        binding = DataBindingUtil.setContentView( this, R.layout.activity_detail_infromation);
+       
         Intent intent = getIntent();
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+
+        reviewsAdapter = new ReviewsAdapter();
+        binding.recyclerviewReviews.setLayoutManager(linearLayoutManager);
+        binding.recyclerviewReviews.setAdapter(reviewsAdapter);
+        binding.recyclerviewReviews.setHasFixedSize(true);
 
         int id = 0;
         if(intent != null){
@@ -50,8 +55,6 @@ public class DetailInformation extends AppCompatActivity {
             }
         }
         findSelectedMovie(id);
-
-
 
 
         uploadData();
@@ -67,33 +70,38 @@ public class DetailInformation extends AppCompatActivity {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (selectedMovie.getVoteAverage() > 8.0) {
-                starRate.setImageDrawable(getDrawable(R.drawable.five_star));
+                binding.starsImageView.setImageDrawable(getDrawable(R.drawable.five_star));
             }else if (selectedMovie.getVoteAverage() > 6.0) {
-                starRate.setImageDrawable(getDrawable(R.drawable.four_star));
+                binding.starsImageView.setImageDrawable(getDrawable(R.drawable.four_star));
             }
             else if (selectedMovie.getVoteAverage() > 4.0) {
-                starRate.setImageDrawable(getDrawable(R.drawable.three_star));
+                binding.starsImageView.setImageDrawable(getDrawable(R.drawable.three_star));
             }
             else if (selectedMovie.getVoteAverage() > 2.0) {
-                starRate.setImageDrawable(getDrawable(R.drawable.two_star));
+                binding.starsImageView.setImageDrawable(getDrawable(R.drawable.two_star));
             }else{
-                starRate.setImageDrawable(getDrawable(R.drawable.one_star));
+                binding.starsImageView.setImageDrawable(getDrawable(R.drawable.one_star));
             }
         }else{
-            starRate.setVisibility(View.INVISIBLE);
+            binding.starsImageView.setVisibility(View.INVISIBLE);
         }
     }
 
 
     private void uploadData(){
-        title.setText(selectedMovie.getTitle());
-        originalTitle.setText(selectedMovie.getOriginalTitle());
-        overview.setText(selectedMovie.getOverview());
-        releaseDate.setText(selectedMovie.getReleaseDate());
-        voteAverage.setText(String.valueOf(selectedMovie.getVoteAverage()));
+        binding.title.setText(selectedMovie.getTitle());
+        binding.originalTitle.setText(selectedMovie.getOriginalTitle());
+        binding.overview.setText(selectedMovie.getOverview());
+        binding.releaseDate.setText(selectedMovie.getReleaseDate());
+        binding.voteAverage.setText(String.valueOf(selectedMovie.getVoteAverage()));
+
+        binding.videoResponse.setText(selectedMovie.getVideoUrls()[0]);
+
+        reviewsAdapter.setReviews(selectedMovie.getReviews());
+
         Picasso.with(this)
                 .load(selectedMovie.getPoster())
-                .into(poster);
+                .into(binding.poster);
     }
 
 
