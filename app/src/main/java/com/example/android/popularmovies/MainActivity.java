@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.database.FavouriteMovieDatabase;
+import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.utilities.MovieJsonConvert;
 import com.example.android.popularmovies.utilities.NetworkUtil;
 
@@ -25,9 +28,16 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieAdapterOnClickHandler {
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        updateUI();
+    }
 
+    private static final String FAVOURITES = "favourites";
     private TextView failureTextView;
 
     private MoviesAdapter movieAdapter;
@@ -68,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         failureTextView = findViewById(R.id.failure_text_view);
         failureTextView.setVisibility(View.INVISIBLE);
         updateUI();
+
+
+
+
     }
 
     private void updateUI() {
@@ -96,21 +110,49 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         @Override
         protected Movie[] doInBackground(Void... voids) {
 
-            URL movieUrl = NetworkUtil.buildUrl(selectedSorting);
 
-
-            try {
-                String answer = NetworkUtil.getResponseFromHttpUrl(movieUrl);
-                Movie[] fetchedMovies = MovieJsonConvert.getMovieFromJson(answer);
-                getVideosFromApi(fetchedMovies);
-                getReviewsFromApi(fetchedMovies);
-                return fetchedMovies;
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
+            if(selectedSorting != FAVOURITES) {
+                URL movieUrl = NetworkUtil.buildUrl(selectedSorting);
+                try {
+                    String answer = NetworkUtil.getResponseFromHttpUrl(movieUrl);
+                    Movie[] fetchedMovies = MovieJsonConvert.getMovieFromJson(answer, MainActivity.this);
+                    getVideosFromApi(fetchedMovies);
+                    getReviewsFromApi(fetchedMovies);
+                    return fetchedMovies;
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                List<MovieEntity> movieEntities = FavouriteMovieDatabase.getInstance(MainActivity.this).movieDao().loadAllMovies();
+                Movie[] movies = new Movie[movieEntities.size()];
+                for(int i = 0; i< movieEntities.size(); i++){
+                    movies[i] = getMovieFromMovieEntity(movieEntities.get(i));
+                }
+                return movies;
             }
-
             return null;
         }
+
+         private Movie getMovieFromMovieEntity(MovieEntity movieEntity) {
+            Movie movie = new Movie();
+
+            movie.setId(movieEntity.getId());
+             movie.setId(movieEntity.getId());
+             movie.setOriginalTitle(movieEntity.getOriginalTitle());
+             movie.setTitle(movieEntity.getTitle());
+
+             movie.setPoster(movieEntity.getPosterUri());
+
+             movie.setOverview(movieEntity.getOverview());
+             movie.setVoteAverage(movieEntity.getVoteAverage());
+             movie.setReleaseDate(movieEntity.getReleaseDate());
+             movie.setVideoUrls(movieEntity.getVideoUrls());
+             movie.setReviews(movieEntity.getReviews());
+
+             movie.setFavourite(true);
+            return movie;
+
+         }
 
          private void getReviewsFromApi(Movie[] fetchedMovies) throws IOException, JSONException {
              for(Movie movie : fetchedMovies){
@@ -151,9 +193,19 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(selectedSorting.equals(POPULAR)){
-            menu.findItem(R.id.sort_by).setTitle(R.string.sort_by_top_rated);
+            //menu.findItem(R.id.sort_by).setTitle(R.string.sort_by_top_rated);
+            menu.findItem(R.id.sort_by_popularity).setVisible(false);
+            menu.findItem(R.id.sort_by_votes).setVisible(true);
+            menu.findItem(R.id.show_favourites).setVisible(true);
         }else if(selectedSorting.equals(TOP_RATED)){
-            menu.findItem(R.id.sort_by).setTitle(R.string.sort_by_popularity);
+            //menu.findItem(R.id.sort_by).setTitle(R.string.sort_by_popularity);
+            menu.findItem(R.id.sort_by_votes).setVisible(false);
+            menu.findItem(R.id.sort_by_popularity).setVisible(true);
+            menu.findItem(R.id.show_favourites).setVisible(true);
+        }else if(selectedSorting.equals(FAVOURITES)){
+            menu.findItem(R.id.sort_by_votes).setVisible(true);
+            menu.findItem(R.id.sort_by_popularity).setVisible(true);
+            menu.findItem(R.id.show_favourites).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -161,16 +213,20 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.sort_by){
-            if(selectedSorting.equals(POPULAR)){
-                selectedSorting = TOP_RATED;
-                setTitle(R.string.top_rated_title);
-                updateUI();
-            }else if(selectedSorting.equals(TOP_RATED)){
-                selectedSorting = POPULAR;
-                setTitle(R.string.popular_movie_title);
-                updateUI();
-            }
+        if(id == R.id.sort_by_popularity){
+            selectedSorting = POPULAR;
+            setTitle(R.string.popular_movie_title);
+            updateUI();
+            return true;
+        }else if(id == R.id.sort_by_votes){
+            selectedSorting = TOP_RATED;
+            setTitle(R.string.top_rated_title);
+            updateUI();
+            return true;
+        }else if(id == R.id.show_favourites){
+            selectedSorting = FAVOURITES;
+            setTitle(R.string.favourites_title);
+            updateUI();
             return true;
         }
         return super.onOptionsItemSelected(item);

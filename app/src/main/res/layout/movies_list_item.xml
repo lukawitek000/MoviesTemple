@@ -9,8 +9,9 @@
         android:id = "@+id/poster_image_view"
         tool:ignore="ContentDescription"
         android:layout_margin="0dp"
-        android:background="@color/background"
         android:scaleType="fitXY"
         android:layout_height="match_parent"
         android:layout_width="wrap_content" />
 </FrameLayout>
+
+   <!-- android:background="@color/background"-->

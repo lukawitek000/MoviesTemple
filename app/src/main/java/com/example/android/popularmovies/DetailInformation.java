@@ -6,17 +6,24 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.popularmovies.database.DatabaseExecutor;
+import com.example.android.popularmovies.database.FavouriteMovieDatabase;
+import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.databinding.ActivityDetailInfromationBinding;
 import com.example.android.popularmovies.utilities.MovieJsonConvert;
 import com.example.android.popularmovies.utilities.NetworkUtil;
@@ -27,16 +34,22 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 
-public class DetailInformation extends AppCompatActivity {
+public class DetailInformation extends AppCompatActivity implements TrailersAdapter.TrailerClickListener {
     private Movie selectedMovie;
     private ActivityDetailInfromationBinding binding;
     private ReviewsAdapter reviewsAdapter;
+
+    private TrailersAdapter trailersAdapter;
+
+    private FavouriteMovieDatabase favouriteMovieDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView( this, R.layout.activity_detail_infromation);
-       
+
+        favouriteMovieDatabase = FavouriteMovieDatabase.getInstance(this);
+
         Intent intent = getIntent();
 
 
@@ -48,16 +61,125 @@ public class DetailInformation extends AppCompatActivity {
         binding.recyclerviewReviews.setAdapter(reviewsAdapter);
         binding.recyclerviewReviews.setHasFixedSize(true);
 
+
+
+        LinearLayoutManager trailerManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        trailersAdapter = new TrailersAdapter(this);
+        binding.recyclerviewTrailers.setLayoutManager(trailerManager);
+        binding.recyclerviewTrailers.setAdapter(trailersAdapter);
+        binding.recyclerviewTrailers.setHasFixedSize(true);
+
+
+
+
+
+
+
+
         int id = 0;
         if(intent != null){
             if(intent.hasExtra("MOVIE")){
                 id = intent.getIntExtra("MOVIE", 0);
+
+
+
+
             }
         }
         findSelectedMovie(id);
-
-
         uploadData();
+
+
+        binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseExecutor.getInstance().getDiskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!selectedMovie.isFavourite()) {
+                            selectedMovie.setFavourite(true);
+                            favouriteMovieDatabase.movieDao().insertMovie(convertMovieToMovieEntity());
+                            Log.i("DetailInformation", "insert movie");
+                        }else{
+                            selectedMovie.setFavourite(false);
+                            favouriteMovieDatabase.movieDao().deleteMovieById(selectedMovie.getId());
+                            Log.i("DetailInformation", "delete movie");
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(selectedMovie.isFavourite()){
+                                    binding.addToFavouriteButton.setText("Remove from favourites");
+                                }else{
+                                    binding.addToFavouriteButton.setText("Add to favourites");
+                                }
+                            }
+                        });
+                        // finish();
+                    }
+                });
+
+            }
+
+        });
+
+
+
+
+
+
+
+
+        DatabaseExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                int me = favouriteMovieDatabase.movieDao().isMovieInDatabase(selectedMovie.getId());
+                if(me != 0){
+                    selectedMovie.setFavourite(true);
+                    binding.addToFavouriteButton.setText("Remove from favourites");
+                }else{
+                    selectedMovie.setFavourite(false);
+                    binding.addToFavouriteButton.setText("Add to favourites");
+                    Log.i("DetailInformation", "set to add favourites");
+                }
+            }
+        });
+
+        if(selectedMovie.isFavourite()){
+            binding.addToFavouriteButton.setText("Remove from favourites");
+        }else{
+            binding.addToFavouriteButton.setText("Add to favourites");
+        }
+
+
+        if(selectedMovie.getReviews().length == 0){
+            Log.i("DetailInformation", "reviews length" + selectedMovie.getReviews().length);
+            binding.reviewsLabel.setVisibility(View.GONE);
+            binding.recyclerviewReviews.setVisibility(View.GONE);
+        }
+        if(selectedMovie.getVideoUrls().length == 0){
+            binding.trailersLabel.setVisibility(View.GONE);
+            binding.recyclerviewTrailers.setVisibility(View.GONE);
+            Log.i("DetailInformation", "trailers length" +selectedMovie.getVideoUrls().length);
+        }
+
+
+
+    }
+
+    private MovieEntity convertMovieToMovieEntity() {
+        MovieEntity movieEntity = new MovieEntity();
+        movieEntity.setId(selectedMovie.getId());
+        movieEntity.setOriginalTitle(selectedMovie.getOriginalTitle());
+        movieEntity.setTitle(selectedMovie.getTitle());
+        movieEntity.setPosterUri(selectedMovie.getPoster());
+        movieEntity.setOverview(selectedMovie.getOverview());
+        movieEntity.setVoteAverage(selectedMovie.getVoteAverage());
+        movieEntity.setReleaseDate(selectedMovie.getReleaseDate());
+        movieEntity.setVideoUrls(selectedMovie.getVideoUrls());
+        movieEntity.setReviews(selectedMovie.getReviews());
+        return movieEntity;
+
     }
 
     private void findSelectedMovie(int id) {
@@ -95,7 +217,7 @@ public class DetailInformation extends AppCompatActivity {
         binding.releaseDate.setText(selectedMovie.getReleaseDate());
         binding.voteAverage.setText(String.valueOf(selectedMovie.getVoteAverage()));
 
-        binding.videoResponse.setText(selectedMovie.getVideoUrls()[0]);
+        trailersAdapter.setTrailers(selectedMovie.getVideoUrls());
 
         reviewsAdapter.setReviews(selectedMovie.getReviews());
 
@@ -121,4 +243,16 @@ public class DetailInformation extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onTrailerClicked(String trailer) {
+        Log.i("DetailInformation", "it was clicked" + trailer);
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + trailer));
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            startActivity(webIntent);
+        }
+    }
 }

@@ -1,29 +1,37 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.database;
+
 
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-public class Movie {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import com.example.android.popularmovies.Review;
 
+@Entity(tableName = "Favorite_Movies")
+public class MovieEntity {
+
+    @PrimaryKey(autoGenerate = true)
+    private int database_id;
     private int id;
+    @ColumnInfo(name = "original_title")
     private String originalTitle;
     private String title;
-    private Uri poster;
+
+    @ColumnInfo(name = "poster_uri")
+    private Uri posterUri;
+
     private String overview;
+    @ColumnInfo(name = "vote_average")
     private float voteAverage;
+    @ColumnInfo(name = "release_date")
     private String releaseDate;
+    @ColumnInfo(name = "video_urls")
     private String[] videoUrls;
     private Review[] reviews;
 
-
-
-    private boolean isFavourite;
-
-
-    public Movie(){
-        isFavourite = false;
-    }
 
 
     public String getTitle() {
@@ -34,13 +42,6 @@ public class Movie {
         this.title = title;
     }
 
-    public Uri getPoster() {
-        return poster;
-    }
-
-    public void setPoster(Uri poster) {
-        this.poster = poster;
-    }
 
     public String getOverview() {
         return overview;
@@ -100,11 +101,19 @@ public class Movie {
     }
 
 
-    public boolean isFavourite() {
-        return isFavourite;
+    public Uri getPosterUri() {
+        return posterUri;
     }
 
-    public void setFavourite(boolean favourite) {
-        isFavourite = favourite;
+    public void setPosterUri(Uri posterUri) {
+        this.posterUri = posterUri;
+    }
+
+    public int getDatabase_id() {
+        return database_id;
+    }
+
+    public void setDatabase_id(int database_id) {
+        this.database_id = database_id;
     }
 }

@@ -1,7 +1,9 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -12,6 +14,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.OutputStream;
 
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
@@ -27,12 +32,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     MoviesAdapter(MovieAdapterOnClickHandler onClickHandler){
         this.clickHandler = onClickHandler;
     }
-
+    private Context context;
 
     @NonNull
     @Override
     public MoviesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.movies_list_item, parent, false);
@@ -44,10 +49,29 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     @Override
     public void onBindViewHolder(@NonNull final MoviesAdapterViewHolder holder, int position) {
         Movie singleMovie = moviesData[position];
+        /*if(singleMovie.getPosterBitmap() != null) {
+            Log.i("MoviesAdapter", " Bitmap cooooooooooool");
+            holder.posterImage.setImageBitmap(singleMovie.getPosterBitmap());
+        }else{
+            Log.i("MoviesAdapter", "null Bitmap fuuuuck");
+            holder.posterImage.setImageBitmap(null);
+        }*/
         Picasso.with(holder.posterImage.getContext())
                 .load(singleMovie.getPoster())
                 .into(holder.posterImage);
 
+
+       /* try {
+            Uri uri = Uri.fromFile(File.createTempFile("temp_file_name", ".jpg", context.getCacheDir()));
+            OutputStream outputStream = context.getContentResolver().openOutputStream(uri);
+            singleMovie.getPosterBitmap().compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.close();
+            Picasso.with(holder.posterImage.getContext())
+                    .load(uri)
+                    .into(holder.posterImage);
+        } catch (Exception e) {
+            Log.e("LoadBitmapByPicasso", e.getMessage());
+        }*/
     }
 
     @Override
