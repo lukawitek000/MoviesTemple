@@ -14,7 +14,7 @@ import java.util.List;
 public interface MovieDao {
 
     @Query("SELECT * FROM Favorite_Movies ORDER BY id")
-    List<MovieEntity> loadAllMovies();
+    LiveData<List<MovieEntity>> loadAllMovies();
 
     @Insert
     void insertMovie(MovieEntity movieEntity);
@@ -24,8 +24,8 @@ public interface MovieDao {
     void deleteMovieById(int id);
 
 
-    @Query(" SELECT id FROM Favorite_Movies WHERE id = :id ")
-    int isMovieInDatabase(int id);
+    @Query(" SELECT * FROM Favorite_Movies WHERE id = :id ")
+    LiveData<MovieEntity> loadMovieById(int id);
 
 
 

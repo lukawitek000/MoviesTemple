@@ -2,6 +2,10 @@ package com.example.android.popularmovies;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 
 public class Movie {
 
@@ -24,6 +28,9 @@ public class Movie {
     public Movie(){
         isFavourite = false;
     }
+
+
+
 
 
     public String getTitle() {
@@ -107,4 +114,7 @@ public class Movie {
     public void setFavourite(boolean favourite) {
         isFavourite = favourite;
     }
+
+
+
 }

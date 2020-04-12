@@ -3,6 +3,10 @@ package com.example.android.popularmovies;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
@@ -89,6 +93,22 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         findSelectedMovie(id);
         uploadData();
 
+        DetailInformationViewModelFactory factory = new DetailInformationViewModelFactory(favouriteMovieDatabase, selectedMovie.getId());
+        DetailInformationViewModel viewModel = ViewModelProviders.of(this, factory).get(DetailInformationViewModel.class);
+
+        viewModel.getMovie().observe(this, new Observer<MovieEntity>() {
+            @Override
+            public void onChanged(MovieEntity movieEntity) {
+                if(movieEntity != null || selectedMovie.isFavourite()){
+                    binding.addToFavouriteButton.setText("Remove from favourites");
+                    selectedMovie.setFavourite(true);
+                }else {
+                    binding.addToFavouriteButton.setText("Add to favourites");
+                    selectedMovie.setFavourite(false);
+                }
+            }
+        });
+
 
         binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,16 +125,6 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
                             favouriteMovieDatabase.movieDao().deleteMovieById(selectedMovie.getId());
                             Log.i("DetailInformation", "delete movie");
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(selectedMovie.isFavourite()){
-                                    binding.addToFavouriteButton.setText("Remove from favourites");
-                                }else{
-                                    binding.addToFavouriteButton.setText("Add to favourites");
-                                }
-                            }
-                        });
                         // finish();
                     }
                 });
@@ -122,34 +132,6 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
             }
 
         });
-
-
-
-
-
-
-
-
-        DatabaseExecutor.getInstance().getDiskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                int me = favouriteMovieDatabase.movieDao().isMovieInDatabase(selectedMovie.getId());
-                if(me != 0){
-                    selectedMovie.setFavourite(true);
-                    binding.addToFavouriteButton.setText("Remove from favourites");
-                }else{
-                    selectedMovie.setFavourite(false);
-                    binding.addToFavouriteButton.setText("Add to favourites");
-                    Log.i("DetailInformation", "set to add favourites");
-                }
-            }
-        });
-
-        if(selectedMovie.isFavourite()){
-            binding.addToFavouriteButton.setText("Remove from favourites");
-        }else{
-            binding.addToFavouriteButton.setText("Add to favourites");
-        }
 
 
         if(selectedMovie.getReviews().length == 0){

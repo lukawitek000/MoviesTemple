@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
-public class Review {
+
+public class Review{
 
     private String author;
     private String content;
