@@ -42,7 +42,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
 
 
 
-    class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder{
+    static class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder{
 
         final TextView author;
         final TextView content;

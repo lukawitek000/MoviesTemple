@@ -1,10 +1,12 @@
 package com.example.android.popularmovies;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 
+@SuppressWarnings("ALL")
 public class DetailInformationViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final FavouriteMovieDatabase database;
@@ -18,8 +20,9 @@ public class DetailInformationViewModelFactory extends ViewModelProvider.NewInst
 
 
 
+    @NonNull
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new DetailInformationViewModel(database, movieId);
     }
 }

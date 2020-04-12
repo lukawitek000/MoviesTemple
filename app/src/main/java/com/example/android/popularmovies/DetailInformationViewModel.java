@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
 
+@SuppressWarnings("WeakerAccess")
 public class DetailInformationViewModel extends ViewModel{
     private final LiveData<MovieEntity> movie;
 

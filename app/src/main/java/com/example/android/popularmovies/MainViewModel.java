@@ -11,6 +11,7 @@ import com.example.android.popularmovies.database.MovieEntity;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class MainViewModel extends AndroidViewModel {
 
     private final LiveData<List<MovieEntity>> favouriteMovies;
