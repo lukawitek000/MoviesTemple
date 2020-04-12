@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsAdapterViewHolder> {
 
-    private static Review[] reviews;
+    private Review[] reviews;
 
     @NonNull
     @Override
@@ -20,7 +19,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.reviews_list_item, parent, false);
-
         return new ReviewsAdapterViewHolder(view);
     }
 
@@ -29,8 +27,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
         Review singleReview = reviews[position];
         holder.content.setText(singleReview.getContent());
         holder.author.setText(singleReview.getAuthor());
-
-
     }
 
     @Override
@@ -48,18 +44,15 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
 
     class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder{
 
-        TextView author;
-        TextView content;
+        final TextView author;
+        final TextView content;
 
 
-        public ReviewsAdapterViewHolder(@NonNull View itemView) {
+        ReviewsAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             author = itemView.findViewById(R.id.authorValue);
             content = itemView.findViewById(R.id.content);
-
         }
     }
-
-
 
 }

@@ -10,7 +10,6 @@ public class DetailInformationViewModelFactory extends ViewModelProvider.NewInst
     private final FavouriteMovieDatabase database;
     private final int movieId;
 
-    // COMPLETED (3) Initialize the member variables in the constructor with the parameters received
     public DetailInformationViewModelFactory(FavouriteMovieDatabase database, int movieId) {
         this.database = database;
         this.movieId = movieId;
@@ -18,9 +17,9 @@ public class DetailInformationViewModelFactory extends ViewModelProvider.NewInst
 
 
 
+
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        //noinspection unchecked
         return (T) new DetailInformationViewModel(database, movieId);
     }
 }

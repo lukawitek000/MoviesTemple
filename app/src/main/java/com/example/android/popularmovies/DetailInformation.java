@@ -3,40 +3,24 @@ package com.example.android.popularmovies;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.popularmovies.database.DatabaseExecutor;
 import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.databinding.ActivityDetailInfromationBinding;
-import com.example.android.popularmovies.utilities.MovieJsonConvert;
-import com.example.android.popularmovies.utilities.NetworkUtil;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
 
 public class DetailInformation extends AppCompatActivity implements TrailersAdapter.TrailerClickListener {
     private Movie selectedMovie;
@@ -51,64 +35,21 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView( this, R.layout.activity_detail_infromation);
-
         favouriteMovieDatabase = FavouriteMovieDatabase.getInstance(this);
-
         Intent intent = getIntent();
-
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
-
-        reviewsAdapter = new ReviewsAdapter();
-        binding.recyclerviewReviews.setLayoutManager(linearLayoutManager);
-        binding.recyclerviewReviews.setAdapter(reviewsAdapter);
-        binding.recyclerviewReviews.setHasFixedSize(true);
-
-
-
-        LinearLayoutManager trailerManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        trailersAdapter = new TrailersAdapter(this);
-        binding.recyclerviewTrailers.setLayoutManager(trailerManager);
-        binding.recyclerviewTrailers.setAdapter(trailersAdapter);
-        binding.recyclerviewTrailers.setHasFixedSize(true);
-
-
-
-
-
-
+        setUpReviewsRecyclerView();
+        setUpTrailersRecyclerView();
 
 
         int id = 0;
         if(intent != null){
-            if(intent.hasExtra("MOVIE")){
-                id = intent.getIntExtra("MOVIE", 0);
-
-
-
-
+            if(intent.hasExtra(MainActivity.MOVIE_KEY)){
+                id = intent.getIntExtra(MainActivity.MOVIE_KEY, 0);
             }
         }
         findSelectedMovie(id);
         uploadData();
-
-        DetailInformationViewModelFactory factory = new DetailInformationViewModelFactory(favouriteMovieDatabase, selectedMovie.getId());
-        DetailInformationViewModel viewModel = ViewModelProviders.of(this, factory).get(DetailInformationViewModel.class);
-
-        viewModel.getMovie().observe(this, new Observer<MovieEntity>() {
-            @Override
-            public void onChanged(MovieEntity movieEntity) {
-                if(movieEntity != null || selectedMovie.isFavourite()){
-                    binding.addToFavouriteButton.setText("Remove from favourites");
-                    selectedMovie.setFavourite(true);
-                }else {
-                    binding.addToFavouriteButton.setText("Add to favourites");
-                    selectedMovie.setFavourite(false);
-                }
-            }
-        });
-
+        setUpViewModel();
 
         binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,13 +60,10 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
                         if(!selectedMovie.isFavourite()) {
                             selectedMovie.setFavourite(true);
                             favouriteMovieDatabase.movieDao().insertMovie(convertMovieToMovieEntity());
-                            Log.i("DetailInformation", "insert movie");
                         }else{
                             selectedMovie.setFavourite(false);
                             favouriteMovieDatabase.movieDao().deleteMovieById(selectedMovie.getId());
-                            Log.i("DetailInformation", "delete movie");
                         }
-                        // finish();
                     }
                 });
 
@@ -135,18 +73,51 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
 
 
         if(selectedMovie.getReviews().length == 0){
-            Log.i("DetailInformation", "reviews length" + selectedMovie.getReviews().length);
             binding.reviewsLabel.setVisibility(View.GONE);
             binding.recyclerviewReviews.setVisibility(View.GONE);
         }
         if(selectedMovie.getVideoUrls().length == 0){
             binding.trailersLabel.setVisibility(View.GONE);
             binding.recyclerviewTrailers.setVisibility(View.GONE);
-            Log.i("DetailInformation", "trailers length" +selectedMovie.getVideoUrls().length);
         }
 
 
 
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setUpViewModel() {
+        DetailInformationViewModelFactory factory = new DetailInformationViewModelFactory(favouriteMovieDatabase, selectedMovie.getId());
+        DetailInformationViewModel viewModel = ViewModelProviders.of(this, factory).get(DetailInformationViewModel.class);
+
+        viewModel.getMovie().observe(this, new Observer<MovieEntity>() {
+            @Override
+            public void onChanged(MovieEntity movieEntity) {
+                if(movieEntity != null || selectedMovie.isFavourite()){
+                    binding.addToFavouriteButton.setText(R.string.remove_from_favourites);
+                    selectedMovie.setFavourite(true);
+                }else {
+                    binding.addToFavouriteButton.setText(R.string.add_to_favourites);
+                    selectedMovie.setFavourite(false);
+                }
+            }
+        });
+    }
+
+    private void setUpTrailersRecyclerView() {
+        LinearLayoutManager trailerManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        trailersAdapter = new TrailersAdapter(this);
+        binding.recyclerviewTrailers.setLayoutManager(trailerManager);
+        binding.recyclerviewTrailers.setAdapter(trailersAdapter);
+        binding.recyclerviewTrailers.setHasFixedSize(true);
+    }
+
+    private void setUpReviewsRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        reviewsAdapter = new ReviewsAdapter();
+        binding.recyclerviewReviews.setLayoutManager(linearLayoutManager);
+        binding.recyclerviewReviews.setAdapter(reviewsAdapter);
+        binding.recyclerviewReviews.setHasFixedSize(true);
     }
 
     private MovieEntity convertMovieToMovieEntity() {
@@ -198,11 +169,8 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         binding.overview.setText(selectedMovie.getOverview());
         binding.releaseDate.setText(selectedMovie.getReleaseDate());
         binding.voteAverage.setText(String.valueOf(selectedMovie.getVoteAverage()));
-
         trailersAdapter.setTrailers(selectedMovie.getVideoUrls());
-
         reviewsAdapter.setReviews(selectedMovie.getReviews());
-
         Picasso.with(this)
                 .load(selectedMovie.getPoster())
                 .into(binding.poster);
@@ -227,7 +195,6 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
 
     @Override
     public void onTrailerClicked(String trailer) {
-        Log.i("DetailInformation", "it was clicked" + trailer);
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + trailer));

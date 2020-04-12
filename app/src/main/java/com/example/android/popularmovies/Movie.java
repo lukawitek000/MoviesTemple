@@ -1,11 +1,7 @@
 package com.example.android.popularmovies;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-import java.io.Serializable;
+import android.net.Uri;
 
 public class Movie {
 
@@ -20,18 +16,12 @@ public class Movie {
     private String[] videoUrls;
     private Review[] reviews;
 
-
-
     private boolean isFavourite;
 
 
     public Movie(){
         isFavourite = false;
     }
-
-
-
-
 
     public String getTitle() {
         return title;

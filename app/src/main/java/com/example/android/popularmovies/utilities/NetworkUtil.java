@@ -1,7 +1,6 @@
 package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +20,6 @@ public class NetworkUtil {
 
     public static URL buildUrl(String query){
         String urlAddress = URL_ADDRESS + query;
-        Log.i("NetworkUtil", urlAddress);
         Uri builtUri = Uri.parse(urlAddress).buildUpon()
                 .appendQueryParameter(FORMAT, format)
                 .appendQueryParameter(API_KEY, api_key)
@@ -33,7 +31,6 @@ public class NetworkUtil {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        Log.i("NetworkUtil", "URL = " + url.toString());
         return url;
     }
 

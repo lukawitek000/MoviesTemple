@@ -8,9 +8,14 @@
     <string name="vote_average_label">User rating:</string>
     <string name="release_date_label">Release date:</string>
     <string name="plot_label">Plot synopsis:</string>
-    <string name="movie_detail_title">Movie Details</string>
     <string name="popular_movie_title">Popular Movies</string>
     <string name="top_rated_title">Top Rated Movies</string>
     <string name="poster_description">Poster</string>
     <string name="favourites_title">Favourites</string>
+    <string name="remove_from_favourites">Remove from favourites</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="trailer_value">Trailers %1$d</string>
+    <string name="author_label">Author</string>
+    <string name="trailers_label">TRAILERS</string>
+    <string name="reviews_label">REVIEWS</string>
 </resources>

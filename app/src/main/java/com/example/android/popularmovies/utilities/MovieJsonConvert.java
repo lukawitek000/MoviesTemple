@@ -1,20 +1,13 @@
 package com.example.android.popularmovies.utilities;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 
 import com.example.android.popularmovies.Movie;
 import com.example.android.popularmovies.Review;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 
 public class MovieJsonConvert {
@@ -32,7 +25,7 @@ public class MovieJsonConvert {
 
 
 
-    public static Movie[] getMovieFromJson(String movieResponse, Context context) throws JSONException {
+    public static Movie[] getMovieFromJson(String movieResponse) throws JSONException {
         Movie[] movies = null;
 
         JSONObject jsonObject = new JSONObject(movieResponse);

@@ -13,7 +13,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     private String[] trailers;
 
-    private TrailerClickListener trailerClickListener;
+    private final TrailerClickListener trailerClickListener;
     public interface TrailerClickListener{
         void onTrailerClicked(String trailer);
     }
@@ -22,11 +22,11 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         this.trailerClickListener = trailerClickListener;
     }
 
-
+    private Context context;
     @NonNull
     @Override
     public TrailersAdapterTrailerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.trailers_list_item, parent, false);
         return new TrailersAdapterTrailerHolder(view);
@@ -34,7 +34,8 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(@NonNull TrailersAdapterTrailerHolder holder, int position) {
-        holder.trailerText.setText("Trailer " + (position+1));
+        String text = context.getString(R.string.trailer_value, (position + 1));
+        holder.trailerText.setText(text);
     }
 
     @Override
@@ -51,9 +52,9 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     class TrailersAdapterTrailerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView trailerText;
+        final TextView trailerText;
 
-        public TrailersAdapterTrailerHolder(@NonNull View itemView) {
+        TrailersAdapterTrailerHolder(@NonNull View itemView) {
             super(itemView);
             trailerText = itemView.findViewById(R.id.trailer_label);
             itemView.setOnClickListener(this);

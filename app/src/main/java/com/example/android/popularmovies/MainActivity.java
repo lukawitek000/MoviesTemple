@@ -3,20 +3,16 @@ package com.example.android.popularmovies;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +20,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.utilities.MovieJsonConvert;
 import com.example.android.popularmovies.utilities.NetworkUtil;
@@ -34,24 +29,23 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieAdapterOnClickHandler {
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        updateUI();
-    }
+
+    private static final String SELECTED_SORTING = "SELECTED_SORTING";
+    static final String MOVIE_KEY = "MOVIE";
 
     private static final String FAVOURITES = "favourites";
-    private TextView failureTextView;
+    private static final String TOP_RATED = "top_rated";
+    private static final String POPULAR = "popular";
+    private final static int IMAGE_WIDTH = 342;
 
     private MoviesAdapter movieAdapter;
-    static final String TOP_RATED = "top_rated";
-    static final String POPULAR = "popular";
     private String selectedSorting;
-
+    private TextView failureTextView;
     private ProgressBar progressBar;
-    private final static int IMAGE_WIDTH = 342;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         failureTextView.setVisibility(View.INVISIBLE);
 
         if(savedInstanceState != null){
-            selectedSorting = savedInstanceState.getString("SELECTED SORTING");
+            selectedSorting = savedInstanceState.getString(SELECTED_SORTING);
+            assert selectedSorting != null;
             switch (selectedSorting){
                 case FAVOURITES:
                     setTitle(R.string.favourites_title);
@@ -83,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             setTitle(R.string.popular_movie_title);
         }
 
-        if(selectedSorting == FAVOURITES) {
+        if(selectedSorting.equals(FAVOURITES)) {
             setupViewModel();
         }else {
             updateUI();
@@ -111,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
     private void setupViewModel() {
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        @SuppressWarnings("deprecation") MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         viewModel.getFavouriteMovies().observe(this, new Observer<List<MovieEntity>>(){
             @Override
             public void onChanged(List<MovieEntity> movieEntities) {
@@ -131,11 +126,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
 
-
     @Override
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, DetailInformation.class);
-        intent.putExtra("MOVIE", movie.getId());
+        intent.putExtra(MOVIE_KEY, movie.getId());
         startActivity(intent);
     }
 
@@ -171,11 +165,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         protected Movie[] doInBackground(Void... voids) {
 
 
-            if(selectedSorting != FAVOURITES) {
+            if(!Objects.equals(selectedSorting, FAVOURITES)) {
                 URL movieUrl = NetworkUtil.buildUrl(selectedSorting);
                 try {
                     String answer = NetworkUtil.getResponseFromHttpUrl(movieUrl);
-                    Movie[] fetchedMovies = MovieJsonConvert.getMovieFromJson(answer, MainActivity.this);
+                    Movie[] fetchedMovies = MovieJsonConvert.getMovieFromJson(answer);
                     getVideosFromApi(fetchedMovies);
                     getReviewsFromApi(fetchedMovies);
                     return fetchedMovies;
@@ -223,18 +217,22 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(selectedSorting.equals(POPULAR)){
-            menu.findItem(R.id.sort_by_popularity).setVisible(false);
-            menu.findItem(R.id.sort_by_votes).setVisible(true);
-            menu.findItem(R.id.show_favourites).setVisible(true);
-        }else if(selectedSorting.equals(TOP_RATED)){
-            menu.findItem(R.id.sort_by_votes).setVisible(false);
-            menu.findItem(R.id.sort_by_popularity).setVisible(true);
-            menu.findItem(R.id.show_favourites).setVisible(true);
-        }else if(selectedSorting.equals(FAVOURITES)){
-            menu.findItem(R.id.sort_by_votes).setVisible(true);
-            menu.findItem(R.id.sort_by_popularity).setVisible(true);
-            menu.findItem(R.id.show_favourites).setVisible(false);
+        switch (selectedSorting) {
+            case POPULAR:
+                menu.findItem(R.id.sort_by_popularity).setVisible(false);
+                menu.findItem(R.id.sort_by_votes).setVisible(true);
+                menu.findItem(R.id.show_favourites).setVisible(true);
+                break;
+            case TOP_RATED:
+                menu.findItem(R.id.sort_by_votes).setVisible(false);
+                menu.findItem(R.id.sort_by_popularity).setVisible(true);
+                menu.findItem(R.id.show_favourites).setVisible(true);
+                break;
+            case FAVOURITES:
+                menu.findItem(R.id.sort_by_votes).setVisible(true);
+                menu.findItem(R.id.sort_by_popularity).setVisible(true);
+                menu.findItem(R.id.show_favourites).setVisible(false);
+                break;
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -256,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             selectedSorting = FAVOURITES;
             setupViewModel();
             setTitle(R.string.favourites_title);
-            updateUI();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -265,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString("SELECTED SORTING", selectedSorting);
+        outState.putString(SELECTED_SORTING, selectedSorting);
         super.onSaveInstanceState(outState);
     }
 }

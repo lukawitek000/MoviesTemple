@@ -8,20 +8,12 @@ import androidx.lifecycle.LiveData;
 
 import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
-import com.example.android.popularmovies.utilities.MovieJsonConvert;
-import com.example.android.popularmovies.utilities.NetworkUtil;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private LiveData<List<MovieEntity>> favouriteMovies;
-
-
+    private final LiveData<List<MovieEntity>> favouriteMovies;
 
     public MainViewModel(@NonNull Application application) {
         super(application);

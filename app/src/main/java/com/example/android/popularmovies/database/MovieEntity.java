@@ -1,7 +1,6 @@
 package com.example.android.popularmovies.database;
 
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 import androidx.room.ColumnInfo;
@@ -19,10 +18,8 @@ public class MovieEntity {
     @ColumnInfo(name = "original_title")
     private String originalTitle;
     private String title;
-
     @ColumnInfo(name = "poster_uri")
     private Uri posterUri;
-
     private String overview;
     @ColumnInfo(name = "vote_average")
     private float voteAverage;
