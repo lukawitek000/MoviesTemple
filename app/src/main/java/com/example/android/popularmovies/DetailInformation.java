@@ -46,6 +46,9 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
             if(intent.hasExtra(MainActivity.MOVIE_KEY)){
                 id = intent.getIntExtra(MainActivity.MOVIE_KEY, 0);
             }
+            if(intent.hasExtra(MainActivity.TITLE_KEY)){
+                setTitle(intent.getStringExtra(MainActivity.TITLE_KEY));
+            }
         }
         findSelectedMovie(id);
         uploadData();

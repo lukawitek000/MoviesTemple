@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     private static final String SELECTED_SORTING = "SELECTED_SORTING";
     static final String MOVIE_KEY = "MOVIE";
+    static final String TITLE_KEY = "TITLE";
 
     private static final String FAVOURITES = "favourites";
     private static final String TOP_RATED = "top_rated";
@@ -85,7 +87,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         }
 
 
+
     }
+
+
 
     private void setUpRecyclerView() {
         int spanCount = calculateSpanCount();
@@ -130,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, DetailInformation.class);
         intent.putExtra(MOVIE_KEY, movie.getId());
+        intent.putExtra(TITLE_KEY, getTitle());
         startActivity(intent);
     }
 
