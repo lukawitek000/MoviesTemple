@@ -5,12 +5,12 @@ To run application you have to create account on the ThemovieDB website( https:/
 
 Application get data from TheMmovieDB : https://www.themoviedb.org/
 
-![Alt text](/screenshots/gif_1.gif?raw=true)
+![](/screenshots/gif_1.gif?raw=true)
 
-![Alt text](/screenshots/ss_1.png?raw=true)
+![ScreenShot](/screenshots/ss_1.png?raw=true)
 
-![Alt text](/screenshots/ss_2.png?raw=true)
+![ScreenShot](/screenshots/ss_2.png?raw=true)
 
-![Alt text](/screenshots/ss_3.png?raw=true)
+![ScreenShot](/screenshots/ss_3.png?raw=true)
 
-![Alt text](/screenshots/ss_4.png?raw=true)
+![](/screenshots/ss_4.png?raw=true)
