@@ -7,10 +7,10 @@ Application get data from TheMmovieDB : https://www.themoviedb.org/
 
 ![](/screenshots/gif_1.gif?raw=true)
 
-![ScreenShot](/screenshots/ss_1.png?raw=true)
+![ScreenShot](/screenshots/ss_1.png?raw=true width="400")
 
 ![ScreenShot](/screenshots/ss_2.png?raw=true)
 
 ![ScreenShot](/screenshots/ss_3.png?raw=true)
 
-![](/screenshots/ss_4.png?raw=true)
+![ScreenShot](/screenshots/ss_4.png?raw=true)
