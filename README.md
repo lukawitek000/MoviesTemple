@@ -5,9 +5,9 @@ To run application you have to create account on the ThemovieDB website( https:/
 
 Application get data from TheMmovieDB : https://www.themoviedb.org/
 
-![](/screenshots/gif_1.gif?raw=true)
+![](/screenshots/gif_1.gif?raw=true = 300x100)
 
-![ScreenShot](/screenshots/ss_1.png?raw=true width="400")
+![ScreenShot](/screenshots/ss_1.png?raw=true)
 
 ![ScreenShot](/screenshots/ss_2.png?raw=true)
 
