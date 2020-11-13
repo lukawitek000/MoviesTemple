@@ -2,7 +2,8 @@ package com.example.android.popularmovies.database
 
 import androidx.room.TypeConverter
 
-internal object VideoUrlsConverter {
+class VideoUrlsConverter {
+
     @TypeConverter
     fun toString(arr: Array<String?>): String {
         val builder = StringBuilder()
