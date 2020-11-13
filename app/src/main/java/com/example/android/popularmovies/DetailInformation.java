@@ -42,6 +42,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
     private DetailInformationViewModel viewModel;
 
     private Review[] reviews;
+    private String[] trailers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
 
     private void setUpTrailersRecyclerView() {
         LinearLayoutManager trailerManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        trailersAdapter = new TrailersAdapter(this);
+        trailersAdapter = new TrailersAdapter(trailers,this);
         binding.recyclerviewTrailers.setLayoutManager(trailerManager);
         binding.recyclerviewTrailers.setAdapter(trailersAdapter);
         binding.recyclerviewTrailers.setHasFixedSize(true);
@@ -164,6 +165,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
             }
         }
         reviews = selectedMovie.getReviews();
+        trailers = selectedMovie.getVideoUrls();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (selectedMovie.getVoteAverage() > 8.0) {
                 binding.starsImageView.setImageDrawable(getDrawable(R.drawable.five_star));
@@ -190,7 +192,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         binding.overview.setText(selectedMovie.getOverview());
         binding.releaseDate.setText(selectedMovie.getReleaseDate());
         binding.voteAverage.setText(String.valueOf(selectedMovie.getVoteAverage()));
-        trailersAdapter.setTrailers(selectedMovie.getVideoUrls());
+        //trailersAdapter.setTrailers(selectedMovie.getVideoUrls());
         //reviewsAdapter.setReviews(selectedMovie.getReviews());
         Picasso.with(this)
                 .load(selectedMovie.getPoster())

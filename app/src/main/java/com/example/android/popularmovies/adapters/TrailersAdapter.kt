@@ -11,8 +11,7 @@ import com.example.android.popularmovies.R
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.widget.TextView
 
-class TrailersAdapter(private val trailerClickListener: TrailerClickListener) : RecyclerView.Adapter<TrailersAdapterTrailerHolder>() {
-    private var trailers: Array<String>?
+class TrailersAdapter(private val trailers: Array<String>?, private val trailerClickListener: TrailerClickListener) : RecyclerView.Adapter<TrailersAdapterTrailerHolder>() {
 
     interface TrailerClickListener {
         fun onTrailerClicked(trailer: String?)
@@ -32,24 +31,18 @@ class TrailersAdapter(private val trailerClickListener: TrailerClickListener) : 
     }
 
     override fun getItemCount(): Int {
-        return if (trailers != null) {
-            trailers!!.size
-        } else 0
-    }
-
-    fun setTrailers(trailers: Array<String>?) {
-        this.trailers = trailers
+        return trailers?.size ?: 0
     }
 
     inner class TrailersAdapterTrailerHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-        val trailerText: TextView
+        val trailerText: TextView = itemView.findViewById(R.id.trailer_label)
+
         override fun onClick(v: View) {
             val adapterPosition = adapterPosition
             trailerClickListener.onTrailerClicked(trailers!![adapterPosition])
         }
 
         init {
-            trailerText = itemView.findViewById(R.id.trailer_label)
             itemView.setOnClickListener(this)
         }
     }
