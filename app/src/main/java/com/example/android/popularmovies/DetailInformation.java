@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,10 @@ import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.databinding.ActivityDetailInfromationBinding;
 import com.example.android.popularmovies.models.Movie;
+import com.example.android.popularmovies.models.Review;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class DetailInformation extends AppCompatActivity implements TrailersAdapter.TrailerClickListener {
     private Movie selectedMovie;
@@ -35,16 +39,16 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
 
     private FavouriteMovieDatabase favouriteMovieDatabase;
 
+    private DetailInformationViewModel viewModel;
+
+    private Review[] reviews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView( this, R.layout.activity_detail_infromation);
         favouriteMovieDatabase = FavouriteMovieDatabase.getInstance(this);
         Intent intent = getIntent();
-        setUpReviewsRecyclerView();
-        setUpTrailersRecyclerView();
-
-
         int id = 0;
         if(intent != null){
             if(intent.hasExtra(MainActivity.MOVIE_KEY)){
@@ -54,9 +58,17 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
                 setTitle(intent.getStringExtra(MainActivity.TITLE_KEY));
             }
         }
+
         findSelectedMovie(id);
-        uploadData();
         setUpViewModel();
+        setUpReviewsRecyclerView();
+        setUpTrailersRecyclerView();
+
+
+
+
+        uploadData();
+
 
         binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +107,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
     @SuppressWarnings("deprecation")
     private void setUpViewModel() {
         DetailInformationViewModelFactory factory = new DetailInformationViewModelFactory(favouriteMovieDatabase, selectedMovie.getId());
-        DetailInformationViewModel viewModel = ViewModelProviders.of(this, factory).get(DetailInformationViewModel.class);
+        viewModel = ViewModelProviders.of(this, factory).get(DetailInformationViewModel.class);
 
         viewModel.getMovie().observe(this, new Observer<MovieEntity>() {
             @Override
@@ -121,7 +133,8 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
 
     private void setUpReviewsRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        reviewsAdapter = new ReviewsAdapter();
+        Log.i("DetailInformation", "set up recycler view reviews = " + reviews);
+        reviewsAdapter = new ReviewsAdapter(reviews);
         binding.recyclerviewReviews.setLayoutManager(linearLayoutManager);
         binding.recyclerviewReviews.setAdapter(reviewsAdapter);
         binding.recyclerviewReviews.setHasFixedSize(true);
@@ -150,6 +163,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
                 break;
             }
         }
+        reviews = selectedMovie.getReviews();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (selectedMovie.getVoteAverage() > 8.0) {
                 binding.starsImageView.setImageDrawable(getDrawable(R.drawable.five_star));
@@ -177,7 +191,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         binding.releaseDate.setText(selectedMovie.getReleaseDate());
         binding.voteAverage.setText(String.valueOf(selectedMovie.getVoteAverage()));
         trailersAdapter.setTrailers(selectedMovie.getVideoUrls());
-        reviewsAdapter.setReviews(selectedMovie.getReviews());
+        //reviewsAdapter.setReviews(selectedMovie.getReviews());
         Picasso.with(this)
                 .load(selectedMovie.getPoster())
                 .into(binding.poster);
