@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.android.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
 

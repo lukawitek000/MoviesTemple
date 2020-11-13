@@ -3,7 +3,7 @@ package com.example.android.popularmovies.database;
 
 import androidx.room.TypeConverter;
 
-import com.example.android.popularmovies.Review;
+import com.example.android.popularmovies.models.Review;
 
 class ReviewsConverter {
 

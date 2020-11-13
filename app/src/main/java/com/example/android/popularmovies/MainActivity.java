@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.database.MovieEntity;
+import com.example.android.popularmovies.models.Movie;
+import com.example.android.popularmovies.models.Review;
 import com.example.android.popularmovies.utilities.MovieJsonConvert;
 import com.example.android.popularmovies.utilities.NetworkUtil;
 
@@ -154,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         movie.setReviews(movieEntity.getReviews());
         movie.setFavourite(true);
         return movie;
-
     }
 
 

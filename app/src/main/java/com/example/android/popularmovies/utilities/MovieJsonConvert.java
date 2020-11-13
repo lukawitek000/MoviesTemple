@@ -2,8 +2,8 @@ package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
 
-import com.example.android.popularmovies.Movie;
-import com.example.android.popularmovies.Review;
+import com.example.android.popularmovies.models.Movie;
+import com.example.android.popularmovies.models.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;

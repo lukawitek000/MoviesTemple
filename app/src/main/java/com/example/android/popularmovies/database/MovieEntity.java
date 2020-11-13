@@ -7,7 +7,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.android.popularmovies.Review;
+import com.example.android.popularmovies.models.Review;
 
 @Entity(tableName = "Favorite_Movies")
 public class MovieEntity {

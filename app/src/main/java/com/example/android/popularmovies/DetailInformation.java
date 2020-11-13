@@ -20,6 +20,7 @@ import com.example.android.popularmovies.database.DatabaseExecutor;
 import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.databinding.ActivityDetailInfromationBinding;
+import com.example.android.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
 public class DetailInformation extends AppCompatActivity implements TrailersAdapter.TrailerClickListener {
