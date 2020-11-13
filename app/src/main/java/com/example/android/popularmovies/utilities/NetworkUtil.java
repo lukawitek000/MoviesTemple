@@ -15,7 +15,7 @@ public class NetworkUtil {
     private static final String FORMAT = "mode";
     private static final String format = "json";
     private static final String API_KEY = "api_key";
-    private static final String api_key = "";
+    private static final String api_key = "3b623a17f57eb4da612b3871d3f78ced";
 
 
     public static URL buildUrl(String query){
