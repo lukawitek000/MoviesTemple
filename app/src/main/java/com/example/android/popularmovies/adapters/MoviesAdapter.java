@@ -1,4 +1,4 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.adapters;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +26,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     private final MovieAdapterOnClickHandler clickHandler ;
     private static Movie[] moviesData;
 
-    MoviesAdapter(MovieAdapterOnClickHandler onClickHandler){
+    public MoviesAdapter(MovieAdapterOnClickHandler onClickHandler){
         this.clickHandler = onClickHandler;
     }
 
@@ -56,12 +57,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         return 0;
     }
 
-    void setMoviesData(Movie[] movies){
+    public void setMoviesData(Movie[] movies){
         moviesData = movies;
         notifyDataSetChanged();
     }
 
-    static Movie[] getMoviesData(){return moviesData;}
+    public static Movie[] getMoviesData(){return moviesData;}
 
 
     class MoviesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.adapters.MoviesAdapter;
 import com.example.android.popularmovies.database.MovieEntity;
 import com.example.android.popularmovies.models.Movie;
 import com.example.android.popularmovies.models.Review;

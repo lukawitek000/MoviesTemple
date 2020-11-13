@@ -16,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.android.popularmovies.adapters.MoviesAdapter;
+import com.example.android.popularmovies.adapters.ReviewsAdapter;
+import com.example.android.popularmovies.adapters.TrailersAdapter;
 import com.example.android.popularmovies.database.DatabaseExecutor;
 import com.example.android.popularmovies.database.FavouriteMovieDatabase;
 import com.example.android.popularmovies.database.MovieEntity;
