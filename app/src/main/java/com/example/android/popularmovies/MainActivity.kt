@@ -21,6 +21,7 @@ import com.example.android.popularmovies.DetailInformation
 import android.annotation.SuppressLint
 import android.graphics.Point
 import android.os.AsyncTask
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,9 +31,6 @@ import com.example.android.popularmovies.models.Movie
 
 class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
     private var movieAdapter: MoviesAdapter? = null
-    private var selectedSorting: String? = null
-    private lateinit var failureTextView: TextView
-    private lateinit var progressBar: ProgressBar
 
     private lateinit var viewModel: MainViewModel
 
@@ -41,21 +39,42 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
         setContentView(R.layout.activity_main)
 
         setupViewModel()
-        viewModel.getPopularMovies()
         setUpRecyclerView()
-        viewModel.popularMovies.observe(this, Observer {
-            movieAdapter?.setMoviesData(it)
+
+        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_movies)
+        val failureText = findViewById<TextView>(R.id.failure_text_view)
+
+        progressBar.visibility = View.VISIBLE
+        failureText.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+
+        viewModel.status.observe(this, Observer {
+            Log.i("MainActivity", "status observer = $it")
+            if(it == MainViewModel.Status.LOADING){
+                progressBar.visibility = View.VISIBLE
+                failureText.visibility = View.GONE
+                recyclerView.visibility = View.GONE
+            }else if(it == MainViewModel.Status.SUCCESS){
+                progressBar.visibility = View.GONE
+                failureText.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }else{
+                progressBar.visibility = View.GONE
+                failureText.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+
+
         })
 
+        viewModel.movies.observe(this, Observer {
+            Log.i("MainActivity", "movies observer = $it")
+            if(it != null) {
+                movieAdapter?.setMoviesData(it)
+            }
+        })
 
-
-
-
-
-        progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        progressBar.visibility = View.INVISIBLE
-        failureTextView = findViewById(R.id.failure_text_view)
-        failureTextView.visibility = View.INVISIBLE
 
         /*
         if (savedInstanceState != null) {
@@ -98,6 +117,33 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
     private fun setupViewModel() {
         val viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.sort_by_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
+        R.id.sort_by_popularity -> {
+            viewModel.setListType(MainViewModel.MovieTypeList.POPULAR_MOVIES)
+            //viewModel.listType = MainViewModel.MovieTypeList.POPULAR_MOVIES
+            true
+        }
+        R.id.sort_by_votes -> {
+            viewModel.setListType(MainViewModel.MovieTypeList.TOP_RATED_MOVIES)
+            //viewModel.listType = MainViewModel.MovieTypeList.TOP_RATED_MOVIES
+                    true
+        }
+        R.id.show_favourites -> {
+            viewModel.setListType(MainViewModel.MovieTypeList.FAVOURITE_MOVIES)
+            //viewModel.listType = MainViewModel.MovieTypeList.FAVOURITE_MOVIES
+                    true
+        }
+        else -> {
+            false
+        }
+
     }
 
     private fun updateUI() {
