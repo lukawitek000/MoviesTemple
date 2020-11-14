@@ -147,7 +147,7 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
 
     override fun onClick(movie: Movie?) {
-        /*val intent = Intent(this, DetailInformation::class.java)
+        /*val intent = Intent(this, DetailInformationFragment::class.java)
         intent.putExtra(MOVIE_KEY, movie!!.id)
         intent.putExtra(TITLE_KEY, title)
         startActivity(intent)*/
