@@ -15,11 +15,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m"
         tools:ignore="AllowBackup">
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

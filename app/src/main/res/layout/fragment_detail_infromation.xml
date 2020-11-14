@@ -28,7 +28,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/add_to_favourite_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Title" />
+                android:text="Detail information layout" />
 
             <ImageView
                 android:id="@+id/poster"

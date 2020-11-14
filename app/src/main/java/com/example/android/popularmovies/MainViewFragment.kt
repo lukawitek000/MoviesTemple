@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -112,7 +113,7 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
     }
 
     private fun setupViewModel() {
-        val viewModelFactory = MainViewModelFactory(activity!!.application)
+        val viewModelFactory = MainViewModelFactory(requireActivity().application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
@@ -147,9 +148,6 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
 
     override fun onClick(movie: Movie?) {
-        /*val intent = Intent(this, DetailInformationFragment::class.java)
-        intent.putExtra(MOVIE_KEY, movie!!.id)
-        intent.putExtra(TITLE_KEY, title)
-        startActivity(intent)*/
+        findNavController().navigate(R.id.action_mainViewFragment_to_detailInformationFragment)
     }
 }

@@ -54,16 +54,16 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
         }
 
         val response: TextView = itemView.findViewById(R.id.response)
-/*
-        init {
+
+        init {/*
             val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val display: Display
             display = windowManager.defaultDisplay
             val point = Point()
             display.getSize(point)
             val displayWidth = point.x
-            posterImage.minimumWidth = displayWidth
+            posterImage.minimumWidth = displayWidth*/
             itemView.setOnClickListener(this)
-        }*/
+        }
     }
 }

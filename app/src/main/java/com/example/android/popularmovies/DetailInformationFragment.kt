@@ -5,10 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.popularmovies.adapters.ReviewsAdapter
 import com.example.android.popularmovies.adapters.TrailersAdapter
@@ -21,7 +24,7 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
     private lateinit var reviewsAdapter: ReviewsAdapter
 
-    private lateinit var viewModel: DetailInformationViewModel
+    //private lateinit var viewModel: DetailInformationViewModel
 
 
 
@@ -30,9 +33,10 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        setUpViewModel();
-        setUpReviewsRecyclerView();
-        setUpTrailersRecyclerView();
+        //setUpViewModel();
+        //setUpReviewsRecyclerView();
+        //setUpTrailersRecyclerView();
+
 
 
 
@@ -79,7 +83,7 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
 
         private fun setUpViewModel() {
-            viewModel = ViewModelProvider(this).get(DetailInformationViewModel::class.java)
+           // viewModel = ViewModelProvider(this).get(DetailInformationViewModel::class.java)
         }
 
         private fun setUpTrailersRecyclerView() {
