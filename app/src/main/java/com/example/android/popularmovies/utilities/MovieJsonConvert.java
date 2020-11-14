@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 
 public class MovieJsonConvert {
-
+/*
     private static final String RESULTS = "results";
     private static final String POSTER = "poster_path";
     private static final String TITLE = "title";
@@ -116,5 +116,5 @@ public class MovieJsonConvert {
             }
         }
         return reviews;
-    }
+    }*/
 }

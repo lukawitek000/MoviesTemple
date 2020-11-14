@@ -27,12 +27,6 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.popularmovies.models.Movie
-import com.example.android.popularmovies.utilities.NetworkUtil
-import com.example.android.popularmovies.utilities.MovieJsonConvert
-import org.json.JSONException
-import kotlin.Throws
-import com.example.android.popularmovies.models.Review
-import java.io.IOException
 
 class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
     private var movieAdapter: MoviesAdapter? = null
@@ -47,8 +41,17 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
         setContentView(R.layout.activity_main)
 
         setupViewModel()
-
+        viewModel.getPopularMovies()
         setUpRecyclerView()
+        viewModel.popularMovies.observe(this, Observer {
+            movieAdapter?.setMoviesData(it)
+        })
+
+
+
+
+
+
         progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         progressBar.visibility = View.INVISIBLE
         failureTextView = findViewById(R.id.failure_text_view)
@@ -102,12 +105,12 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
     }
 
     override fun onClick(movie: Movie?) {
-        val intent = Intent(this, DetailInformation::class.java)
+        /*val intent = Intent(this, DetailInformation::class.java)
         intent.putExtra(MOVIE_KEY, movie!!.id)
         intent.putExtra(TITLE_KEY, title)
-        startActivity(intent)
+        startActivity(intent)*/
     }
-
+/*
     private fun getMovieFromMovieEntity(movieEntity: MovieEntity): Movie {
         val movie = Movie()
         movie.id = movieEntity.id
@@ -122,7 +125,7 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
         movie.reviews = movieEntity.reviews
         movie.isFavourite = true
         return movie
-    }
+    }*/
 /*
     @SuppressLint("StaticFieldLeak")
     internal inner class FetchMovies : AsyncTask<Void?, Void?, Array<Movie>?>() {
@@ -177,7 +180,7 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
             }
         }
     }*/
-
+/*
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.sort_by_menu, menu)
         return true
@@ -228,7 +231,7 @@ class MainActivity : AppCompatActivity(), MovieAdapterOnClickHandler {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(SELECTED_SORTING, selectedSorting)
         super.onSaveInstanceState(outState)
-    }
+    }*/
 
     companion object {
         private const val SELECTED_SORTING = "SELECTED_SORTING"

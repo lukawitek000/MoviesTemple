@@ -31,7 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class DetailInformation extends AppCompatActivity implements TrailersAdapter.TrailerClickListener {
-    private Movie selectedMovie;
+    /*private Movie selectedMovie;
     private ActivityDetailInfromationBinding binding;
     private ReviewsAdapter reviewsAdapter;
 
@@ -43,11 +43,11 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
 
     private Review[] reviews;
     private String[] trailers;
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView( this, R.layout.activity_detail_infromation);
+      /*  binding = DataBindingUtil.setContentView( this, R.layout.activity_detail_infromation);
         favouriteMovieDatabase = FavouriteMovieDatabase.getInstance(this);
         Intent intent = getIntent();
         int id = 0;
@@ -79,7 +79,7 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
                     public void run() {
                         if(!selectedMovie.isFavourite()) {
                             selectedMovie.setFavourite(true);
-                            favouriteMovieDatabase.movieDao().insertMovie(convertMovieToMovieEntity());
+                            //favouriteMovieDatabase.movieDao().insertMovie(convertMovieToMovieEntity());
                         }else{
                             selectedMovie.setFavourite(false);
                             favouriteMovieDatabase.movieDao().deleteMovieById(selectedMovie.getId());
@@ -102,9 +102,9 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         }
 
 
-
+*/
     }
-
+/*
     @SuppressWarnings("deprecation")
     private void setUpViewModel() {
         DetailInformationViewModelFactory factory = new DetailInformationViewModelFactory(favouriteMovieDatabase, selectedMovie.getId());
@@ -141,6 +141,8 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         binding.recyclerviewReviews.setHasFixedSize(true);
     }
 
+ */
+/*
     private MovieEntity convertMovieToMovieEntity() {
         MovieEntity movieEntity = new MovieEntity();
         movieEntity.setId(selectedMovie.getId());
@@ -154,10 +156,11 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
         movieEntity.setReviews(selectedMovie.getReviews());
         return movieEntity;
 
-    }
-
+    }*/
+/*
     private void findSelectedMovie(int id) {
-        Movie[] movies = MoviesAdapter.getMoviesData();
+        Movie[] movies = null;
+                //MoviesAdapter.getMoviesData();
         for(Movie movie : movies){
             if(movie.getId() == id){
                 selectedMovie = movie;
@@ -215,16 +218,16 @@ public class DetailInformation extends AppCompatActivity implements TrailersAdap
                 .getIntent();
     }
 
-
+*/
     @Override
     public void onTrailerClicked(String trailer) {
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer));
+       /* Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + trailer));
         try {
             startActivity(appIntent);
         } catch (ActivityNotFoundException ex) {
             startActivity(webIntent);
-        }
+        }*/
     }
 }
