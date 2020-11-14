@@ -22,6 +22,9 @@ interface TMDBService{
     @GET("/3/movie/popular")
     suspend fun getPopularMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
 
+    @GET("/3/movie/top_rated")
+    suspend fun getTopRatedMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
+
 }
 
 //private const val URL_ADDRESS = "https://api.themoviedb.org/3/movie/"

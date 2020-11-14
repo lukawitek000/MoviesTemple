@@ -24,4 +24,11 @@ class MainRepository(private val application: Application) {
         }
     }
 
+    suspend fun getTopRatedMovies(): List<Movie>{
+        return withContext(Dispatchers.IO){
+            val response = TMDBApi.retrofitService.getTopRatedMovies()
+            response.movies
+        }
+    }
+
 }
