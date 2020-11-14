@@ -2,6 +2,8 @@ package com.example.android.popularmovies.utilities
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import com.example.android.popularmovies.models.Movie
+import com.example.android.popularmovies.models.TMDBResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -18,7 +20,7 @@ import java.util.*
 interface TMDBService{
 
     @GET("/3/movie/popular")
-    suspend fun getPopularMovies(@Query(api_key) apiKey: String = api_key): String
+    suspend fun getPopularMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
 
 }
 
@@ -35,6 +37,12 @@ private val retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl(URL_ADDRESS)
         .build()
+
+object TMDBApi{
+    val retrofitService : TMDBService by lazy {
+        retrofit.create(TMDBService::class.java)
+    }
+}
 
 
 /*
