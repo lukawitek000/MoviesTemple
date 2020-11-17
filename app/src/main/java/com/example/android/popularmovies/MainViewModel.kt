@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.popularmovies.models.Movie
+import com.example.android.popularmovies.models.MovieWithReviewsAndVideos
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import java.lang.Exception
@@ -27,6 +28,9 @@ class MainViewModel(application: Application) : ViewModel() {
 
     private lateinit var topRatedMovies: List<Movie>
 
+
+    val databaseValues  = repository.favouriteMovies
+    private lateinit var favouriteMovies: List<Movie>
 
     private var listType: MovieTypeList = MovieTypeList.POPULAR_MOVIES
 
@@ -85,11 +89,31 @@ class MainViewModel(application: Application) : ViewModel() {
     private fun setMoviesList(){
         if(listType == MovieTypeList.POPULAR_MOVIES){
             _movies.value = popularMovies
-        }else{
+        }else if(listType == MovieTypeList.TOP_RATED_MOVIES){
             _movies.value = topRatedMovies
+        }else{
+            Log.i("MainViewModel", "favourite movies: $favouriteMovies")
+            //_movies.value = favouriteMovies.value
+            _movies.value = favouriteMovies
         }
     }
 
+    fun addMovieToDatabase() {
+        viewModelScope.launch {
+            repository.insertMovieToDatabase(selectedMovie!!)
+        }
+    }
+
+    fun setFavouriteMovies(response: List<MovieWithReviewsAndVideos>) {
+        val movies = mutableListOf<Movie>()
+        for(value in response){
+            val movie = value.movie
+            movie.trailers = value.videos
+            movie.reviews = value.reviews
+            movies.add(movie)
+        }
+        favouriteMovies = movies
+    }
 
 
 }

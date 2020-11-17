@@ -19,9 +19,9 @@ class ReviewsAdapter(private val reviews: List<Review>) : RecyclerView.Adapter<R
     }
 
     override fun onBindViewHolder(holder: ReviewsAdapterViewHolder, position: Int) {
-        val (author, content) = reviews!![position]
-        holder.content.text = content
-        holder.author.text = author
+        val review = reviews[position]
+        holder.content.text = review.content
+        holder.author.text = review.author
     }
 
     override fun getItemCount(): Int {

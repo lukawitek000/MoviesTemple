@@ -84,6 +84,15 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
            }
        })
 
+
+
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                viewModel.setFavouriteMovies(it)
+            }
+        })
+
+
         setHasOptionsMenu(true)
         return binding.root
 

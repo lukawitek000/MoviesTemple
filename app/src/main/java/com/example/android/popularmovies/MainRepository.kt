@@ -1,16 +1,27 @@
 package com.example.android.popularmovies
 
 import android.app.Application
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android.popularmovies.models.Movie
-import com.example.android.popularmovies.models.Review
-import com.example.android.popularmovies.models.TMDBResponse
-import com.example.android.popularmovies.models.Video
+import com.example.android.popularmovies.database.FavouriteMovieDatabase
+import com.example.android.popularmovies.models.*
 import com.example.android.popularmovies.utilities.TMDBApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
 class MainRepository(private val application: Application) {
+
+    val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
+
+
+    val favouriteMovies = database!!.movieDao().loadAllMovies()
+
+    suspend fun insertMovieToDatabase(movie: Movie){
+        withContext(IO){
+            database?.movieDao()?.insert(movie)
+        }
+    }
 
 
     suspend fun getPopularMovies(): List<Movie>{

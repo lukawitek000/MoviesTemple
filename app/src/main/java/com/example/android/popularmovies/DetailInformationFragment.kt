@@ -52,6 +52,10 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
                 .into(binding.poster)
         //uploadData();
 
+        binding.addToFavouriteButton.setOnClickListener {
+            viewModel.addMovieToDatabase()
+        }
+
 /*
         binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
