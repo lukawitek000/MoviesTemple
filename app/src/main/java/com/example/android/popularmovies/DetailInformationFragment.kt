@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.example.android.popularmovies.adapters.ReviewsAdapter
 import com.example.android.popularmovies.adapters.TrailersAdapter
 import com.example.android.popularmovies.adapters.TrailersAdapter.TrailerClickListener
 import com.example.android.popularmovies.databinding.FragmentDetailInfromationBinding
+import com.example.android.popularmovies.models.Video
 
 class DetailInformationFragment : Fragment(), TrailerClickListener {
 
@@ -24,7 +26,7 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
     private lateinit var reviewsAdapter: ReviewsAdapter
 
-    //private lateinit var viewModel: DetailInformationViewModel
+    private lateinit var viewModel: MainViewModel
 
 
 
@@ -33,12 +35,12 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        //setUpViewModel();
-        //setUpReviewsRecyclerView();
-        //setUpTrailersRecyclerView();
+        setUpViewModel();
+        setUpReviewsRecyclerView();
+        setUpTrailersRecyclerView();
+        binding.title.text = viewModel.selectedMovie?.title
 
-
-
+        binding.overview.text = viewModel.selectedMovie?.overview
 
 
         //uploadData();
@@ -83,12 +85,14 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
 
         private fun setUpViewModel() {
-           // viewModel = ViewModelProvider(this).get(DetailInformationViewModel::class.java)
+           //viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+            val viewModelFactory = MainViewModelFactory(requireActivity().application)
+            viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
         }
 
         private fun setUpTrailersRecyclerView() {
             val trailerManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            trailersAdapter =  TrailersAdapter(null, this)
+            trailersAdapter =  TrailersAdapter(viewModel.selectedMovie!!.trailers, this)
             binding.recyclerviewTrailers.layoutManager = trailerManager
             binding.recyclerviewTrailers.adapter = trailersAdapter
             binding.recyclerviewTrailers.setHasFixedSize(true)
@@ -97,7 +101,7 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
         private fun setUpReviewsRecyclerView() {
             val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             Log.i("DetailInformation", "set up recycler view reviews = ")
-            reviewsAdapter = ReviewsAdapter(null)
+            reviewsAdapter = ReviewsAdapter(viewModel.selectedMovie!!.reviews)
             binding.recyclerviewReviews.layoutManager = linearLayoutManager
             binding.recyclerviewReviews.adapter = reviewsAdapter
             binding.recyclerviewReviews.setHasFixedSize(true)
@@ -122,7 +126,9 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
     }
 
 */
-    override fun onTrailerClicked(trailer: String?) {
+    override fun onTrailerClicked(trailer: Video) {
+
+        Toast.makeText(requireContext(), "clicked trailer ${trailer.name}", Toast.LENGTH_SHORT).show()
         /* Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + trailer));

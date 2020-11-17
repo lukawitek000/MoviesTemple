@@ -39,5 +39,9 @@ data class Movie (
         var voteAverage: Float,
         var overview: String,
         @Json(name="release_date")
-        var releaseDate: String
+        var releaseDate: String,
+        @Transient
+        var trailers: List<Video> = emptyList(),
+        @Transient
+        var reviews: List<Review> = emptyList()
 )

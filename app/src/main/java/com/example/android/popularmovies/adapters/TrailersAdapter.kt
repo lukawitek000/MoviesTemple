@@ -10,11 +10,12 @@ import android.view.View
 import com.example.android.popularmovies.R
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.widget.TextView
+import com.example.android.popularmovies.models.Video
 
-class TrailersAdapter(private val trailers: Array<String>?, private val trailerClickListener: TrailerClickListener) : RecyclerView.Adapter<TrailersAdapterTrailerHolder>() {
+class TrailersAdapter(private val trailers: List<Video>?, private val trailerClickListener: TrailerClickListener) : RecyclerView.Adapter<TrailersAdapterTrailerHolder>() {
 
     interface TrailerClickListener {
-        fun onTrailerClicked(trailer: String?)
+        fun onTrailerClicked(trailer: Video)
     }
 
     private var context: Context? = null

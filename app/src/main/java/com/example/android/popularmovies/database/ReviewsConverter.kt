@@ -16,7 +16,7 @@ class ReviewsConverter {
         val reviews = arrayOfNulls<Review>(reviewInString.size)
         for (i in reviewInString.indices) {
             val rev = reviewInString[i].split(CONTENT_REGEX).toTypedArray()
-            val review = Review(rev[0], rev[1])
+            val review = Review(rev[0], rev[1], "", "")
             reviews[i] = review
         }
         return reviews

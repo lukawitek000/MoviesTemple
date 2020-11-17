@@ -2,6 +2,7 @@ package com.example.android.popularmovies.adapters
 
 import android.content.Context
 import android.graphics.Point
+import android.net.Uri
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -31,10 +32,12 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
 
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = moviesData!![position]
-        holder.response.text = movie.toString()
-       // Picasso.with(holder.posterImage.context)
-        //        .load(movie.poster)
-        //        .into(holder.posterImage)
+        //holder.response.text = movie.toString()
+        val uri = Uri.parse("http://image.tmdb.org/t/p/w342" + movie.posterPath)
+        //val uri = Uri.parse("http://imag" + movie.posterPath)
+        Picasso.with(holder.posterImage.context)
+                .load(uri)
+                .into(holder.posterImage)
     }
 
     override fun getItemCount(): Int {
@@ -47,7 +50,7 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
     }
 
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-       // val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
+        val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
         override fun onClick(view: View) {
             val adapterPosition = adapterPosition
             clickHandler.onClick(moviesData!![adapterPosition])
@@ -55,14 +58,14 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
 
         val response: TextView = itemView.findViewById(R.id.response)
 
-        init {/*
+        init {
             val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val display: Display
             display = windowManager.defaultDisplay
             val point = Point()
             display.getSize(point)
             val displayWidth = point.x
-            posterImage.minimumWidth = displayWidth*/
+            posterImage.minimumWidth = displayWidth
             itemView.setOnClickListener(this)
         }
     }

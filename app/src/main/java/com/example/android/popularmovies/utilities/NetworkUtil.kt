@@ -2,13 +2,13 @@ package com.example.android.popularmovies.utilities
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import com.example.android.popularmovies.models.Movie
-import com.example.android.popularmovies.models.TMDBResponse
+import com.example.android.popularmovies.models.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -24,6 +24,17 @@ interface TMDBService{
 
     @GET("/3/movie/top_rated")
     suspend fun getTopRatedMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
+
+
+    @GET("/3/movie/{movieId}/videos")
+    suspend fun getVideos(
+            @Path("movieId") movieId: Long,
+            @Query(API_KEY) apiKey: String = api_key): VideoResponse
+
+    @GET("/3/movie/{movieId}/reviews")
+    suspend fun getReviews(
+            @Path("movieId") movieId: Long,
+            @Query(API_KEY) apiKey: String = api_key): ReviewResponse
 
 }
 
