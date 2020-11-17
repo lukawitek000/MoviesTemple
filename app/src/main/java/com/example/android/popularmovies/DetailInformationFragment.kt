@@ -52,8 +52,19 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
                 .into(binding.poster)
         //uploadData();
 
+        if(viewModel.isSelectedMovieInDatabase()){
+            binding.addToFavouriteButton.text = resources.getString(R.string.remove_from_favourites)
+        }else {
+            binding.addToFavouriteButton.text = resources.getString(R.string.add_to_favourites)
+        }
+
+
         binding.addToFavouriteButton.setOnClickListener {
-            viewModel.addMovieToDatabase()
+            if(viewModel.isSelectedMovieInDatabase()){
+                viewModel.deleteMovieFromDatabase()
+            }else {
+                viewModel.addMovieToDatabase()
+            }
         }
 
 /*

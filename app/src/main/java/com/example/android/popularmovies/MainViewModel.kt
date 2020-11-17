@@ -115,5 +115,23 @@ class MainViewModel(application: Application) : ViewModel() {
         favouriteMovies = movies
     }
 
+    fun deleteMovieFromDatabase(){
+        viewModelScope.launch {
+            val movieToDelete = favouriteMovies.find {
+                it.id == selectedMovie!!.id
+            }
+            repository.deleteMovieFromDatabase(movieToDelete!!)
+        }
+    }
+
+    fun isSelectedMovieInDatabase(): Boolean{
+        favouriteMovies.forEach {
+            if(it.id == selectedMovie!!.id){
+                return true
+            }
+        }
+        return false
+    }
+
 
 }

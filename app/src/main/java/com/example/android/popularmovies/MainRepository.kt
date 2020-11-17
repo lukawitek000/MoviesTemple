@@ -12,10 +12,19 @@ import kotlinx.coroutines.Dispatchers.IO
 
 class MainRepository(private val application: Application) {
 
-    val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
+    private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
 
     val favouriteMovies = database!!.movieDao().loadAllMovies()
+
+
+
+
+    suspend fun deleteMovieFromDatabase(movie: Movie){
+        withContext(IO){
+            database!!.movieDao().deleteMovieReviewAndVideo(movie)
+        }
+    }
 
     suspend fun insertMovieToDatabase(movie: Movie){
         withContext(IO){
