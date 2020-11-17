@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.models
 
 import android.net.Uri
+import com.example.android.popularmovies.utilities.POSTER_BASE_URI
 import com.squareup.moshi.Json
 
 /*
@@ -44,4 +45,7 @@ data class Movie (
         var trailers: List<Video> = emptyList(),
         @Transient
         var reviews: List<Review> = emptyList()
-)
+){
+        val posterUri: Uri
+        get() = Uri.parse(POSTER_BASE_URI + posterPath)
+}

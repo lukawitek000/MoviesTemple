@@ -1,5 +1,7 @@
 package com.example.android.popularmovies
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +21,7 @@ import com.example.android.popularmovies.adapters.TrailersAdapter
 import com.example.android.popularmovies.adapters.TrailersAdapter.TrailerClickListener
 import com.example.android.popularmovies.databinding.FragmentDetailInfromationBinding
 import com.example.android.popularmovies.models.Video
+import com.squareup.picasso.Picasso
 
 class DetailInformationFragment : Fragment(), TrailerClickListener {
 
@@ -41,8 +44,12 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
         binding.title.text = viewModel.selectedMovie?.title
 
         binding.overview.text = viewModel.selectedMovie?.overview
+        binding.originalTitle.text = viewModel.selectedMovie?.originalTitle
+        binding.releaseDate.text = viewModel.selectedMovie?.releaseDate
 
-
+        Picasso.with(context)
+                .load(viewModel.selectedMovie?.posterUri)
+                .into(binding.poster)
         //uploadData();
 
 /*
@@ -66,18 +73,16 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
         });*/
 
-/*
-        if(selectedMovie.getReviews().length == 0){
-            binding.reviewsLabel.setVisibility(View.GONE);
-            binding.recyclerviewReviews.setVisibility(View.GONE);
-        }
-        if(selectedMovie.getVideoUrls().length == 0){
-            binding.trailersLabel.setVisibility(View.GONE);
-            binding.recyclerviewTrailers.setVisibility(View.GONE);
-        }
 
-
-*/
+        if(viewModel.selectedMovie!!.reviews.isEmpty()){
+            binding.reviewsLabel.visibility = View.GONE
+            binding.recyclerviewReviews.visibility = View.GONE
+        }
+        if(viewModel.selectedMovie!!.trailers.isEmpty()){
+            binding.trailersLabel.visibility = View.GONE
+            binding.recyclerviewTrailers.visibility = View.GONE
+        }
+        
 
 
         return binding.root
@@ -85,7 +90,6 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
 
         private fun setUpViewModel() {
-           //viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
             val viewModelFactory = MainViewModelFactory(requireActivity().application)
             viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
         }
@@ -127,15 +131,14 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
 */
     override fun onTrailerClicked(trailer: Video) {
-
         Toast.makeText(requireContext(), "clicked trailer ${trailer.name}", Toast.LENGTH_SHORT).show()
-        /* Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer));
-        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=" + trailer));
-        try {
-            startActivity(appIntent);
-        } catch (ActivityNotFoundException ex) {
-            startActivity(webIntent);
-        }*/
+        val intent = Intent(Intent.ACTION_VIEW)
+        if(trailer.site == "YouTube") {
+            intent.data = trailer.videoUri
+            startActivity(intent)
+        }else{
+            Toast.makeText(requireContext(), "Unknown site", Toast.LENGTH_SHORT).show()
+        }
+
     }
 }

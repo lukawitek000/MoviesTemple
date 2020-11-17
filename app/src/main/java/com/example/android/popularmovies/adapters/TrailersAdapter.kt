@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.widget.TextView
 import com.example.android.popularmovies.models.Video
 
-class TrailersAdapter(private val trailers: List<Video>?, private val trailerClickListener: TrailerClickListener) : RecyclerView.Adapter<TrailersAdapterTrailerHolder>() {
+class TrailersAdapter(private val trailers: List<Video>, private val trailerClickListener: TrailerClickListener) : RecyclerView.Adapter<TrailersAdapterTrailerHolder>() {
 
     interface TrailerClickListener {
         fun onTrailerClicked(trailer: Video)
@@ -29,6 +29,9 @@ class TrailersAdapter(private val trailers: List<Video>?, private val trailerCli
     override fun onBindViewHolder(holder: TrailersAdapterTrailerHolder, position: Int) {
         val text = context!!.getString(R.string.trailer_value, position + 1)
         holder.trailerText.text = text
+        if(trailers[position].type != "Trailer" && trailers[position].type != "Teaser"){
+            holder.itemView.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int {

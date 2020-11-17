@@ -32,11 +32,8 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
 
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = moviesData!![position]
-        //holder.response.text = movie.toString()
-        val uri = Uri.parse("http://image.tmdb.org/t/p/w342" + movie.posterPath)
-        //val uri = Uri.parse("http://imag" + movie.posterPath)
         Picasso.with(holder.posterImage.context)
-                .load(uri)
+                .load(movie.posterUri)
                 .into(holder.posterImage)
     }
 
@@ -56,7 +53,6 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
             clickHandler.onClick(moviesData!![adapterPosition])
         }
 
-        val response: TextView = itemView.findViewById(R.id.response)
 
         init {
             val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager

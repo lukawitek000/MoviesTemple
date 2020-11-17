@@ -1,5 +1,7 @@
 package com.example.android.popularmovies.models
 
+import android.net.Uri
+import com.example.android.popularmovies.utilities.TRAILER_BASE_URI
 import com.squareup.moshi.Json
 
 data class Video(
@@ -13,4 +15,7 @@ data class Video(
         var site: String,
         var size: Int,
         var type: String = "Trailer"
-)
+){
+        val videoUri: Uri
+        get() = Uri.parse(TRAILER_BASE_URI + key)
+}
