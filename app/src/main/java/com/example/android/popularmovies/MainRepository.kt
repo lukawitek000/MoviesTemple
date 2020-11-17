@@ -7,24 +7,14 @@ import com.example.android.popularmovies.models.Review
 import com.example.android.popularmovies.models.TMDBResponse
 import com.example.android.popularmovies.models.Video
 import com.example.android.popularmovies.utilities.TMDBApi
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 
 class MainRepository(private val application: Application) {
 
-    //private val database
-
-    private val popularMovies = MutableLiveData<List<Movie>>()
 
     suspend fun getPopularMovies(): List<Movie>{
-        return withContext(Dispatchers.IO){
-           /*popularMovies.value = TMDBApi.retrofitService.getPopularMovies()
-            popularMovies.value!!*/
-            //val response = TMDBApi.retrofitService.getPopularMovies()
-            //response.movies
-
+        return withContext(IO){
             val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
             getVideosAndReviews(movieInfoResponse)
             movieInfoResponse.movies
@@ -32,37 +22,31 @@ class MainRepository(private val application: Application) {
     }
 
     private suspend fun getVideosAndReviews(movieInfoResponse: TMDBResponse) {
-        for (movie in movieInfoResponse.movies) {
-            val trailers: Deferred<List<Video>> = getVideosAsync(movie)
-            val reviews: Deferred<List<Review>> =  getReviewsAsync(movie)
-            movie.trailers = trailers.await()
-            movie.reviews = reviews.await()
-        }
-
-    }
-
-    private suspend fun getReviewsAsync(movie: Movie): Deferred<List<Review>> {
-        return withContext(Dispatchers.IO) {
-            async {
-                val reviewsResponse = TMDBApi.retrofitService.getReviews(movie.id)
-                reviewsResponse.results
+        CoroutineScope(IO).launch {
+            val fetchReviews = movieInfoResponse.movies.map {
+                async {
+                    it.reviews = TMDBApi.retrofitService.getReviews(it.id).results
+                }
             }
+
+            val fetchTrailers = movieInfoResponse.movies.map {
+                async {
+                    it.trailers = TMDBApi.retrofitService.getVideos(it.id).results
+                }
+            }
+
+            fetchReviews.awaitAll()
+            fetchTrailers.awaitAll()
         }
+
     }
 
-    private suspend fun getVideosAsync(movie: Movie): Deferred<List<Video>> {
-        return withContext(Dispatchers.IO) {
-            async {
-                val trailersResponse = TMDBApi.retrofitService.getVideos(movie.id)
-                trailersResponse.results
-            }
-        }
-    }
 
 
     suspend fun getTopRatedMovies(): List<Movie>{
-        return withContext(Dispatchers.IO){
+        return withContext(IO){
             val response = TMDBApi.retrofitService.getTopRatedMovies()
+            getVideosAndReviews(response)
             response.movies
         }
     }

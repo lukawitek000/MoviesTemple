@@ -114,7 +114,7 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     private fun setupViewModel() {
         val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
     }
 
 
@@ -148,6 +148,7 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
 
     override fun onClick(movie: Movie?) {
+        viewModel.selectedMovie = movie
         findNavController().navigate(R.id.action_mainViewFragment_to_detailInformationFragment)
     }
 }

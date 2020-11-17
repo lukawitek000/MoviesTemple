@@ -3,10 +3,9 @@ package com.example.android.popularmovies
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.android.popularmovies.database.FavouriteMovieDatabase.Companion.getInstance
-import com.example.android.popularmovies.database.MovieEntity
 import com.example.android.popularmovies.models.Movie
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import java.lang.Exception
 
 class MainViewModel(application: Application) : ViewModel() {
@@ -46,34 +45,40 @@ class MainViewModel(application: Application) : ViewModel() {
     val status: LiveData<Status>
         get() = _status
 
+    var selectedMovie: Movie? = null
+
 
     init {
         getMovies()
     }
 
-    private suspend fun getPopularMovies(){
-        popularMovies = repository.getPopularMovies()
-        Log.i("MainViewModel", "getpopularmovies = $popularMovies")
-    }
-
-    private suspend fun getTopRatedMovies(){
-        topRatedMovies = repository.getTopRatedMovies()
-        Log.i("MainViewModel", "getTopratedMoveis = $topRatedMovies")
-    }
-
     private fun getMovies(){
         viewModelScope.launch {
             try {
+                val startTime = System.currentTimeMillis()
                 _status.value = Status.LOADING
-                getPopularMovies()
-                getTopRatedMovies()
+                getAllMovies()
                 Log.i("MainViewModel", "popularmovies = $popularMovies")
                 setMoviesList()
                 _status.value = Status.SUCCESS
+                Log.i("MainViewModel", "time elapsed for fetching data = ${System.currentTimeMillis() - startTime}")
             } catch (e: Exception) {
                 Log.i("MainViewModel", "failure e=$e")
                 _status.value = Status.FAILURE
             }
+        }
+    }
+
+    private suspend fun getAllMovies() {
+        withContext(IO) {
+            val popularMovies: Deferred<List<Movie>> = async {
+                repository.getPopularMovies()
+            }
+            val topRatedMovies: Deferred<List<Movie>> = async {
+                repository.getTopRatedMovies()
+            }
+            this@MainViewModel.popularMovies = popularMovies.await()
+            this@MainViewModel.topRatedMovies = topRatedMovies.await()
         }
     }
 
@@ -84,6 +89,7 @@ class MainViewModel(application: Application) : ViewModel() {
             _movies.value = topRatedMovies
         }
     }
+
 
 
 }
