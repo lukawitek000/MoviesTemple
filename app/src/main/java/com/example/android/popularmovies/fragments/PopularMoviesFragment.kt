@@ -141,6 +141,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
     override fun onClick(movie: Movie?) {
         viewModel.selectedMovie = movie
-        findNavController().navigate(R.id.action_mainViewFragment_to_detailInformationFragment)
+        findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
     }
 }
