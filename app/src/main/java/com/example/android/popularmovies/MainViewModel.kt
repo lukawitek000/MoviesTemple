@@ -21,9 +21,22 @@ class MainViewModel(application: Application) : ViewModel() {
 
     private val repository = MainRepository(application)
 
-    private lateinit var popularMovies: List<Movie>
+    //private lateinit var popularMovies: List<Movie>
 
-    private lateinit var topRatedMovies: List<Movie>
+    private val _popularMovies = MutableLiveData<List<Movie>>()
+
+    val popularMovies: LiveData<List<Movie>>
+        get() = _popularMovies
+
+    //private lateinit var topRatedMovies: List<Movie>
+    private val _topRatedMovies = MutableLiveData<List<Movie>>()
+
+    val topRatedMovies: LiveData<List<Movie>>
+        get() = _topRatedMovies
+    private val _topRatedMoviesStatus = MutableLiveData<Status>()
+
+    val topRatedMoviesStatus: LiveData<Status>
+        get() = _topRatedMoviesStatus
 
 
     val databaseValues  = repository.favouriteMovies
@@ -33,7 +46,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun setListType(typeList: MovieTypeList){
         listType = typeList
-        setMoviesList()
+        //setMoviesList()
     }
 
     private val _movies = MutableLiveData<List<Movie>>()
@@ -41,35 +54,76 @@ class MainViewModel(application: Application) : ViewModel() {
         get() = _movies
 
 
-    private val _status = MutableLiveData<Status>()
+    private val _popularMoviesStatus = MutableLiveData<Status>()
 
-    val status: LiveData<Status>
-        get() = _status
+    val popularMoviesStatus: LiveData<Status>
+        get() = _popularMoviesStatus
 
     var selectedMovie: Movie? = null
 
 
     init {
-        getMovies()
+  //      getMovies()
     }
 
-    private fun getMovies(){
+    fun getTopRatedMovies(){
         viewModelScope.launch {
             try {
                 val startTime = System.currentTimeMillis()
-                _status.value = Status.LOADING
-                getAllMovies()
-                Log.i("MainViewModel", "popularmovies = $popularMovies")
-                setMoviesList()
-                _status.value = Status.SUCCESS
+                _topRatedMoviesStatus.value = Status.LOADING
+                // getAllMovies()
+               // Log.i("MainViewModel", "toprated = $popularMovies")
+                // setMoviesList()
+                val response = repository.getTopRatedMovies()
+                Log.i("MainViewModel", "toprated = $response")
+                _topRatedMovies.value = response
+                _topRatedMoviesStatus.value = Status.SUCCESS
                 Log.i("MainViewModel", "time elapsed for fetching data = ${System.currentTimeMillis() - startTime}")
             } catch (e: Exception) {
                 Log.i("MainViewModel", "failure e=$e")
-                _status.value = Status.FAILURE
+                _topRatedMoviesStatus.value = Status.FAILURE
             }
         }
     }
 
+    fun getPopularMovies(){
+        viewModelScope.launch {
+            try {
+                val startTime = System.currentTimeMillis()
+                _popularMoviesStatus.value = Status.LOADING
+               // getAllMovies()
+
+               // setMoviesList()
+                val response = repository.getPopularMovies()
+                Log.i("MainViewModel", "popularmovies = $response")
+                _popularMovies.value = response
+                _popularMoviesStatus.value = Status.SUCCESS
+                Log.i("MainViewModel", "time elapsed for fetching data = ${System.currentTimeMillis() - startTime}")
+            } catch (e: Exception) {
+                Log.i("MainViewModel", "failure e=$e")
+                _popularMoviesStatus.value = Status.FAILURE
+            }
+        }
+    }
+
+/*
+    private fun getMovies(){
+        viewModelScope.launch {
+            try {
+                val startTime = System.currentTimeMillis()
+                _popularMoviesStatus.value = Status.LOADING
+                getAllMovies()
+                Log.i("MainViewModel", "popularmovies = $popularMovies")
+                setMoviesList()
+                _popularMoviesStatus.value = Status.SUCCESS
+                Log.i("MainViewModel", "time elapsed for fetching data = ${System.currentTimeMillis() - startTime}")
+            } catch (e: Exception) {
+                Log.i("MainViewModel", "failure e=$e")
+                _popularMoviesStatus.value = Status.FAILURE
+            }
+        }
+    }*/
+/*
     private suspend fun getAllMovies() {
         withContext(IO) {
             val popularMovies: Deferred<List<Movie>> = async {
@@ -82,7 +136,8 @@ class MainViewModel(application: Application) : ViewModel() {
             this@MainViewModel.topRatedMovies = topRatedMovies.await()
         }
     }
-
+*/
+    /*
     private fun setMoviesList(){
         if(listType == MovieTypeList.POPULAR_MOVIES && ::popularMovies.isInitialized){
             _movies.value = popularMovies
@@ -92,7 +147,7 @@ class MainViewModel(application: Application) : ViewModel() {
             Log.i("MainViewModel", "favourite movies: $favouriteMovies")
             _movies.value = favouriteMovies
         }
-    }
+    }*/
 
     fun addMovieToDatabase() {
         viewModelScope.launch {
@@ -109,7 +164,7 @@ class MainViewModel(application: Application) : ViewModel() {
             movies.add(movie)
         }
         favouriteMovies = movies
-        setMoviesList()
+        //setMoviesList()
     }
 
 

@@ -39,10 +39,11 @@ interface TMDBService{
 }
 
 
+
+const val IMAGE_WIDTH = 500
 private const val URL_ADDRESS = "https://api.themoviedb.org"
 private const val API_KEY = "api_key"
 private const val api_key = "3b623a17f57eb4da612b3871d3f78ced"
-//const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w342"
 const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w500"
 const val VIDEO_BASE_URI = "https://www.youtube.com/watch?v="
 

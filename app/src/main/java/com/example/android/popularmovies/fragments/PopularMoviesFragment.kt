@@ -17,14 +17,11 @@ import com.example.android.popularmovies.R
 import com.example.android.popularmovies.adapters.MoviesAdapter
 import com.example.android.popularmovies.databinding.FragmentMainViewBinding
 import com.example.android.popularmovies.models.Movie
+import com.example.android.popularmovies.utilities.IMAGE_WIDTH
 
 
 class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
-    companion object {
-        private const val IMAGE_WIDTH = 500
-        //private const val IMAGE_WIDTH_IN_DP = 270
-    }
     private var movieAdapter: MoviesAdapter? = null
 
     private lateinit var viewModel: MainViewModel
@@ -43,6 +40,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         movieRecyclerView = binding.recyclerviewMovies
 
         setupViewModel()
+        viewModel.getPopularMovies()
         setUpRecyclerView()
         setObservers()
 
@@ -74,7 +72,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
     }
 
     private fun setObservers(){
-        viewModel.status.observe(viewLifecycleOwner, Observer {
+        viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "status observer = $it")
             when(it) {
                 MainViewModel.Status.LOADING -> {
@@ -95,14 +93,20 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
             }
 
         })
-
+/*
         viewModel.movies.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "movies observer = $it")
             if(it != null) {
                 movieAdapter?.submitList(it)
             }
         })
-
+*/
+        viewModel.popularMovies.observe(viewLifecycleOwner, Observer {
+            Log.i("PopularMoviesFragment", "movies observer = $it")
+            if(it != null) {
+                movieAdapter?.submitList(it)
+            }
+        })
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "database value $it")
             if(it != null){
