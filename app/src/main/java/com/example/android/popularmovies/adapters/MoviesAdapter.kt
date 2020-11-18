@@ -23,15 +23,12 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
         fun onClick(movie: Movie?)
     }
 
-    //private var moviesData: List<Movie>? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapterViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.movies_list_item, parent, false)
         return MoviesAdapterViewHolder(view)
     }
-
 
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = getItem(position)
@@ -40,11 +37,6 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
                 .into(holder.posterImage)
     }
 
-
-    //fun setMoviesData(movies: List<Movie>) {
-    //    moviesData = movies
-    //    notifyDataSetChanged()
-    //}
 
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
         val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
@@ -55,17 +47,18 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
 
 
         init {
-            val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            /*val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val display: Display
             display = windowManager.defaultDisplay
             val point = Point()
             display.getSize(point)
             val displayWidth = point.x
-            posterImage.minimumWidth = displayWidth
+            posterImage.minimumWidth = displayWidth*/
             itemView.setOnClickListener(this)
         }
     }
 }
+
 
 class MoviesDiffCallback : DiffUtil.ItemCallback<Movie>(){
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
@@ -75,5 +68,4 @@ class MoviesDiffCallback : DiffUtil.ItemCallback<Movie>(){
     override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         return oldItem == newItem
     }
-
 }

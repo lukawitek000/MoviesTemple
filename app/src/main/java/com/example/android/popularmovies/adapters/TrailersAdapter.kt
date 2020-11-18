@@ -27,15 +27,12 @@ class TrailersAdapter(private val trailers: List<Video>, private val trailerClic
     }
 
     override fun onBindViewHolder(holder: TrailersAdapterTrailerHolder, position: Int) {
-        val text = context!!.getString(R.string.trailer_value, position + 1)
-        holder.trailerText.text = text
-        if(trailers[position].type != "Trailer" && trailers[position].type != "Teaser"){
-            holder.itemView.visibility = View.GONE
-        }
+        val video = trailers[position]
+        holder.trailerText.text = video.name
     }
 
     override fun getItemCount(): Int {
-        return trailers?.size ?: 0
+        return trailers.size
     }
 
     inner class TrailersAdapterTrailerHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
@@ -43,7 +40,7 @@ class TrailersAdapter(private val trailers: List<Video>, private val trailerClic
 
         override fun onClick(v: View) {
             val adapterPosition = adapterPosition
-            trailerClickListener.onTrailerClicked(trailers!![adapterPosition])
+            trailerClickListener.onTrailerClicked(trailers[adapterPosition])
         }
 
         init {

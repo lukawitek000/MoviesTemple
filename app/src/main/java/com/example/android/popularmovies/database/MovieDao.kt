@@ -63,10 +63,5 @@ interface MovieDao {
 
     @Query("DELETE FROM Video WHERE movieOwnerID = :id")
     suspend fun deleteVideoByMovieOwnerId(id: Long)
-/*
-    @Query("DELETE FROM Favorite_Movies WHERE id = :id")
-    suspend fun deleteMovieById(id: Int)
 
-    @Query(" SELECT * FROM Favorite_Movies WHERE id = :id ")
-    fun loadMovieById(id: Int): LiveData<Movie>*/
 }

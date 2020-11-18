@@ -32,36 +32,22 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
     private lateinit var viewModel: MainViewModel
 
-
-
     private lateinit var binding: FragmentDetailInfromationBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        setUpViewModel();
-        setUpReviewsRecyclerView();
-        setUpTrailersRecyclerView();
-        binding.title.text = viewModel.selectedMovie?.title
+        setUpViewModel()
+        setUpReviewsRecyclerView()
+        setUpTrailersRecyclerView()
+        setDataToUI()
+        setUpObservers()
+        handleButtonAction()
 
-        binding.overview.text = viewModel.selectedMovie?.overview
-        binding.originalTitle.text = viewModel.selectedMovie?.originalTitle
-        binding.releaseDate.text = viewModel.selectedMovie?.releaseDate
+        return binding.root
+    }
 
-        Picasso.with(context)
-                .load(viewModel.selectedMovie?.posterUri)
-                .into(binding.poster)
-        //uploadData();
-
-       setButtonText()
-
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                viewModel.setFavouriteMovies(it)
-            }
-        })
-
-
+    private fun handleButtonAction() {
         binding.addToFavouriteButton.setOnClickListener {
             if(viewModel.isSelectedMovieInDatabase()){
                 viewModel.deleteMovieFromDatabase()
@@ -73,29 +59,33 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
                 Toast.makeText(requireContext(), "Added to database", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-/*
-        binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseExecutor.getInstance().getDiskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!selectedMovie.isFavourite()) {
-                            selectedMovie.setFavourite(true);
-                            //favouriteMovieDatabase.movieDao().insertMovie(convertMovieToMovieEntity());
-                        }else{
-                            selectedMovie.setFavourite(false);
-                            favouriteMovieDatabase.movieDao().deleteMovieById(selectedMovie.getId());
-                        }
-                    }
-                });
 
+    private fun setUpObservers() {
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                viewModel.setFavouriteMovies(it)
             }
+        })
+    }
 
-        });*/
 
+    private fun setDataToUI(){
+        binding.title.text = viewModel.selectedMovie?.title
+        binding.overview.text = viewModel.selectedMovie?.overview
+        binding.originalTitle.text = viewModel.selectedMovie?.originalTitle
+        binding.releaseDate.text = viewModel.selectedMovie?.releaseDate
 
+        Picasso.with(context)
+                .load(viewModel.selectedMovie?.posterUri)
+                .into(binding.poster)
+
+        setButtonText()
+        updateUI()
+    }
+
+    private fun updateUI() {
         if(viewModel.selectedMovie!!.reviews.isEmpty()){
             binding.reviewsLabel.visibility = View.GONE
             binding.recyclerviewReviews.visibility = View.GONE
@@ -104,11 +94,8 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
             binding.trailersLabel.visibility = View.GONE
             binding.recyclerviewTrailers.visibility = View.GONE
         }
-        
-
-
-        return binding.root
     }
+
 
     private fun setButtonText(){
         if(viewModel.isSelectedMovieInDatabase()){
@@ -119,47 +106,31 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
     }
 
 
-        private fun setUpViewModel() {
-            val viewModelFactory = MainViewModelFactory(requireActivity().application)
-            viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-        }
 
-        private fun setUpTrailersRecyclerView() {
-            val trailerManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            trailersAdapter =  TrailersAdapter(viewModel.selectedMovie!!.trailers, this)
-            binding.recyclerviewTrailers.layoutManager = trailerManager
-            binding.recyclerviewTrailers.adapter = trailersAdapter
-            binding.recyclerviewTrailers.setHasFixedSize(true)
-        }
-
-        private fun setUpReviewsRecyclerView() {
-            val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            Log.i("DetailInformation", "set up recycler view reviews = ")
-            reviewsAdapter = ReviewsAdapter(viewModel.selectedMovie!!.reviews)
-            binding.recyclerviewReviews.layoutManager = linearLayoutManager
-            binding.recyclerviewReviews.adapter = reviewsAdapter
-            binding.recyclerviewReviews.setHasFixedSize(true)
-        }
-
-
-
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.detail_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.share_item);
-        menuItem.setIntent(createShareMovieIntent());
-        return true;
+    private fun setUpViewModel() {
+        val viewModelFactory = MainViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
     }
 
-    private Intent createShareMovieIntent() {
-        return ShareCompat.IntentBuilder.from(this)
-                .setType("text/plain")
-                .setText(selectedMovie.getTitle() + " " + selectedMovie.getOverview())
-                .getIntent();
+    private fun setUpTrailersRecyclerView() {
+        val trailerManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        trailersAdapter =  TrailersAdapter(viewModel.selectedMovie!!.trailers, this)
+        binding.recyclerviewTrailers.layoutManager = trailerManager
+        binding.recyclerviewTrailers.adapter = trailersAdapter
+        binding.recyclerviewTrailers.setHasFixedSize(true)
     }
 
-*/
+    private fun setUpReviewsRecyclerView() {
+        val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        Log.i("DetailInformation", "set up recycler view reviews = ")
+        reviewsAdapter = ReviewsAdapter(viewModel.selectedMovie!!.reviews)
+        binding.recyclerviewReviews.layoutManager = linearLayoutManager
+        binding.recyclerviewReviews.adapter = reviewsAdapter
+        binding.recyclerviewReviews.setHasFixedSize(true)
+    }
+
+
+
     override fun onTrailerClicked(trailer: Video) {
         Toast.makeText(requireContext(), "clicked trailer ${trailer.name}", Toast.LENGTH_SHORT).show()
         val intent = Intent(Intent.ACTION_VIEW)

@@ -10,21 +10,18 @@ import com.example.android.popularmovies.utilities.TMDBApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
-class MainRepository(private val application: Application) {
+class MainRepository(application: Application) {
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
-
     val favouriteMovies = database!!.movieDao().loadAllMovies()
-
-
-
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
         withContext(IO){
             database!!.movieDao().deleteMovieReviewAndVideo(movie)
         }
     }
+
 
     suspend fun insertMovieToDatabase(movie: Movie){
         withContext(IO){
@@ -40,6 +37,7 @@ class MainRepository(private val application: Application) {
             movieInfoResponse.movies
         }
     }
+
 
     private suspend fun getVideosAndReviews(movieInfoResponse: TMDBResponse) {
         CoroutineScope(IO).launch {
@@ -60,7 +58,6 @@ class MainRepository(private val application: Application) {
         }
 
     }
-
 
 
     suspend fun getTopRatedMovies(): List<Movie>{

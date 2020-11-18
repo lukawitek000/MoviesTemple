@@ -25,7 +25,7 @@ class ReviewsAdapter(private val reviews: List<Review>) : RecyclerView.Adapter<R
     }
 
     override fun getItemCount(): Int {
-        return reviews?.size ?: 0
+        return reviews.size
     }
 
 

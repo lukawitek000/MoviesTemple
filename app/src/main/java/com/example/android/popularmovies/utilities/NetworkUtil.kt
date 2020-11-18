@@ -38,14 +38,15 @@ interface TMDBService{
 
 }
 
-//private const val URL_ADDRESS = "https://api.themoviedb.org/3/movie/"
+
 private const val URL_ADDRESS = "https://api.themoviedb.org"
-private const val FORMAT = "mode"
-private const val format = "json"
 private const val API_KEY = "api_key"
 private const val api_key = "3b623a17f57eb4da612b3871d3f78ced"
-const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w342"
+//const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w342"
+const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w500"
 const val TRAILER_BASE_URI = "https://www.youtube.com/watch?v="
+
+
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
@@ -60,46 +61,3 @@ object TMDBApi{
     }
 }
 
-
-/*
-object NetworkUtil {
-    private const val URL_ADDRESS = "https://api.themoviedb.org/3/movie/"
-    private const val FORMAT = "mode"
-    private const val format = "json"
-    private const val API_KEY = "api_key"
-    private const val api_key = "3b623a17f57eb4da612b3871d3f78ced"
-
-
-    fun buildUrl(query: String): URL? {
-        val urlAddress = URL_ADDRESS + query
-        val builtUri = Uri.parse(urlAddress).buildUpon()
-                .appendQueryParameter(FORMAT, format)
-                .appendQueryParameter(API_KEY, api_key)
-                .build()
-        var url: URL? = null
-        try {
-            url = URL(builtUri.toString())
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
-        }
-        return url
-    }
-
-    @Throws(IOException::class)
-    fun getResponseFromHttpUrl(url: URL): String? {
-        val urlConnection = url.openConnection() as HttpURLConnection
-        return try {
-            val `in` = urlConnection.inputStream
-            val scanner = Scanner(`in`)
-            scanner.useDelimiter("\\A")
-            val hasInput = scanner.hasNext()
-            if (hasInput) {
-                scanner.next()
-            } else {
-                null
-            }
-        } finally {
-            urlConnection.disconnect()
-        }
-    }
-}*/

@@ -44,7 +44,6 @@ data class Movie (
         val posterUri: Uri
         get() = Uri.parse(POSTER_BASE_URI + posterPath)
 
-       // constructor(): this(0L, 0f, 0, false, "", 0L, false, "", "", "", emptyList(), )
         constructor(): this( 0f, 0, false, "", 0L,
                false, "", "", "", emptyList(), "",
                0f, "", "", emptyList(), emptyList())

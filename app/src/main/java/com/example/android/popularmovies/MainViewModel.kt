@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers.IO
 import java.lang.Exception
 
 class MainViewModel(application: Application) : ViewModel() {
-    //val favouriteMovies: LiveData<List<MovieEntity?>?>?
 
     enum class MovieTypeList{
         POPULAR_MOVIES, TOP_RATED_MOVIES, FAVOURITE_MOVIES
@@ -21,9 +20,6 @@ class MainViewModel(application: Application) : ViewModel() {
     enum class Status {
         LOADING, SUCCESS, FAILURE
     }
-
-
-
 
     private val repository = MainRepository(application)
 
@@ -89,14 +85,13 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun setMoviesList(){
+    private fun setMoviesList(){
         if(listType == MovieTypeList.POPULAR_MOVIES && ::popularMovies.isInitialized){
             _movies.value = popularMovies
         }else if(listType == MovieTypeList.TOP_RATED_MOVIES  && ::topRatedMovies.isInitialized){
             _movies.value = topRatedMovies
         }else if (listType == MovieTypeList.FAVOURITE_MOVIES  && ::favouriteMovies.isInitialized){
             Log.i("MainViewModel", "favourite movies: $favouriteMovies")
-            //_movies.value = favouriteMovies.value
             _movies.value = favouriteMovies
         }
     }

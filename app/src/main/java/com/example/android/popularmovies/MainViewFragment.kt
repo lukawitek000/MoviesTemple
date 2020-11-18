@@ -1,7 +1,10 @@
 package com.example.android.popularmovies
 
+import android.content.res.Configuration
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -17,22 +20,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.popularmovies.adapters.MoviesAdapter
 import com.example.android.popularmovies.databinding.FragmentMainViewBinding
 import com.example.android.popularmovies.models.Movie
+import kotlin.math.roundToInt
 
 
 class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     companion object {
-        private const val SELECTED_SORTING = "SELECTED_SORTING"
-        const val MOVIE_KEY = "MOVIE"
-        const val TITLE_KEY = "TITLE"
-        private const val FAVOURITES = "favourites"
-        private const val TOP_RATED = "top_rated"
-        private const val POPULAR = "popular"
-        private const val IMAGE_WIDTH = 342
-
-        fun newInstance(): MainViewFragment{
-            return MainViewFragment()
-        }
+        private const val IMAGE_WIDTH = 500
+        //private const val IMAGE_WIDTH_IN_DP = 270
     }
     private var movieAdapter: MoviesAdapter? = null
 
@@ -43,75 +38,27 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
     private lateinit var movieRecyclerView: RecyclerView
 
 
-    override fun onResume() {
-        super.onResume()
-        Log.i("MainViewFragment", "onResume")
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
 
-        binding = DataBindingUtil.inflate<FragmentMainViewBinding>(inflater, R.layout.fragment_main_view, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_view, container, false)
 
         movieRecyclerView = binding.recyclerviewMovies
 
         setupViewModel()
         setUpRecyclerView()
-
-        Log.i("MainViewFragment", "onCreate")
-        binding.progressBar.visibility = View.VISIBLE
-        binding.failureTextView.visibility = View.GONE
-        movieRecyclerView.visibility = View.GONE
-
-        //viewModel.setMoviesList()
-
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-           Log.i("MainViewFragment", "status observer = $it")
-           if(it == MainViewModel.Status.LOADING){
-               binding.progressBar.visibility = View.VISIBLE
-               binding.failureTextView.visibility = View.GONE
-               movieRecyclerView.visibility = View.GONE
-           }else if(it == MainViewModel.Status.SUCCESS){
-               binding.progressBar.visibility = View.GONE
-               binding.failureTextView.visibility = View.GONE
-               movieRecyclerView.visibility = View.VISIBLE
-           }else{
-               binding.progressBar.visibility = View.GONE
-               binding.failureTextView.visibility = View.VISIBLE
-               movieRecyclerView.visibility = View.GONE
-           }
-
-
-       })
-
-       viewModel.movies.observe(viewLifecycleOwner, Observer {
-           Log.i("MainViewFragment", "movies observer = $it")
-           if(it != null) {
-              // movieAdapter?.setMoviesData(it)
-               movieAdapter?.submitList(it)
-           }
-       })
-
-
-
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            Log.i("MainViewFragment", "database value $it")
-            if(it != null){
-                viewModel.setFavouriteMovies(it)
-            }
-        })
-
+        setObservers()
 
         setHasOptionsMenu(true)
         return binding.root
-
-
-
     }
 
 
-
+    private fun setupViewModel() {
+        val viewModelFactory = MainViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+    }
 
 
     private fun setUpRecyclerView() {
@@ -123,18 +70,60 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
         movieRecyclerView.adapter = movieAdapter
     }
 
+
     private fun calculateSpanCount(): Int {
-        val point = Point()
-        val display = activity?.windowManager?.defaultDisplay
-        display?.getSize(point)
-        val display_width = point.x
-        return Math.round(display_width.toFloat() / IMAGE_WIDTH)
+       /* val displayWidth = resources.displayMetrics.widthPixels
+        Log.i("MainViewFragment", "display width : $displayWidth")
+        val displayWidthDp = displayWidth / (resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+        Log.i("MainViewFragment", "display width in dp : $displayWidthDp")
+        return (displayWidthDp.toFloat() / IMAGE_WIDTH).roundToInt()*/
+       // val displayWidth = resources.displayMetrics.widthPixels
+        //return (displayWidth.toFloat() / IMAGE_WIDTH).roundToInt()
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+            return 3
+        }
+        return 7
     }
 
-    private fun setupViewModel() {
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+    private fun setObservers(){
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            Log.i("MainViewFragment", "status observer = $it")
+            when(it) {
+                MainViewModel.Status.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.failureTextView.visibility = View.GONE
+                    movieRecyclerView.visibility = View.GONE
+                }
+                MainViewModel.Status.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.failureTextView.visibility = View.GONE
+                    movieRecyclerView.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.failureTextView.visibility = View.VISIBLE
+                    movieRecyclerView.visibility = View.GONE
+                }
+            }
+
+        })
+
+        viewModel.movies.observe(viewLifecycleOwner, Observer {
+            Log.i("MainViewFragment", "movies observer = $it")
+            if(it != null) {
+                movieAdapter?.submitList(it)
+            }
+        })
+
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+            Log.i("MainViewFragment", "database value $it")
+            if(it != null){
+                viewModel.setFavouriteMovies(it)
+            }
+        })
     }
+
+
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -145,23 +134,19 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
         R.id.sort_by_popularity -> {
             viewModel.setListType(MainViewModel.MovieTypeList.POPULAR_MOVIES)
-            //viewModel.listType = MainViewModel.MovieTypeList.POPULAR_MOVIES
             true
         }
         R.id.sort_by_votes -> {
             viewModel.setListType(MainViewModel.MovieTypeList.TOP_RATED_MOVIES)
-            //viewModel.listType = MainViewModel.MovieTypeList.TOP_RATED_MOVIES
             true
         }
         R.id.show_favourites -> {
             viewModel.setListType(MainViewModel.MovieTypeList.FAVOURITE_MOVIES)
-            //viewModel.listType = MainViewModel.MovieTypeList.FAVOURITE_MOVIES
             true
         }
         else -> {
             false
         }
-
     }
 
 
