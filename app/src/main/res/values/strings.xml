@@ -14,8 +14,7 @@
     <string name="favourites_title">Favourites</string>
     <string name="remove_from_favourites">Remove from favourites</string>
     <string name="add_to_favourites">Add to favourites</string>
-    <string name="trailer_value">Trailers %1$d</string>
     <string name="author_label">Author</string>
-    <string name="trailers_label">TRAILERS</string>
+    <string name="videos_label">VIDEO</string>
     <string name="reviews_label">REVIEWS</string>
 </resources>

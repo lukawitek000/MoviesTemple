@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<ScrollView
-    tools:context=".DetailInformation"
+<androidx.core.widget.NestedScrollView
+    tools:context=".DetailInformationFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -28,7 +28,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/add_to_favourite_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Title" />
+                android:text="Detail information layout" />
 
             <ImageView
                 android:id="@+id/poster"
@@ -136,15 +136,15 @@
                 />
 
             <TextView
-                android:id="@+id/trailers_label"
+                android:id="@+id/videos_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trailers_label"
-                android:textSize="32sp"/>
+                android:text="@string/videos_label"
+                android:textSize="32sp" />
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/recyclerview_trailers"/>
+                android:id="@+id/recyclerview_videos"/>
             <TextView
                 android:id="@+id/reviews_label"
                 android:layout_width="wrap_content"
@@ -158,5 +158,5 @@
 
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
 </layout>
