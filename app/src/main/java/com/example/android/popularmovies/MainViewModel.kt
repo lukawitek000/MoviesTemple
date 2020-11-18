@@ -11,9 +11,10 @@ import java.lang.Exception
 
 class MainViewModel(application: Application) : ViewModel() {
 
+    /*
     enum class MovieTypeList{
         POPULAR_MOVIES, TOP_RATED_MOVIES, FAVOURITE_MOVIES
-    }
+    }*/
 
     enum class Status {
         LOADING, SUCCESS, FAILURE
@@ -41,17 +42,22 @@ class MainViewModel(application: Application) : ViewModel() {
 
     val databaseValues  = repository.favouriteMovies
     private lateinit var favouriteMovies: List<Movie>
+    fun getFavouriteMovies(): List<Movie>{
+        return favouriteMovies
+    }
 
-    private var listType: MovieTypeList = MovieTypeList.POPULAR_MOVIES
 
+    //private var listType: MovieTypeList = MovieTypeList.POPULAR_MOVIES
+
+    /*
     fun setListType(typeList: MovieTypeList){
         listType = typeList
         //setMoviesList()
-    }
+    }*/
 
-    private val _movies = MutableLiveData<List<Movie>>()
-    val movies: LiveData<List<Movie>>
-        get() = _movies
+    //private val _movies = MutableLiveData<List<Movie>>()
+    //val movies: LiveData<List<Movie>>
+    //    get() = _movies
 
 
     private val _popularMoviesStatus = MutableLiveData<Status>()

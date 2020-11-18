@@ -107,17 +107,17 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
                 movieAdapter?.submitList(it)
             }
         })
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+       /* viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "database value $it")
             if(it != null){
                 viewModel.setFavouriteMovies(it)
             }
-        })
+        })*/
     }
 
 
 
-
+/*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort_by_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -139,7 +139,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         else -> {
             false
         }
-    }
+    }*/
 
 
 
