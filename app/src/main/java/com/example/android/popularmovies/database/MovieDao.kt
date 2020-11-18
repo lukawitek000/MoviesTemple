@@ -7,7 +7,6 @@ import com.example.android.popularmovies.models.Movie
 import com.example.android.popularmovies.models.MovieWithReviewsAndVideos
 import com.example.android.popularmovies.models.Review
 import com.example.android.popularmovies.models.Video
-import retrofit2.http.DELETE
 
 @Dao
 interface MovieDao {
@@ -23,7 +22,7 @@ interface MovieDao {
     @Transaction
     suspend fun insert(movie: Movie){
         insertMovie(movie)
-        val videos = movie.trailers
+        val videos = movie.videos
         videos.forEach {
             it.movieOwnerID = movie.id
             insertVideo(it)
@@ -50,7 +49,7 @@ interface MovieDao {
     @Transaction
     suspend fun deleteMovieReviewAndVideo(movie: Movie){
         Log.i("Dao", "movie to delete = $movie")
-        val id = deleteMovieById(movie.id)
+        deleteMovieById(movie.id)
         deleteReviewByMovieOwnerId(movie.id)
         deleteVideoByMovieOwnerId(movie.id)
     }

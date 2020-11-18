@@ -36,7 +36,7 @@ data class Movie (
         var releaseDate: String = "",
         @Transient
         @Ignore
-        var trailers: List<Video> = emptyList(),
+        var videos: List<Video> = emptyList(),
         @Transient
         @Ignore
         var reviews: List<Review> = emptyList()

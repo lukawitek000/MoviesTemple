@@ -1,9 +1,6 @@
 package com.example.android.popularmovies
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.android.popularmovies.database.FavouriteMovieDatabase
 import com.example.android.popularmovies.models.*
 import com.example.android.popularmovies.utilities.TMDBApi
@@ -47,14 +44,14 @@ class MainRepository(application: Application) {
                 }
             }
 
-            val fetchTrailers = movieInfoResponse.movies.map {
+            val fetchVideos = movieInfoResponse.movies.map {
                 async {
-                    it.trailers = TMDBApi.retrofitService.getVideos(it.id).results
+                    it.videos = TMDBApi.retrofitService.getVideos(it.id).results
                 }
             }
 
             fetchReviews.awaitAll()
-            fetchTrailers.awaitAll()
+            fetchVideos.awaitAll()
         }
 
     }

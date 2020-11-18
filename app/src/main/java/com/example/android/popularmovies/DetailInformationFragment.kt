@@ -1,32 +1,27 @@
 package com.example.android.popularmovies
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.popularmovies.adapters.ReviewsAdapter
-import com.example.android.popularmovies.adapters.TrailersAdapter
-import com.example.android.popularmovies.adapters.TrailersAdapter.TrailerClickListener
+import com.example.android.popularmovies.adapters.VideosAdapter
+import com.example.android.popularmovies.adapters.VideosAdapter.VideoClickListener
 import com.example.android.popularmovies.databinding.FragmentDetailInfromationBinding
 import com.example.android.popularmovies.models.Video
 import com.squareup.picasso.Picasso
 
-class DetailInformationFragment : Fragment(), TrailerClickListener {
+class DetailInformationFragment : Fragment(), VideoClickListener {
 
-    private lateinit var trailersAdapter: TrailersAdapter
+    private lateinit var videosAdapter: VideosAdapter
 
     private lateinit var reviewsAdapter: ReviewsAdapter
 
@@ -39,7 +34,7 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
         setUpViewModel()
         setUpReviewsRecyclerView()
-        setUpTrailersRecyclerView()
+        setUpVideosRecyclerView()
         setDataToUI()
         setUpObservers()
         handleButtonAction()
@@ -90,9 +85,9 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
             binding.reviewsLabel.visibility = View.GONE
             binding.recyclerviewReviews.visibility = View.GONE
         }
-        if(viewModel.selectedMovie!!.trailers.isEmpty()){
-            binding.trailersLabel.visibility = View.GONE
-            binding.recyclerviewTrailers.visibility = View.GONE
+        if(viewModel.selectedMovie!!.videos.isEmpty()){
+            binding.videosLabel.visibility = View.GONE
+            binding.recyclerviewVideos.visibility = View.GONE
         }
     }
 
@@ -112,12 +107,12 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
     }
 
-    private fun setUpTrailersRecyclerView() {
-        val trailerManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        trailersAdapter =  TrailersAdapter(viewModel.selectedMovie!!.trailers, this)
-        binding.recyclerviewTrailers.layoutManager = trailerManager
-        binding.recyclerviewTrailers.adapter = trailersAdapter
-        binding.recyclerviewTrailers.setHasFixedSize(true)
+    private fun setUpVideosRecyclerView() {
+        val videoManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        videosAdapter =  VideosAdapter(viewModel.selectedMovie!!.videos, this)
+        binding.recyclerviewVideos.layoutManager = videoManager
+        binding.recyclerviewVideos.adapter = videosAdapter
+        binding.recyclerviewVideos.setHasFixedSize(true)
     }
 
     private fun setUpReviewsRecyclerView() {
@@ -131,11 +126,11 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
 
 
-    override fun onTrailerClicked(trailer: Video) {
-        Toast.makeText(requireContext(), "clicked trailer ${trailer.name}", Toast.LENGTH_SHORT).show()
+    override fun onVideoClicked(video: Video) {
+        Toast.makeText(requireContext(), "clicked video ${video.name}", Toast.LENGTH_SHORT).show()
         val intent = Intent(Intent.ACTION_VIEW)
-        if(trailer.site == "YouTube") {
-            intent.data = trailer.videoUri
+        if(video.site == "YouTube") {
+            intent.data = video.videoUri
             startActivity(intent)
         }else{
             Toast.makeText(requireContext(), "Unknown site", Toast.LENGTH_SHORT).show()

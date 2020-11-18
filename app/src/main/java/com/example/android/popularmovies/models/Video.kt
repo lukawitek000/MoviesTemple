@@ -3,7 +3,7 @@ package com.example.android.popularmovies.models
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.android.popularmovies.utilities.TRAILER_BASE_URI
+import com.example.android.popularmovies.utilities.VIDEO_BASE_URI
 import com.squareup.moshi.Json
 
 
@@ -21,10 +21,10 @@ data class Video(
         var name: String,
         var site: String,
         var size: Int,
-        var type: String = "Trailer"
+        var type: String = ""
 ){
         val videoUri: Uri
-        get() = Uri.parse(TRAILER_BASE_URI + key)
+        get() = Uri.parse(VIDEO_BASE_URI + key)
         constructor():this(0L, 0L, "", "", "", "",
                 "", "", 0, "")
 }

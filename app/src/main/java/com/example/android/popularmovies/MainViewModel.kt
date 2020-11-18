@@ -1,9 +1,7 @@
 package com.example.android.popularmovies
 
 import android.app.Application
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.android.popularmovies.models.Movie
 import com.example.android.popularmovies.models.MovieWithReviewsAndVideos
@@ -106,7 +104,7 @@ class MainViewModel(application: Application) : ViewModel() {
         val movies = mutableListOf<Movie>()
         for(value in response){
             val movie = value.movie
-            movie.trailers = value.videos
+            movie.videos = value.videos
             movie.reviews = value.reviews
             movies.add(movie)
         }
