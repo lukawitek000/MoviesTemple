@@ -1,15 +1,9 @@
-package com.example.android.popularmovies
+package com.example.android.popularmovies.fragments
 
-import android.content.res.Configuration
-import android.graphics.Point
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,13 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.popularmovies.MainViewModel
+import com.example.android.popularmovies.MainViewModelFactory
+import com.example.android.popularmovies.R
 import com.example.android.popularmovies.adapters.MoviesAdapter
 import com.example.android.popularmovies.databinding.FragmentMainViewBinding
 import com.example.android.popularmovies.models.Movie
-import kotlin.math.roundToInt
 
 
-class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
+class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     companion object {
         private const val IMAGE_WIDTH = 500
@@ -73,13 +69,13 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     private fun calculateSpanCount(): Int {
         val displayWidth = resources.displayMetrics.widthPixels
-        Log.i("MainViewFragment", "display width : $displayWidth")
+        Log.i("PopularMoviesFragment", "display width : $displayWidth")
         return displayWidth/ IMAGE_WIDTH + 1
     }
 
     private fun setObservers(){
         viewModel.status.observe(viewLifecycleOwner, Observer {
-            Log.i("MainViewFragment", "status observer = $it")
+            Log.i("PopularMoviesFragment", "status observer = $it")
             when(it) {
                 MainViewModel.Status.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -101,14 +97,14 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
         })
 
         viewModel.movies.observe(viewLifecycleOwner, Observer {
-            Log.i("MainViewFragment", "movies observer = $it")
+            Log.i("PopularMoviesFragment", "movies observer = $it")
             if(it != null) {
                 movieAdapter?.submitList(it)
             }
         })
 
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            Log.i("MainViewFragment", "database value $it")
+            Log.i("PopularMoviesFragment", "database value $it")
             if(it != null){
                 viewModel.setFavouriteMovies(it)
             }

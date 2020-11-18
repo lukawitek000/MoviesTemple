@@ -1,4 +1,4 @@
-package com.example.android.popularmovies
+package com.example.android.popularmovies.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android.popularmovies.MainViewModel
+import com.example.android.popularmovies.MainViewModelFactory
+import com.example.android.popularmovies.R
 import com.example.android.popularmovies.adapters.ReviewsAdapter
 import com.example.android.popularmovies.adapters.VideosAdapter
 import com.example.android.popularmovies.adapters.VideosAdapter.VideoClickListener

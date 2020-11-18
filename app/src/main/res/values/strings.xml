@@ -17,4 +17,6 @@
     <string name="author_label">Author</string>
     <string name="videos_label">VIDEO</string>
     <string name="reviews_label">REVIEWS</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

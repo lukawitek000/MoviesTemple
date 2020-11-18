@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/mainViewFragment"
-        android:name="com.example.android.popularmovies.MainViewFragment"
+        android:name="com.example.android.popularmovies.fragments.PopularMoviesFragment"
         android:label="MainViewFragment" >
         <action
             android:id="@+id/action_mainViewFragment_to_detailInformationFragment"
@@ -13,6 +13,6 @@
     </fragment>
     <fragment
         android:id="@+id/detailInformationFragment"
-        android:name="com.example.android.popularmovies.DetailInformationFragment"
+        android:name="com.example.android.popularmovies.fragments.DetailInformationFragment"
         android:label="DetailInformationFragment" />
 </navigation>
