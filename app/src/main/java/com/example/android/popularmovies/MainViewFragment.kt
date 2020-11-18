@@ -42,6 +42,12 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     private lateinit var movieRecyclerView: RecyclerView
 
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("MainViewFragment", "onResume")
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -53,13 +59,15 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
         setupViewModel()
         setUpRecyclerView()
 
-
+        Log.i("MainViewFragment", "onCreate")
         binding.progressBar.visibility = View.VISIBLE
         binding.failureTextView.visibility = View.GONE
         movieRecyclerView.visibility = View.GONE
 
+        //viewModel.setMoviesList()
+
         viewModel.status.observe(viewLifecycleOwner, Observer {
-           Log.i("MainActivity", "status observer = $it")
+           Log.i("MainViewFragment", "status observer = $it")
            if(it == MainViewModel.Status.LOADING){
                binding.progressBar.visibility = View.VISIBLE
                binding.failureTextView.visibility = View.GONE
@@ -78,7 +86,7 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
        })
 
        viewModel.movies.observe(viewLifecycleOwner, Observer {
-           Log.i("MainActivity", "movies observer = $it")
+           Log.i("MainViewFragment", "movies observer = $it")
            if(it != null) {
                movieAdapter?.setMoviesData(it)
            }
@@ -87,6 +95,7 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
 
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+            Log.i("MainViewFragment", "database value $it")
             if(it != null){
                 viewModel.setFavouriteMovies(it)
             }

@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,21 +53,31 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
                 .into(binding.poster)
         //uploadData();
 
-        if(viewModel.isSelectedMovieInDatabase()){
-            binding.addToFavouriteButton.text = resources.getString(R.string.remove_from_favourites)
-        }else {
-            binding.addToFavouriteButton.text = resources.getString(R.string.add_to_favourites)
-        }
+       setButtonText()
+
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                viewModel.setFavouriteMovies(it)
+            }
+        })
 
 
         binding.addToFavouriteButton.setOnClickListener {
             if(viewModel.isSelectedMovieInDatabase()){
                 viewModel.deleteMovieFromDatabase()
+                binding.addToFavouriteButton.text = resources.getString(R.string.add_to_favourites)
+                Toast.makeText(requireContext(), "Removed from database", Toast.LENGTH_SHORT).show()
             }else {
                 viewModel.addMovieToDatabase()
+                binding.addToFavouriteButton.text = resources.getString(R.string.remove_from_favourites)
+                Toast.makeText(requireContext(), "Added to database", Toast.LENGTH_SHORT).show()
             }
         }
 
+        // done: change text on button after click
+
+        // done: refresh adapter after coming back to main view
+        // TODO: use DiffUtil to optimize recyclerView
 /*
         binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +112,14 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
 
 
         return binding.root
+    }
+
+    private fun setButtonText(){
+        if(viewModel.isSelectedMovieInDatabase()){
+            binding.addToFavouriteButton.text = resources.getString(R.string.remove_from_favourites)
+        }else {
+            binding.addToFavouriteButton.text = resources.getString(R.string.add_to_favourites)
+        }
     }
 
 

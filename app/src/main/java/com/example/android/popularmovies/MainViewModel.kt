@@ -1,7 +1,9 @@
 package com.example.android.popularmovies
 
 import android.app.Application
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.android.popularmovies.models.Movie
 import com.example.android.popularmovies.models.MovieWithReviewsAndVideos
@@ -19,6 +21,7 @@ class MainViewModel(application: Application) : ViewModel() {
     enum class Status {
         LOADING, SUCCESS, FAILURE
     }
+
 
 
 
@@ -86,12 +89,12 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    private fun setMoviesList(){
-        if(listType == MovieTypeList.POPULAR_MOVIES){
+    fun setMoviesList(){
+        if(listType == MovieTypeList.POPULAR_MOVIES && ::popularMovies.isInitialized){
             _movies.value = popularMovies
-        }else if(listType == MovieTypeList.TOP_RATED_MOVIES){
+        }else if(listType == MovieTypeList.TOP_RATED_MOVIES  && ::topRatedMovies.isInitialized){
             _movies.value = topRatedMovies
-        }else{
+        }else if (listType == MovieTypeList.FAVOURITE_MOVIES  && ::favouriteMovies.isInitialized){
             Log.i("MainViewModel", "favourite movies: $favouriteMovies")
             //_movies.value = favouriteMovies.value
             _movies.value = favouriteMovies
@@ -113,7 +116,9 @@ class MainViewModel(application: Application) : ViewModel() {
             movies.add(movie)
         }
         favouriteMovies = movies
+        setMoviesList()
     }
+
 
     fun deleteMovieFromDatabase(){
         viewModelScope.launch {
