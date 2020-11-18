@@ -74,10 +74,6 @@ class DetailInformationFragment : Fragment(), TrailerClickListener {
             }
         }
 
-        // done: change text on button after click
-
-        // done: refresh adapter after coming back to main view
-        // TODO: use DiffUtil to optimize recyclerView
 /*
         binding.addToFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -88,7 +88,8 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
        viewModel.movies.observe(viewLifecycleOwner, Observer {
            Log.i("MainViewFragment", "movies observer = $it")
            if(it != null) {
-               movieAdapter?.setMoviesData(it)
+              // movieAdapter?.setMoviesData(it)
+               movieAdapter?.submitList(it)
            }
        })
 

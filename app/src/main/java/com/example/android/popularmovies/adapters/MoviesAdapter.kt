@@ -6,6 +6,8 @@ import android.net.Uri
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.example.android.popularmovies.adapters.MoviesAdapter.MovieAdapterOnClickHandler
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.popularmovies.adapters.MoviesAdapter.MoviesAdapterViewHolder
@@ -15,13 +17,13 @@ import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.android.popularmovies.models.Movie
 
-class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : RecyclerView.Adapter<MoviesAdapterViewHolder>() {
+class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : ListAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
     interface MovieAdapterOnClickHandler {
         fun onClick(movie: Movie?)
     }
 
-    private var moviesData: List<Movie>? = null
+    //private var moviesData: List<Movie>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapterViewHolder {
         val context = parent.context
@@ -30,27 +32,25 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
         return MoviesAdapterViewHolder(view)
     }
 
+
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
-        val movie = moviesData!![position]
+        val movie = getItem(position)
         Picasso.with(holder.posterImage.context)
                 .load(movie.posterUri)
                 .into(holder.posterImage)
     }
 
-    override fun getItemCount(): Int {
-        return moviesData?.size ?: 0
-    }
 
-    fun setMoviesData(movies: List<Movie>) {
-        moviesData = movies
-        notifyDataSetChanged()
-    }
+    //fun setMoviesData(movies: List<Movie>) {
+    //    moviesData = movies
+    //    notifyDataSetChanged()
+    //}
 
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
         val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
         override fun onClick(view: View) {
             val adapterPosition = adapterPosition
-            clickHandler.onClick(moviesData!![adapterPosition])
+            clickHandler.onClick(getItem(adapterPosition))
         }
 
 
@@ -65,4 +65,15 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Recy
             itemView.setOnClickListener(this)
         }
     }
+}
+
+class MoviesDiffCallback : DiffUtil.ItemCallback<Movie>(){
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem == newItem
+    }
+
 }
