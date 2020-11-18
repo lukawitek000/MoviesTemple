@@ -72,17 +72,9 @@ class MainViewFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
 
     private fun calculateSpanCount(): Int {
-       /* val displayWidth = resources.displayMetrics.widthPixels
+        val displayWidth = resources.displayMetrics.widthPixels
         Log.i("MainViewFragment", "display width : $displayWidth")
-        val displayWidthDp = displayWidth / (resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
-        Log.i("MainViewFragment", "display width in dp : $displayWidthDp")
-        return (displayWidthDp.toFloat() / IMAGE_WIDTH).roundToInt()*/
-       // val displayWidth = resources.displayMetrics.widthPixels
-        //return (displayWidth.toFloat() / IMAGE_WIDTH).roundToInt()
-        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-            return 3
-        }
-        return 7
+        return displayWidth/ IMAGE_WIDTH + 1
     }
 
     private fun setObservers(){

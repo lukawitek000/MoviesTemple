@@ -47,13 +47,6 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
 
 
         init {
-            /*val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val display: Display
-            display = windowManager.defaultDisplay
-            val point = Point()
-            display.getSize(point)
-            val displayWidth = point.x
-            posterImage.minimumWidth = displayWidth*/
             itemView.setOnClickListener(this)
         }
     }

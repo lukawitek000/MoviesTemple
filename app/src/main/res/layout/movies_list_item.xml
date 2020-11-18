@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/poster_margin">
+    android:layout_height="wrap_content">
     <ImageView
         android:id = "@+id/poster_image_view"
         tool:ignore="ContentDescription"
         android:layout_margin="0dp"
-        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 </FrameLayout>
