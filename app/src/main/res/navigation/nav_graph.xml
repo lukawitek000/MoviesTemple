@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/popularMoviesFragment"
         android:name="com.example.android.popularmovies.fragments.PopularMoviesFragment"
-        android:label="MainViewFragment" >
+        android:label="Popular Movies" >
         <action
             android:id="@+id/action_popularMoviesFragment_to_detailInformationFragment"
             app:destination="@id/detailInformationFragment" />
@@ -16,11 +16,11 @@
     <fragment
         android:id="@+id/detailInformationFragment"
         android:name="com.example.android.popularmovies.fragments.DetailInformationFragment"
-        android:label="DetailInformationFragment" />
+        android:label="Detail Information" />
     <fragment
         android:id="@+id/favouriteMoviesFragment"
         android:name="com.example.android.popularmovies.fragments.FavouriteMoviesFragment"
-        android:label="fragment_favourite_movies"
+        android:label="Favourite Movies"
         tools:layout="@layout/fragment_favourite_movies" >
         <action
             android:id="@+id/action_favouriteMoviesFragment_to_detailInformationFragment"
@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/topRatedMoviesFragment"
         android:name="com.example.android.popularmovies.fragments.TopRatedMoviesFragment"
-        android:label="fragment_top_rated_movies"
+        android:label="Top Rated Movies"
         tools:layout="@layout/fragment_top_rated_movies" >
         <action
             android:id="@+id/action_topRatedMoviesFragment_to_detailInformationFragment"
@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/recommendMoviesFragment"
         android:name="com.example.android.popularmovies.fragments.RecommendMoviesFragment"
-        android:label="fragment_recommend_movies"
+        android:label="Recommended Movies"
         tools:layout="@layout/fragment_recommend_movies" >
         <action
             android:id="@+id/action_recommendMoviesFragment_to_detailInformationFragment"

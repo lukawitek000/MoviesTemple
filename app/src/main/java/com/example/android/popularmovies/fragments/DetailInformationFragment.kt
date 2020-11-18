@@ -11,7 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android.popularmovies.MainActivity
 import com.example.android.popularmovies.MainViewModel
 import com.example.android.popularmovies.MainViewModelFactory
 import com.example.android.popularmovies.R
@@ -34,6 +36,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
+
+        (requireActivity() as MainActivity).bottomNavigation.visibility = View.GONE
 
         setUpViewModel()
         setUpReviewsRecyclerView()

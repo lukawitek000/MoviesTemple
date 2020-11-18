@@ -41,7 +41,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
 
     val databaseValues  = repository.favouriteMovies
-    private lateinit var favouriteMovies: List<Movie>
+    private var favouriteMovies: List<Movie> = emptyList()
     fun getFavouriteMovies(): List<Movie>{
         return favouriteMovies
     }
@@ -69,6 +69,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
 
     init {
+        //setFavouriteMovies(databaseValues.value!!)
   //      getMovies()
     }
 

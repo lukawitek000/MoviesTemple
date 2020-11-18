@@ -44,7 +44,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         setUpRecyclerView()
         setObservers()
 
-        setHasOptionsMenu(true)
+       // setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -107,12 +107,12 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
                 movieAdapter?.submitList(it)
             }
         })
-       /* viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "database value $it")
             if(it != null){
                 viewModel.setFavouriteMovies(it)
             }
-        })*/
+        })
     }
 
 

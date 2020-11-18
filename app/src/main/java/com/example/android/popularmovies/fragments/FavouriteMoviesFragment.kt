@@ -31,6 +31,8 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+
         val view = inflater.inflate(R.layout.fragment_favourite_movies, container, false)
         recyclerView = view.findViewById(R.id.favourite_movies_recyclerview)
         emptyFavouriteMoviesListTextView = view.findViewById(R.id.empty_list_favourite_movies_textview)
