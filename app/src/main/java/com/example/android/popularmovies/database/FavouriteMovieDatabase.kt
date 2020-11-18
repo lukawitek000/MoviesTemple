@@ -10,7 +10,7 @@ import com.example.android.popularmovies.models.Review
 import com.example.android.popularmovies.models.Video
 
 //@TypeConverters(ReviewsConverter::class, VideoUrlsConverter::class, PosterUriConverter::class)
-@Database(entities = [Movie::class, Review::class, Video::class], version = 10, exportSchema = false)
+@Database(entities = [Movie::class, Review::class, Video::class], version = 11, exportSchema = false)
 abstract class FavouriteMovieDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 

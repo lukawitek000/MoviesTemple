@@ -9,13 +9,13 @@ data class MovieWithReviewsAndVideos(
         @Embedded
         val movie: Movie,
         @Relation(
-                parentColumn = "movieID",
+                parentColumn = "id",
                 entityColumn = "movieOwnerID",
                 entity = Review::class
         )
         val reviews: List<Review>,
         @Relation(
-                parentColumn = "movieID",
+                parentColumn = "id",
                 entityColumn = "movieOwnerID",
                 entity = Video::class
         )

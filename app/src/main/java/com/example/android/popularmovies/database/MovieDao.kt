@@ -22,15 +22,15 @@ interface MovieDao {
 
     @Transaction
     suspend fun insert(movie: Movie){
-        val id = insertMovie(movie)
+        insertMovie(movie)
         val videos = movie.trailers
         videos.forEach {
-            it.movieOwnerID = id
+            it.movieOwnerID = movie.id
             insertVideo(it)
         }
         val reviews = movie.reviews
         reviews.forEach {
-            it.movieOwnerID = id
+            it.movieOwnerID = movie.id
             insertReview(it)
         }
 
@@ -44,18 +44,18 @@ interface MovieDao {
     suspend fun insertVideo(video: Video)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(movie: Movie): Long
+    suspend fun insertMovie(movie: Movie)
 
 
     @Transaction
     suspend fun deleteMovieReviewAndVideo(movie: Movie){
         Log.i("Dao", "movie to delete = $movie")
-        val id = deleteMovieById(movie.movieID)
-        deleteReviewByMovieOwnerId(movie.movieID)
-        deleteVideoByMovieOwnerId(movie.movieID)
+        val id = deleteMovieById(movie.id)
+        deleteReviewByMovieOwnerId(movie.id)
+        deleteVideoByMovieOwnerId(movie.id)
     }
 
-    @Query("DELETE FROM Movie WHERE movieID = :id")
+    @Query("DELETE FROM Movie WHERE id = :id")
     suspend fun deleteMovieById(id: Long)
 
     @Query("DELETE FROM Review WHERE movieOwnerID = :id")
