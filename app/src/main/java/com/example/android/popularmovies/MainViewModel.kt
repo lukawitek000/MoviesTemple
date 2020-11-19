@@ -169,4 +169,12 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
+
+    fun deleteAllFavouriteMovies(){
+        viewModelScope.launch {
+            repository.deleteAllFavouriteMovies()
+            favouriteMovies.toMutableList().clear()
+        }
+    }
+
 }

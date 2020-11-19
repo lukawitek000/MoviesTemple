@@ -64,4 +64,11 @@ class MainRepository(application: Application) {
         }
     }
 
+
+    suspend fun deleteAllFavouriteMovies(){
+        withContext(IO){
+            database?.movieDao()?.deleteAll()
+        }
+    }
+
 }

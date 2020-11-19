@@ -1,12 +1,12 @@
 package com.example.android.popularmovies.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -40,7 +40,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
-
+        setHasOptionsMenu(true)
         return view
     }
 
@@ -82,4 +82,32 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        return inflater.inflate(R.menu.favourite_fragment_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
+        R.id.delete_all_item -> {
+            createAlertDialog().show()
+            true
+        }
+        else -> false
+    }
+
+    private fun createAlertDialog(): AlertDialog.Builder{
+        val builder = AlertDialog.Builder(requireContext())
+        builder.apply {
+            setTitle("Warning!")
+            setMessage("Do you want to delete all favourite movies?")
+            setPositiveButton("Yes") { _, _ ->
+                viewModel.deleteAllFavouriteMovies()
+                Toast.makeText(requireContext(), "All favourite movies deleted", Toast.LENGTH_SHORT).show()
+            }
+            setNegativeButton("Cancel"){ _, _ -> }
+            create()
+        }
+        return builder
+
+    }
 }
