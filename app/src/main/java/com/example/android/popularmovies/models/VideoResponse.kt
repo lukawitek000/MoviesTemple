@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.models
 
 data class VideoResponse(
-        var id: Long,
+        @Transient
+        var id: Long = 0L,
         var results: List<Video>
 )
