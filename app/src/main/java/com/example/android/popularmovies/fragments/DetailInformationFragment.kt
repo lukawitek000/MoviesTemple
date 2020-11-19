@@ -40,6 +40,15 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
 
         setUpViewModel()
+        //viewModel.getDetailInformation()
+        viewModel.detailsStatus.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                if(it == MainViewModel.Status.SUCCESS){
+                   // setUpReviewsRecyclerView()
+                   // setUpVideosRecyclerView()
+                }
+            }
+        })
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
         setDataToUI()

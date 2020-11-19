@@ -33,12 +33,12 @@ class MainRepository(application: Application) {
             val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
             //getVideosAndReviews(movieInfoResponse)
 
-            getMoviesDetails(movieInfoResponse)
+            getMoviesDetails2(movieInfoResponse)
             movieInfoResponse.movies
         }
     }
 
-    private suspend fun getMoviesDetails(movieInfoResponse: TMDBResponse) {
+    private suspend fun getMoviesDetails2(movieInfoResponse: TMDBResponse) {
         CoroutineScope(IO).launch {
             val allResponses = movieInfoResponse.movies.map {
                 async {
@@ -49,8 +49,14 @@ class MainRepository(application: Application) {
             }
             allResponses.awaitAll()
         }
+    }
 
-
+    suspend fun getMovieDetails(movie: Movie) {
+        CoroutineScope(IO).launch {
+            val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movie.id)
+            movie.reviews  = response.reviews.results
+            movie.videos = response.videos.results
+        }
     }
 
 
@@ -79,7 +85,7 @@ class MainRepository(application: Application) {
         return withContext(IO){
             val response = TMDBApi.retrofitService.getTopRatedMovies()
            // getVideosAndReviews(response)
-            getMoviesDetails(response)
+            getMoviesDetails2(response)
             response.movies
         }
     }
@@ -87,8 +93,8 @@ class MainRepository(application: Application) {
     suspend fun getRecommendationBasedOnMovieID(movieID: Long): List<Movie> {
         return withContext(IO){
             val response = TMDBApi.retrofitService.getRecommendationsBaseOnMovieID(movieID)
-            getVideosAndReviews(response)
-            //getMoviesDetails(response)
+            //getVideosAndReviews(response)
+            //getMoviesDetails2(response)
             response.movies
         }
     }

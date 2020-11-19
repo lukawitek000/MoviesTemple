@@ -209,6 +209,26 @@ class MainViewModel(application: Application) : ViewModel() {
         return false
     }
 
+    private val _detailsStatus = MutableLiveData<Status>()
+    val detailsStatus: LiveData<Status>
+    get() = _detailsStatus
+
+    fun getDetailInformation(){
+        viewModelScope.launch {
+            try{
+
+                val start = System.currentTimeMillis()
+                _detailsStatus.value = Status.LOADING
+                repository.getMovieDetails(selectedMovie!!)
+                _detailsStatus.value = Status.SUCCESS
+                Log.i("MainViewModel", "time elaspsed ${System.currentTimeMillis() - start}")
+            }catch (e: Exception){
+                Log.i("MainViewModel", "errror $e")
+                _detailsStatus.value = Status.FAILURE
+            }
+        }
+    }
+
 
     fun getRecommendationsBasedOnFavouriteMovies(){
         viewModelScope.launch {
