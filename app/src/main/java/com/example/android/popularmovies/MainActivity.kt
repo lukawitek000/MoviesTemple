@@ -3,12 +3,14 @@ package com.example.android.popularmovies
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.android.popularmovies.utilities.IMAGE_WIDTH
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -44,5 +46,11 @@ class MainActivity : AppCompatActivity() {
 
     fun setBottomNavigationVisibility(value: Int){
         bottomNavigation.visibility = value
+    }
+
+    fun calculateSpanCount(): Int {
+        val displayWidth = resources.displayMetrics.widthPixels
+        Log.i("PopularMoviesFragment", "display width : $displayWidth")
+        return displayWidth/ IMAGE_WIDTH + 1
     }
 }

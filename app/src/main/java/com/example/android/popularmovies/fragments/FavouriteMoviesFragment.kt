@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.popularmovies.MainActivity
 import com.example.android.popularmovies.MainViewModel
 import com.example.android.popularmovies.MainViewModelFactory
 import com.example.android.popularmovies.R
@@ -36,8 +37,6 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         val view = inflater.inflate(R.layout.fragment_favourite_movies, container, false)
         recyclerView = view.findViewById(R.id.favourite_movies_recyclerview)
         emptyFavouriteMoviesListTextView = view.findViewById(R.id.empty_list_favourite_movies_textview)
-        emptyFavouriteMoviesListTextView.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
         setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
@@ -51,7 +50,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
     }
 
     private fun setUpRecyclerView() {
-        val spanCount = calculateSpanCount()
+        val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
@@ -60,17 +59,12 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
     }
 
 
-    private fun calculateSpanCount(): Int {
-        val displayWidth = resources.displayMetrics.widthPixels
-        Log.i("FavouriteMoviesFragment", "display width : $displayWidth")
-        return displayWidth / IMAGE_WIDTH + 1
-    }
 
     private fun setUpObservers() {
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("FavouriteMoviesFragment", "database value $it")
             if(it != null){
-                viewModel.setFavouriteMovies(it)
+                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
                 moviesAdapter.submitList(viewModel.getFavouriteMovies())
                 if(it.isEmpty()){
                     emptyFavouriteMoviesListTextView.visibility = View.VISIBLE
@@ -83,8 +77,8 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         })
     }
 
-    override fun onClick(movie: Movie?) {
-        viewModel.selectedMovie = movie
+    override fun onClick(movie: Movie) {
+        viewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
     }
 

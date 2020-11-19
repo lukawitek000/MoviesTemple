@@ -29,7 +29,7 @@ class LoadingFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_loading, container, false)
         setUpViewModel()
         setUpObservers()
-
+        viewModel.getMovies()
         return view
     }
 
@@ -41,9 +41,8 @@ class LoadingFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
+        viewModel.initialApiRequestStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                //findNavController().navigate(R.id.action_loadingFragment_to_popularMoviesFragment)
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
                         findNavController().navigate(R.id.action_loadingFragment_to_popularMoviesFragment)

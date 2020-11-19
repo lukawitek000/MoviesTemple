@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.popularmovies.MainActivity
 import com.example.android.popularmovies.MainViewModel
 import com.example.android.popularmovies.MainViewModelFactory
 import com.example.android.popularmovies.R
@@ -56,7 +57,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     }
 
     private fun setUpRecyclerView() {
-        val spanCount = calculateSpanCount()
+        val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
@@ -65,14 +66,9 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     }
 
 
-    private fun calculateSpanCount(): Int {
-        val displayWidth = resources.displayMetrics.widthPixels
-        Log.i("TopRatedMoviesFragment", "display width : $displayWidth")
-        return displayWidth / IMAGE_WIDTH + 1
-    }
 
-    override fun onClick(movie: Movie?) {
-        viewModel.selectedMovie = movie
+    override fun onClick(movie: Movie) {
+        viewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_recommendMoviesFragment_to_detailInformationFragment)
     }
 

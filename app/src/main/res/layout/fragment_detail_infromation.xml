@@ -156,6 +156,11 @@
                 android:layout_height="match_parent"
                 android:id="@+id/recyclerview_reviews"/>
 
+            <ProgressBar
+                android:id="@+id/detail_information_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -20,7 +20,7 @@ import com.example.android.popularmovies.models.Movie
 class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : ListAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
     interface MovieAdapterOnClickHandler {
-        fun onClick(movie: Movie?)
+        fun onClick(movie: Movie)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapterViewHolder {

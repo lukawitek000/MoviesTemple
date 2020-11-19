@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.widget.TextView
 import com.example.android.popularmovies.models.Video
 
-class VideosAdapter(private val videos: List<Video>, private val videoClickListener: VideoClickListener) : RecyclerView.Adapter<VideosAdapterHolder>() {
+class VideosAdapter(private val videoClickListener: VideoClickListener) : RecyclerView.Adapter<VideosAdapterHolder>() {
 
     interface VideoClickListener {
         fun onVideoClicked(video: Video)
     }
+
+    var videos: List<Video> = emptyList()
 
     private var context: Context? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosAdapterHolder {
