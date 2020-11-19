@@ -43,7 +43,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
         setDataToUI()
-        //setUpObservers()
+        setUpObservers()
         handleButtonAction()
 
         return binding.root
@@ -63,14 +63,14 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         }
     }
 
-/*
+
     private fun setUpObservers() {
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             if(it != null){
-               // viewModel.setFavouriteMovies(it)
+                viewModel.setFavouriteMovies(it)
             }
         })
-    }*/
+    }
 
 
     private fun setDataToUI(){

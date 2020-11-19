@@ -37,9 +37,9 @@
     </fragment>
     <fragment
         android:id="@+id/recommendMoviesFragment"
-        android:name="com.example.android.popularmovies.fragments.RecommendMoviesFragment"
+        android:name="com.example.android.popularmovies.fragments.RecommendedMoviesFragment"
         android:label="Recommended Movies"
-        tools:layout="@layout/fragment_recommend_movies" >
+        tools:layout="@layout/fragment_recommended_movies" >
         <action
             android:id="@+id/action_recommendMoviesFragment_to_detailInformationFragment"
             app:destination="@id/detailInformationFragment" />

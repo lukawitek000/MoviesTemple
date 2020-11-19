@@ -65,4 +65,12 @@ class MainRepository(application: Application) {
         }
     }
 
+    suspend fun getRecommendationBasedOnMovieID(movieID: Long): List<Movie> {
+        return withContext(IO){
+            val response = TMDBApi.retrofitService.getRecommendationsBaseOnMovieID(movieID)
+            getVideosAndReviews(response)
+            response.movies
+        }
+    }
+
 }

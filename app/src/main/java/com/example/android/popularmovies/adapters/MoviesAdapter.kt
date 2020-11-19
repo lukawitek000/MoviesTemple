@@ -32,9 +32,17 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
 
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = getItem(position)
-        Picasso.with(holder.posterImage.context)
-                .load(movie.posterUri)
-                .into(holder.posterImage)
+
+        if(movie.posterUri != null) {
+            Picasso.with(holder.posterImage.context)
+                    .load(movie.posterUri)
+                    .into(holder.posterImage)
+        }else{
+            Picasso.with(holder.posterImage.context)
+                    .load(R.drawable.default_movie_poster)
+                    .into(holder.posterImage)
+        }
+
     }
 
 

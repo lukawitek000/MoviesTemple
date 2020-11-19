@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.models
 
+import android.content.ContentResolver
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -15,12 +16,12 @@ data class Movie (
         var voteCount: Int = 0,
         var video: Boolean = false,
         @Json(name="poster_path")
-        var posterPath: String = "",
+        var posterPath: String? = "",
         @PrimaryKey
         var id: Long = 0L,
         var adult: Boolean = false,
         @Json(name="backdrop_path")
-        var backdropPath: String = "",
+        var backdropPath: String? = "",
         @Json(name="original_language")
         var originalLanguage: String = "",
         @Json(name="original_title")
@@ -41,8 +42,13 @@ data class Movie (
         @Ignore
         var reviews: List<Review> = emptyList()
 ){
-        val posterUri: Uri
-        get() = Uri.parse(POSTER_BASE_URI + posterPath)
+        val posterUri: Uri?
+        get() {
+                if(posterPath != null) {
+                       return  Uri.parse(POSTER_BASE_URI + posterPath)
+                }
+                return null
+        }
 
         constructor(): this( 0f, 0, false, "", 0L,
                false, "", "", "", emptyList(), "",

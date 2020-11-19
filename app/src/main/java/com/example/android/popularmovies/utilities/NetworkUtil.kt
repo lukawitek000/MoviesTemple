@@ -36,6 +36,11 @@ interface TMDBService{
             @Path("movieId") movieId: Long,
             @Query(API_KEY) apiKey: String = api_key): ReviewResponse
 
+    @GET("/3/movie/{movieId}/recommendations")
+    suspend fun getRecommendationsBaseOnMovieID(
+            @Path("movieId") movieId: Long,
+            @Query(API_KEY) apiKey: String = api_key): TMDBResponse
+
 }
 
 

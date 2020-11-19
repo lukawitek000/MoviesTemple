@@ -65,6 +65,12 @@ class MainViewModel(application: Application) : ViewModel() {
     val popularMoviesStatus: LiveData<Status>
         get() = _popularMoviesStatus
 
+
+    private val _recommendedMovies = MutableLiveData<Set<Movie>>()
+    val recommendedMovies: LiveData<Set<Movie>>
+    get() = _recommendedMovies
+
+
     var selectedMovie: Movie? = null
 
 
@@ -156,6 +162,7 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }*/
 
+
     fun addMovieToDatabase() {
         viewModelScope.launch {
             repository.insertMovieToDatabase(selectedMovie!!)
@@ -171,6 +178,7 @@ class MainViewModel(application: Application) : ViewModel() {
             movies.add(movie)
         }
         favouriteMovies = movies
+        getRecommendationsBasedOnFavouriteMovies()
         //setMoviesList()
     }
 
@@ -193,5 +201,18 @@ class MainViewModel(application: Application) : ViewModel() {
         return false
     }
 
+
+    fun getRecommendationsBasedOnFavouriteMovies(){
+        viewModelScope.launch {
+            val recommendationsList = mutableSetOf<Movie>()
+            val recommendations = favouriteMovies.map {
+                async {
+                    recommendationsList.addAll(repository.getRecommendationBasedOnMovieID(it.id))
+                }
+            }
+            recommendations.awaitAll()
+            _recommendedMovies.value = recommendationsList
+        }
+    }
 
 }
