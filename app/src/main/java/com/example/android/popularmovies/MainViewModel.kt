@@ -70,6 +70,11 @@ class MainViewModel(application: Application) : ViewModel() {
     val recommendedMovies: LiveData<Set<Movie>>
     get() = _recommendedMovies
 
+    private val _status = MutableLiveData<Status>()
+
+    val status: LiveData<Status>
+        get() = _status
+
 
     var selectedMovie: Movie? = null
 

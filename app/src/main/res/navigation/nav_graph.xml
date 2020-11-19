@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/popularMoviesFragment">
+    app:startDestination="@id/loadingFragment">
 
     <fragment
         android:id="@+id/popularMoviesFragment"
@@ -43,5 +43,14 @@
         <action
             android:id="@+id/action_recommendMoviesFragment_to_detailInformationFragment"
             app:destination="@id/detailInformationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.example.android.popularmovies.fragments.LoadingFragment"
+        android:label="fragment_loading"
+        tools:layout="@layout/fragment_loading" >
+        <action
+            android:id="@+id/action_loadingFragment_to_popularMoviesFragment"
+            app:destination="@id/popularMoviesFragment" />
     </fragment>
 </navigation>

@@ -31,6 +31,7 @@ class MainRepository(application: Application) {
         return withContext(IO){
             val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
             //getVideosAndReviews(movieInfoResponse)
+            //delay(5000)
             getMoviesDetails(movieInfoResponse)
             movieInfoResponse.movies
         }
