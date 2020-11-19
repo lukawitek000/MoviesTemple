@@ -44,6 +44,6 @@ data class MovieDetailsResponse(
 
         var videos: VideoResponse,
         var reviews: ReviewResponse,
-        var recommendations: RecommendationsResponse
+        //var recommendations: RecommendationsResponse
 
 )

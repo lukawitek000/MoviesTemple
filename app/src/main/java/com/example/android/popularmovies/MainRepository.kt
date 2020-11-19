@@ -30,9 +30,25 @@ class MainRepository(application: Application) {
     suspend fun getPopularMovies(): List<Movie>{
         return withContext(IO){
             val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
-            getVideosAndReviews(movieInfoResponse)
+            //getVideosAndReviews(movieInfoResponse)
+            getMoviesDetails(movieInfoResponse)
             movieInfoResponse.movies
         }
+    }
+
+    private suspend fun getMoviesDetails(movieInfoResponse: TMDBResponse) {
+        CoroutineScope(IO).launch {
+            val allResponses = movieInfoResponse.movies.map {
+                async {
+                    val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(it.id)
+                    it.reviews = response.reviews.results
+                    it.videos = response.videos.results
+                }
+            }
+            allResponses.awaitAll()
+        }
+
+
     }
 
 
@@ -60,7 +76,8 @@ class MainRepository(application: Application) {
     suspend fun getTopRatedMovies(): List<Movie>{
         return withContext(IO){
             val response = TMDBApi.retrofitService.getTopRatedMovies()
-            getVideosAndReviews(response)
+           // getVideosAndReviews(response)
+            getMoviesDetails(response)
             response.movies
         }
     }

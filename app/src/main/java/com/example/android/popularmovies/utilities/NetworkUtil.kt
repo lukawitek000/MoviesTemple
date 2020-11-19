@@ -41,6 +41,11 @@ interface TMDBService{
             @Path("movieId") movieId: Long,
             @Query(API_KEY) apiKey: String = api_key): TMDBResponse
 
+    @GET("/3/movie/{movieId}")
+    suspend fun getMovieDetailsVideosReviewsById( @Path("movieId") movieId: Long,
+                                                  @Query("append_to_response") appendToResponse: String = append_to_response,
+                                                  @Query(API_KEY) apiKey: String = api_key): MovieDetailsResponse
+
 }
 
 
@@ -51,7 +56,8 @@ private const val API_KEY = "api_key"
 private const val api_key = "3b623a17f57eb4da612b3871d3f78ced"
 const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w500"
 const val VIDEO_BASE_URI = "https://www.youtube.com/watch?v="
-
+private const val append_to_response = "videos,reviews"
+private const val APPEND_TO_RESPONSE = "append_to_response"
 
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
