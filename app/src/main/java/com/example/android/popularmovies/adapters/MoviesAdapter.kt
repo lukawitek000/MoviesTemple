@@ -1,18 +1,12 @@
 package com.example.android.popularmovies.adapters
 
-import android.content.Context
-import android.graphics.Point
-import android.net.Uri
+
 import android.view.*
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.android.popularmovies.adapters.MoviesAdapter.MovieAdapterOnClickHandler
-import androidx.recyclerview.widget.RecyclerView
 import com.example.android.popularmovies.adapters.MoviesAdapter.MoviesAdapterViewHolder
 import com.example.android.popularmovies.R
-import com.example.android.popularmovies.adapters.MoviesAdapter
 import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.android.popularmovies.models.Movie

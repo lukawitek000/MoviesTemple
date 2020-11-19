@@ -26,20 +26,18 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var viewModel: MainViewModel
-    //private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_recommended_movies, container, false)
         recyclerView = view.findViewById(R.id.recommended_movies_recyclerview)
+        progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
         setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
-        viewModel.getRecommendationsBasedOnFavouriteMovies()
-
         return view
     }
 
@@ -49,6 +47,34 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                 moviesAdapter.submitList(it.toList())
             }
         })
+
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
+                viewModel.getRecommendationsBasedOnFavouriteMovies()
+            }
+        })
+
+        viewModel.recommendedMoviesStatus.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                when(it){
+                    MainViewModel.Status.LOADING -> {
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    }
+                    MainViewModel.Status.SUCCESS ->{
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView.visibility = View.GONE
+                    }
+
+                }
+            }
+        })
+
     }
 
     private fun setUpViewModel() {

@@ -44,9 +44,18 @@ class MainViewModel(application: Application) : ViewModel() {
     val recommendedMovies: LiveData<Set<Movie>>
     get() = _recommendedMovies
 
+
+    private val _recommendedMoviesStatus = MutableLiveData<Status>()
+    val recommendedMoviesStatus: LiveData<Status>
+        get() = _recommendedMoviesStatus
+
     private val _selectedMovie = MutableLiveData<Movie>()
     val selectedMovie: LiveData<Movie>
         get() = _selectedMovie
+
+    private val _requestDetailInformationStatus = MutableLiveData<Status>()
+    val requestDetailInformationStatus: LiveData<Status>
+        get() = _requestDetailInformationStatus
 
 
     fun selectMovie(movie: Movie) {
@@ -110,9 +119,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    private val _requestDetailInformationStatus = MutableLiveData<Status>()
-    val requestDetailInformationStatus: LiveData<Status>
-    get() = _requestDetailInformationStatus
+
 
 
     private fun getDetailInformation(){
@@ -146,15 +153,18 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun getRecommendationsBasedOnFavouriteMovies(){
         viewModelScope.launch {
-            if(_initialApiRequestStatus.value == Status.SUCCESS) {
+            try {
+                _recommendedMoviesStatus.value = Status.LOADING
                 val recommendationsList = mutableSetOf<Movie>()
-                val recommendations = favouriteMovies.map {
-                    async {
-                        recommendationsList.addAll(repository.getRecommendationBasedOnMovieID(it.id))
-                    }
+                for(movie in favouriteMovies){
+                    val response = repository.getRecommendationBasedOnMovieID(movie.id)
+                    recommendationsList.addAll(response)
                 }
-                recommendations.awaitAll()
-                _recommendedMovies.value = recommendationsList
+                _recommendedMovies.value = recommendationsList.shuffled().toSet()
+                _recommendedMoviesStatus.value = Status.SUCCESS
+            }catch (e: Exception){
+                Log.i("MainViewModel", "Error with fetching recommendations")
+                _recommendedMoviesStatus.value = Status.FAILURE
             }
         }
     }
