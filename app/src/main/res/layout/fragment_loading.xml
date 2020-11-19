@@ -5,8 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".fragments.LoadingFragment">
 
-    <pl.droidsonroids.gif.GifImageView android:layout_height="wrap_content"
+    <pl.droidsonroids.gif.GifImageView
         android:layout_width="wrap_content"
-        android:src="@drawable/camera_clapboard"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/clapboard" />
 
 </FrameLayout>

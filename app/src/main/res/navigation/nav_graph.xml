@@ -52,5 +52,8 @@
         <action
             android:id="@+id/action_loadingFragment_to_popularMoviesFragment"
             app:destination="@id/popularMoviesFragment" />
+        <action
+            android:id="@+id/action_loadingFragment_to_favouriteMoviesFragment"
+            app:destination="@id/favouriteMoviesFragment" />
     </fragment>
 </navigation>

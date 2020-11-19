@@ -110,7 +110,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "database value $it")
             if(it != null){
-                viewModel.setFavouriteMovies(it)
+                //viewModel.setFavouriteMovies(it)
             }
         })
     }

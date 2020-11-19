@@ -212,14 +212,16 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun getRecommendationsBasedOnFavouriteMovies(){
         viewModelScope.launch {
-            val recommendationsList = mutableSetOf<Movie>()
-            val recommendations = favouriteMovies.map {
-                async {
-                    recommendationsList.addAll(repository.getRecommendationBasedOnMovieID(it.id))
+            if(_popularMoviesStatus.value == Status.SUCCESS) {
+                val recommendationsList = mutableSetOf<Movie>()
+                val recommendations = favouriteMovies.map {
+                    async {
+                        recommendationsList.addAll(repository.getRecommendationBasedOnMovieID(it.id))
+                    }
                 }
+                recommendations.awaitAll()
+                _recommendedMovies.value = recommendationsList
             }
-            recommendations.awaitAll()
-            _recommendedMovies.value = recommendationsList
         }
     }
 

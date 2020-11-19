@@ -37,7 +37,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        (requireActivity() as MainActivity).bottomNavigation.visibility = View.GONE
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
 
         setUpViewModel()
         setUpReviewsRecyclerView()
