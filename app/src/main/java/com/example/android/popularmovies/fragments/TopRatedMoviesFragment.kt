@@ -37,7 +37,7 @@ class TopRatedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHand
         recyclerView = view.findViewById(R.id.top_rated_movies_recyclerview)
         progressBar = view.findViewById(R.id.top_rated_movies_progress_bar)
         setUpViewModel()
-        viewModel.getTopRatedMovies()
+        //viewModel.getTopRatedMovies()
         setUpRecyclerView()
         setUpObservers()
 

@@ -40,7 +40,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         movieRecyclerView = binding.recyclerviewMovies
 
         setupViewModel()
-        viewModel.getPopularMovies()
+        //viewModel.getPopularMovies()
         setUpRecyclerView()
         setObservers()
 

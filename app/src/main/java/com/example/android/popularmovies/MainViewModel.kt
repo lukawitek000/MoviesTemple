@@ -77,10 +77,13 @@ class MainViewModel(application: Application) : ViewModel() {
     init {
         //setFavouriteMovies(databaseValues.value!!)
   //      getMovies()
+        getPopularMovies()
+        getTopRatedMovies()
     }
 
     fun getTopRatedMovies(){
         viewModelScope.launch {
+
             try {
                 val startTime = System.currentTimeMillis()
                 _topRatedMoviesStatus.value = Status.LOADING
