@@ -1,11 +1,11 @@
 package com.example.android.popularmovies.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -38,6 +38,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
         setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
+        setHasOptionsMenu(true)
         return view
     }
 
@@ -99,4 +100,27 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        return inflater.inflate(R.menu.recommendations_fragment_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
+        R.id.recommended_movies_info -> {
+            buildAlertDialog().show()
+            true
+        }
+        else -> {
+            false
+        }
+    }
+
+    private fun buildAlertDialog(): AlertDialog {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.apply {
+            setTitle("Info")
+            setMessage("Recommendations are based on your favourite movies")
+            setPositiveButton("OK", DialogInterface.OnClickListener { _, _ ->  })
+        }
+        return builder.create()
+    }
 }
