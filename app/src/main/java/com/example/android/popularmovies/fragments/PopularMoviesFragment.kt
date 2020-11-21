@@ -1,11 +1,14 @@
 package com.example.android.popularmovies.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android.popularmovies.MainActivity
 import com.example.android.popularmovies.MainViewModel
 import com.example.android.popularmovies.MainViewModelFactory
@@ -27,7 +31,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
     private lateinit var viewModel: MainViewModel
     private lateinit var movieRecyclerView: RecyclerView
     private lateinit var errorMessageTextView: TextView
-    private lateinit var refreshButton: ImageButton
     private lateinit var progressBar: ProgressBar
 
 
@@ -38,7 +41,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
         movieRecyclerView = view.findViewById(R.id.popular_movies_recyclerview)
         errorMessageTextView = view.findViewById(R.id.error_message_textview)
-        refreshButton = view.findViewById(R.id.refresh_button)
         progressBar = view.findViewById(R.id.popular_movies_progressbar)
 
 
@@ -49,9 +51,19 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         setObservers()
 
 
-        refreshButton.setOnClickListener {
+
+
+
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
+        refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
+        refresh.setColorSchemeColors(Color.BLACK)
+
+        refresh.setOnRefreshListener {
+            Toast.makeText(requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
             viewModel.getPopularMovies()
+            refresh.isRefreshing = false
         }
+
         return view
     }
 
@@ -87,19 +99,16 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
                     MainViewModel.Status.SUCCESS -> {
                         progressBar.visibility = View.GONE
                         movieRecyclerView.visibility = View.VISIBLE
-                        refreshButton.visibility = View.GONE
                         errorMessageTextView.visibility = View.GONE
                     }
                     MainViewModel.Status.LOADING -> {
                         progressBar.visibility = View.VISIBLE
                         movieRecyclerView.visibility = View.GONE
-                        refreshButton.visibility = View.GONE
                         errorMessageTextView.visibility = View.GONE
                     }
                     else -> {
                         progressBar.visibility = View.GONE
                         movieRecyclerView.visibility = View.GONE
-                        refreshButton.visibility = View.VISIBLE
                         errorMessageTextView.visibility = View.VISIBLE
                     }
 

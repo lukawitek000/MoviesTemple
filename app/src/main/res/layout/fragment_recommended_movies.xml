@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:text="Recommendations are based on you favourite movies."
+        android:text="There aren't any movies to recommend you. Recommendations are based on you favourite movies."
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
