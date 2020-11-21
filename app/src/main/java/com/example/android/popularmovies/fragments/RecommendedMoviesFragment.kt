@@ -2,20 +2,20 @@ package com.example.android.popularmovies.fragments
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Button
-import android.widget.ImageButton
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android.popularmovies.MainActivity
 import com.example.android.popularmovies.MainViewModel
 import com.example.android.popularmovies.MainViewModelFactory
@@ -23,6 +23,7 @@ import com.example.android.popularmovies.R
 import com.example.android.popularmovies.adapters.MoviesAdapter
 import com.example.android.popularmovies.models.Movie
 import com.example.android.popularmovies.utilities.IMAGE_WIDTH
+import kotlinx.coroutines.delay
 
 
 class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
@@ -32,7 +33,6 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var errorMessageTextView: TextView
-    private lateinit var refreshButton: ImageButton
     private lateinit var infoTextView: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -41,17 +41,21 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
         recyclerView = view.findViewById(R.id.recommended_movies_recyclerview)
         progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
         errorMessageTextView = view.findViewById(R.id.error_message_textview)
-        refreshButton = view.findViewById(R.id.refresh_button)
         infoTextView = view.findViewById(R.id.recommendations_info_textview)
 
         setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
 
-        refreshButton.setOnClickListener {
-            viewModel.getRecommendationsBasedOnFavouriteMovies()
-        }
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_recommendations_layout)
+        refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
+        refresh.setColorSchemeColors(Color.BLACK)
 
+        refresh.setOnRefreshListener {
+            Toast.makeText(requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
+            viewModel.getRecommendationsBasedOnFavouriteMovies()
+            refresh.isRefreshing = false
+        }
         setHasOptionsMenu(true)
         return view
     }
@@ -77,14 +81,12 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
                         errorMessageTextView.visibility = View.GONE
-                        refreshButton.visibility = View.GONE
                         infoTextView.visibility = View.GONE
                     }
                     MainViewModel.Status.SUCCESS ->{
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
                         errorMessageTextView.visibility = View.GONE
-                        refreshButton.visibility = View.GONE
                         if(viewModel.recommendedMovies.value.isNullOrEmpty()){
                             infoTextView.visibility = View.VISIBLE
                         }else {
