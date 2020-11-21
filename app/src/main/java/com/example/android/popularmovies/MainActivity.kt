@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.TranslateAnimation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -44,7 +47,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setBottomNavigationVisibility(value: Int){
-        bottomNavigation.visibility = value
+        val collapseListener = object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                bottomNavigation.visibility = value
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) {
+            }
+
+        }
+        val anim: TranslateAnimation
+        if(value == View.GONE){
+            anim = TranslateAnimation(0.0f, -bottomNavigation.width.toFloat(), 0.0f, 0.0f)
+        }else{
+            bottomNavigation.visibility = value
+            anim = TranslateAnimation(-bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
+        }
+        anim.setAnimationListener(collapseListener)
+        anim.duration = 300
+        bottomNavigation.startAnimation(anim)
     }
 
     fun calculateSpanCount(): Int {
