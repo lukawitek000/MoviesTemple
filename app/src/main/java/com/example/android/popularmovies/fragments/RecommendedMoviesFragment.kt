@@ -5,8 +5,10 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -28,16 +30,25 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     private lateinit var viewModel: MainViewModel
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
-
+    private lateinit var errorMessageTextView: TextView
+    private lateinit var refreshButton: ImageButton
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_recommended_movies, container, false)
         recyclerView = view.findViewById(R.id.recommended_movies_recyclerview)
         progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
+        errorMessageTextView = view.findViewById(R.id.error_message_textview)
+        refreshButton = view.findViewById(R.id.refresh_button)
+
         setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
+
+        refreshButton.setOnClickListener {
+            viewModel.getRecommendationsBasedOnFavouriteMovies()
+        }
+
         setHasOptionsMenu(true)
         return view
     }
@@ -62,14 +73,20 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                     MainViewModel.Status.LOADING -> {
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
+                        errorMessageTextView.visibility = View.GONE
+                        refreshButton.visibility = View.GONE
                     }
                     MainViewModel.Status.SUCCESS ->{
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
+                        errorMessageTextView.visibility = View.GONE
+                        refreshButton.visibility = View.GONE
                     }
                     else -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
+                        errorMessageTextView.visibility = View.VISIBLE
+                        refreshButton.visibility = View.VISIBLE
                     }
 
                 }
