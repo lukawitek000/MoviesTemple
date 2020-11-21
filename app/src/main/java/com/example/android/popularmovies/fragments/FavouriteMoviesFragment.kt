@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
@@ -95,19 +96,21 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         else -> false
     }
 
-    private fun createAlertDialog(): AlertDialog.Builder{
+    private fun createAlertDialog(): AlertDialog {
         val builder = AlertDialog.Builder(requireContext())
-        builder.apply {
-            setTitle("Warning!")
-            setMessage("Do you want to delete all favourite movies?")
-            setPositiveButton("Yes") { _, _ ->
-                viewModel.deleteAllFavouriteMovies()
-                Toast.makeText(requireContext(), "All favourite movies deleted", Toast.LENGTH_SHORT).show()
-            }
-            setNegativeButton("Cancel"){ _, _ -> }
-            create()
+        val view = layoutInflater.inflate(R.layout.delete_all_custom_dialog, null)
+
+        builder.setView(view)
+        val dialog = builder.create()
+        view.findViewById<Button>(R.id.delete_all_yes_button).setOnClickListener {
+            viewModel.deleteAllFavouriteMovies()
+            Toast.makeText(requireContext(), "All favourite movies deleted", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
-        return builder
+        view.findViewById<Button>(R.id.delete_all_cancel_button).setOnClickListener {
+            dialog.dismiss()
+        }
+        return dialog
 
     }
 }

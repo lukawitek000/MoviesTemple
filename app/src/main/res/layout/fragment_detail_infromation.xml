@@ -83,27 +83,11 @@
                 android:text = "@string/vote_average_label"
                 style="@style/labels" />
 
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/vote_average_textview"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:ignore="UseCompoundDrawables">
-
-                <TextView
-                    android:id="@+id/vote_average"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    />
-
-                <ImageView
-                    android:id="@+id/stars_image_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/five_star"
-                    android:contentDescription="@string/poster_description" />
-            </LinearLayout>
+                android:textSize="24sp"/>
 
 
 

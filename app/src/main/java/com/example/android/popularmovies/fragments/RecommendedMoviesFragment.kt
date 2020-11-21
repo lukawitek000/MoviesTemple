@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import android.widget.ProgressBar
@@ -32,6 +33,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     private lateinit var recyclerView: RecyclerView
     private lateinit var errorMessageTextView: TextView
     private lateinit var refreshButton: ImageButton
+    private lateinit var infoTextView: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,6 +42,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
         progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
         errorMessageTextView = view.findViewById(R.id.error_message_textview)
         refreshButton = view.findViewById(R.id.refresh_button)
+        infoTextView = view.findViewById(R.id.recommendations_info_textview)
 
         setUpViewModel()
         setUpRecyclerView()
@@ -75,18 +78,24 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                         recyclerView.visibility = View.GONE
                         errorMessageTextView.visibility = View.GONE
                         refreshButton.visibility = View.GONE
+                        infoTextView.visibility = View.GONE
                     }
                     MainViewModel.Status.SUCCESS ->{
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
                         errorMessageTextView.visibility = View.GONE
                         refreshButton.visibility = View.GONE
+                        if(viewModel.recommendedMovies.value.isNullOrEmpty()){
+                            infoTextView.visibility = View.VISIBLE
+                        }else {
+                            infoTextView.visibility = View.GONE
+                        }
                     }
                     else -> {
                         progressBar.visibility = View.GONE
                         recyclerView.visibility = View.GONE
                         errorMessageTextView.visibility = View.VISIBLE
-                        refreshButton.visibility = View.VISIBLE
+                        infoTextView.visibility = View.GONE
                     }
 
                 }
@@ -132,12 +141,16 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     }
 
     private fun buildAlertDialog(): AlertDialog {
+        val view = layoutInflater.inflate(R.layout.recommendations_info_dialog, null)
+
+
         val builder = AlertDialog.Builder(requireContext())
-        builder.apply {
-            setTitle("Info")
-            setMessage("Recommendations are based on your favourite movies")
-            setPositiveButton("OK", DialogInterface.OnClickListener { _, _ ->  })
+
+        builder.setView(view)
+        val dialog = builder.create()
+        view.findViewById<Button>(R.id.ok_button).setOnClickListener {
+            dialog.dismiss()
         }
-        return builder.create()
+        return dialog
     }
 }

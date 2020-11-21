@@ -141,7 +141,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         binding.overview.text = selectedMovie.overview
         binding.originalTitle.text = selectedMovie.originalTitle
         binding.releaseDate.text = selectedMovie.releaseDate
-
+        binding.voteAverageTextview.text = selectedMovie.voteAverage.toString()
         Picasso.with(context)
                 .load(selectedMovie.posterUri)
                 .into(binding.poster)
