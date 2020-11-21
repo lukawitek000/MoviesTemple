@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 <androidx.core.widget.NestedScrollView
-    tools:context=".DetailInformationFragment"
+    tools:context=".fragments.DetailInformationFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -155,6 +155,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/recyclerview_reviews"/>
+
+            <ProgressBar
+                android:id="@+id/detail_information_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </LinearLayout>

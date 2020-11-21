@@ -63,4 +63,20 @@ interface MovieDao {
     @Query("DELETE FROM Video WHERE movieOwnerID = :id")
     suspend fun deleteVideoByMovieOwnerId(id: Long)
 
+
+    @Transaction
+    suspend fun deleteAll(){
+        deleteAllReviews()
+        deleteAllVideos()
+        deleteAllMovies()
+    }
+
+    @Query("DELETE FROM Movie")
+    suspend fun deleteAllMovies()
+
+    @Query("DELETE FROM Review")
+    suspend fun deleteAllReviews()
+
+    @Query("DELETE FROM Video")
+    suspend fun deleteAllVideos()
 }

@@ -2,11 +2,9 @@ package com.example.android.popularmovies.models
 
 import com.squareup.moshi.Json
 
-data class ReviewResponse(
-        @Transient
-        var id: Long = 0L,
+data class RecommendationsResponse(
         var page: Int,
-        var results: List<Review>,
+        var results: List<Movie>,
         @Json(name = "total_pages")
         var totalPages: Int,
         @Json(name = "total_results")

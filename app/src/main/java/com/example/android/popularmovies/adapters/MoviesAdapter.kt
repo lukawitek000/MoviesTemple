@@ -1,18 +1,12 @@
 package com.example.android.popularmovies.adapters
 
-import android.content.Context
-import android.graphics.Point
-import android.net.Uri
+
 import android.view.*
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.android.popularmovies.adapters.MoviesAdapter.MovieAdapterOnClickHandler
-import androidx.recyclerview.widget.RecyclerView
 import com.example.android.popularmovies.adapters.MoviesAdapter.MoviesAdapterViewHolder
 import com.example.android.popularmovies.R
-import com.example.android.popularmovies.adapters.MoviesAdapter
 import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.android.popularmovies.models.Movie
@@ -20,7 +14,7 @@ import com.example.android.popularmovies.models.Movie
 class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : ListAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
     interface MovieAdapterOnClickHandler {
-        fun onClick(movie: Movie?)
+        fun onClick(movie: Movie)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapterViewHolder {
@@ -32,9 +26,17 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
 
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = getItem(position)
-        Picasso.with(holder.posterImage.context)
-                .load(movie.posterUri)
-                .into(holder.posterImage)
+
+        if(movie.posterUri != null) {
+            Picasso.with(holder.posterImage.context)
+                    .load(movie.posterUri)
+                    .into(holder.posterImage)
+        }else{
+            Picasso.with(holder.posterImage.context)
+                    .load(R.drawable.default_movie_poster)
+                    .into(holder.posterImage)
+        }
+
     }
 
 

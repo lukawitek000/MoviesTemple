@@ -10,7 +10,10 @@ import com.example.android.popularmovies.R
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.widget.TextView
 
-class ReviewsAdapter(private val reviews: List<Review>) : RecyclerView.Adapter<ReviewsAdapterViewHolder>() {
+class ReviewsAdapter() : RecyclerView.Adapter<ReviewsAdapterViewHolder>() {
+
+    var reviews: List<Review> = emptyList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewsAdapterViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
