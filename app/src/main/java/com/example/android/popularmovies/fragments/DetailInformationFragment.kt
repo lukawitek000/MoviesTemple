@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -38,7 +37,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
-
 
         Log.i("DetailInformation", "on create view")
         setUpViewModel()
@@ -170,15 +168,21 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     }
 
+
+
     override fun onStop() {
-        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE)
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
         super.onStop()
     }
 
+    private var showEnterAnimation = true
+
     override fun onStart() {
-        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
         super.onStart()
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, showEnterAnimation)
+        showEnterAnimation = false
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.TranslateAnimation
@@ -15,13 +16,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.android.popularmovies.fragments.DetailInformationFragment
 import com.example.android.popularmovies.utilities.IMAGE_WIDTH
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
 
-    private lateinit var bottomNavigation: BottomNavigationView
+    lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +43,6 @@ class MainActivity : AppCompatActivity() {
                 )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-
         val viewModelFactory = MainViewModelFactory(application)
         val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.databaseValues.observe(this, Observer {
@@ -51,13 +51,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
         )
+        
+        Log.i("MainActivity", "bottom nav height ${bottomNavigation.height} ")
+        
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.fragment_container).navigateUp() || super.onSupportNavigateUp()
     }
 
-    fun setBottomNavigationVisibility(value: Int){
+    fun setBottomNavigationVisibility(value: Int, isAnimated: Boolean){
         val collapseListener = object : Animation.AnimationListener {
             override fun onAnimationStart(p0: Animation?) {
             }
@@ -75,10 +79,15 @@ class MainActivity : AppCompatActivity() {
             anim = TranslateAnimation(0.0f, -bottomNavigation.width.toFloat(), 0.0f, 0.0f)
         }else{
             bottomNavigation.visibility = value
-            anim = TranslateAnimation(-bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
+           anim = TranslateAnimation(-bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
+
         }
         anim.setAnimationListener(collapseListener)
-        anim.duration = 300
+        if(isAnimated) {
+            anim.duration = 300
+        }else{
+            anim.duration = 0
+        }
         bottomNavigation.startAnimation(anim)
     }
 

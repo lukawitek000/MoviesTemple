@@ -25,7 +25,7 @@ class LoadingFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
+        //(requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, true)
         val view = inflater.inflate(R.layout.fragment_loading, container, false)
         setUpViewModel()
         setUpObservers()
@@ -46,14 +46,14 @@ class LoadingFragment : Fragment() {
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
                         findNavController().navigate(R.id.action_loadingFragment_to_popularMoviesFragment)
-                        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE)
+                        //(requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
                     }
                     MainViewModel.Status.LOADING -> {
                         Log.i(TAG, "loading")
                     }
                     else -> {
                         findNavController().navigate(R.id.action_loadingFragment_to_favouriteMoviesFragment)
-                        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE)
+                       // (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
                         Log.i(TAG, "setUpObservers: errror")
                     }
 
