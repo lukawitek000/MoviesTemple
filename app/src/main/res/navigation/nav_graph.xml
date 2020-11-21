@@ -11,7 +11,11 @@
         android:label="Popular Movies" >
         <action
             android:id="@+id/action_popularMoviesFragment_to_detailInformationFragment"
-            app:destination="@id/detailInformationFragment" />
+            app:destination="@id/detailInformationFragment"
+            app:enterAnim="@anim/slide_in_detail_information"
+            app:exitAnim="@anim/slide_out_movies_list"
+            app:popEnterAnim="@anim/slide_in_movies_list"
+            app:popExitAnim="@anim/slide_out_detail_information" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationFragment"
@@ -24,7 +28,11 @@
         tools:layout="@layout/fragment_favourite_movies" >
         <action
             android:id="@+id/action_favouriteMoviesFragment_to_detailInformationFragment"
-            app:destination="@id/detailInformationFragment" />
+            app:destination="@id/detailInformationFragment"
+            app:enterAnim="@anim/slide_in_detail_information"
+            app:exitAnim="@anim/slide_out_movies_list"
+            app:popEnterAnim="@anim/slide_in_movies_list"
+            app:popExitAnim="@anim/slide_out_detail_information" />
     </fragment>
     <fragment
         android:id="@+id/topRatedMoviesFragment"
@@ -33,7 +41,11 @@
         tools:layout="@layout/fragment_top_rated_movies" >
         <action
             android:id="@+id/action_topRatedMoviesFragment_to_detailInformationFragment"
-            app:destination="@id/detailInformationFragment" />
+            app:destination="@id/detailInformationFragment"
+            app:enterAnim="@anim/slide_in_detail_information"
+            app:exitAnim="@anim/slide_out_movies_list"
+            app:popEnterAnim="@anim/slide_in_movies_list"
+            app:popExitAnim="@anim/slide_out_detail_information" />
     </fragment>
     <fragment
         android:id="@+id/recommendMoviesFragment"
@@ -42,7 +54,11 @@
         tools:layout="@layout/fragment_recommended_movies" >
         <action
             android:id="@+id/action_recommendMoviesFragment_to_detailInformationFragment"
-            app:destination="@id/detailInformationFragment" />
+            app:destination="@id/detailInformationFragment"
+            app:enterAnim="@anim/slide_in_detail_information"
+            app:exitAnim="@anim/slide_out_movies_list"
+            app:popEnterAnim="@anim/slide_in_movies_list"
+            app:popExitAnim="@anim/slide_out_detail_information" />
     </fragment>
     <fragment
         android:id="@+id/loadingFragment"
