@@ -40,7 +40,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
+
 
         setUpViewModel()
         selectedMovie = viewModel.selectedMovie.value!!
@@ -193,5 +193,15 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             Toast.makeText(requireContext(), "Unknown site", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    override fun onStop() {
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE)
+        super.onStop()
+    }
+
+    override fun onStart() {
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
+        super.onStart()
     }
 }

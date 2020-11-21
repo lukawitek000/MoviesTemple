@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        bottomNavigation.visibility = View.VISIBLE
         return findNavController(R.id.fragment_container).navigateUp() || super.onSupportNavigateUp()
     }
 
