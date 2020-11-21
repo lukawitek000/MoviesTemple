@@ -22,38 +22,32 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="204dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/add_to_favourite_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/poster"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Detail information layout" />
+                tools:text="Detail information layout" />
 
             <ImageView
                 android:id="@+id/poster"
-                android:layout_width="204dp"
-                android:layout_height="200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:layout_marginEnd="8dp"
+                android:contentDescription="@string/poster_description"
+                tools:layout_width="200dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/title"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/poster_description" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/add_to_favourite_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@color/darkYellow"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                tools:text="@string/add_to_favourites"
-                android:textColor="@color/lightBlack"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/title"
-                app:layout_constraintStart_toStartOf="@+id/title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

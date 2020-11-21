@@ -68,6 +68,8 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
+
+
     fun getPopularMovies(){
         viewModelScope.launch {
             try {
@@ -128,6 +130,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     fun isSelectedMovieInDatabase(): Boolean{
+        Log.i("MainViewModel", "is selected in database selected: ${_selectedMovie.value} \n favourite: $favouriteMovies")
         favouriteMovies.forEach {
             if(it.id == _selectedMovie.value!!.id){
                 return true

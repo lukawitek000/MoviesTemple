@@ -3,10 +3,9 @@ package com.example.android.popularmovies.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -41,7 +40,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
 
-
+        Log.i("DetailInformation", "on create view")
         setUpViewModel()
         selectedMovie = viewModel.selectedMovie.value!!
         setVideosAndReviewsVisible(false)
@@ -49,26 +48,11 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
         setDataToUI()
-        handleButtonAction()
-
+        setHasOptionsMenu(true)
+        Log.i("DetailInformation", "on create view end")
         return binding.root
     }
 
-
-
-    private fun handleButtonAction() {
-        binding.addToFavouriteButton.setOnClickListener {
-            if(viewModel.isSelectedMovieInDatabase()){
-                viewModel.deleteMovieFromDatabase()
-                binding.addToFavouriteButton.text = resources.getString(R.string.add_to_favourites)
-                Toast.makeText(requireContext(), "Removed from database", Toast.LENGTH_SHORT).show()
-            }else {
-                viewModel.addMovieToDatabase()
-                binding.addToFavouriteButton.text = resources.getString(R.string.remove_from_favourites)
-                Toast.makeText(requireContext(), "Added to database", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
 
     private fun setUpObservers() {
@@ -145,17 +129,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         Picasso.with(context)
                 .load(selectedMovie.posterUri)
                 .into(binding.poster)
-
-        setButtonText()
     }
 
-    private fun setButtonText(){
-        if(viewModel.isSelectedMovieInDatabase()){
-            binding.addToFavouriteButton.text = resources.getString(R.string.remove_from_favourites)
-        }else {
-            binding.addToFavouriteButton.text = resources.getString(R.string.add_to_favourites)
-        }
-    }
 
 
 
@@ -203,5 +178,43 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
     override fun onStart() {
         (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
         super.onStart()
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.detail_menu, menu)
+        val item = menu.findItem(R.id.like_item)
+        Log.i("DetailInformationFra", "on create menu ${item?.itemId}")
+        if(item != null) {
+            if (viewModel.isSelectedMovieInDatabase()) {
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
+            } else {
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
+            }
+        }
+
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
+       /* R.id.share_item -> {
+            Toast.makeText(requireContext(), "Share", Toast.LENGTH_SHORT).show()
+            true
+        }*/
+        R.id.like_item -> {
+            if(viewModel.isSelectedMovieInDatabase()){
+                viewModel.deleteMovieFromDatabase()
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
+                Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()
+            }else {
+                viewModel.addMovieToDatabase()
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
+                Toast.makeText(requireContext(), "Added to favourites", Toast.LENGTH_SHORT).show()
+            }
+            true
+        }
+        else -> false
+
+
     }
 }

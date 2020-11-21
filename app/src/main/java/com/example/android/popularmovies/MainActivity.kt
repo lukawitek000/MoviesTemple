@@ -8,6 +8,8 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.TranslateAnimation
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -40,6 +42,15 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+
+        val viewModelFactory = MainViewModelFactory(application)
+        val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.databaseValues.observe(this, Observer {
+            if( it!= null){
+                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
+            }
+        }
+        )
     }
 
     override fun onSupportNavigateUp(): Boolean {
