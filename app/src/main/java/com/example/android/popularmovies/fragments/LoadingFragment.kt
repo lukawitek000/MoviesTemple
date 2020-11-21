@@ -29,7 +29,7 @@ class LoadingFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_loading, container, false)
         setUpViewModel()
         setUpObservers()
-        viewModel.getMovies()
+        //viewModel.getMovies()
         return view
     }
 
@@ -41,7 +41,7 @@ class LoadingFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.initialApiRequestStatus.observe(viewLifecycleOwner, Observer {
+        viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {

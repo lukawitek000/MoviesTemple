@@ -26,10 +26,14 @@ class MainViewModel(application: Application) : ViewModel() {
     val topRatedMovies: LiveData<List<Movie>>
         get() = _topRatedMovies
 
+    private val _topRatedMoviesStatus = MutableLiveData<Status>()
+    val topRatedMoviesStatus: LiveData<Status>
+        get() = _topRatedMoviesStatus
 
-    private val _initialApiRequestStatus = MutableLiveData<Status>()
-    val initialApiRequestStatus: LiveData<Status>
-        get() = _initialApiRequestStatus
+
+    private val _popularMoviesStatus = MutableLiveData<Status>()
+    val popularMoviesStatus: LiveData<Status>
+        get() = _popularMoviesStatus
 
 
     val databaseValues  = repository.favouriteMovies
@@ -64,19 +68,33 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    fun getMovies(){
+    fun getPopularMovies(){
         viewModelScope.launch {
             try {
                 val startTime = System.currentTimeMillis()
-                _initialApiRequestStatus.value = Status.LOADING
+                _popularMoviesStatus.value = Status.LOADING
                 _popularMovies.value = repository.getPopularMovies()
-                Log.i("MainViewModel", "time elapsed for fetching data after popular = ${System.currentTimeMillis() - startTime}")
-                _topRatedMovies.value = repository.getTopRatedMovies()
-                _initialApiRequestStatus.value = Status.SUCCESS
-                Log.i("MainViewModel", "time elapsed for fetching data end = ${System.currentTimeMillis() - startTime}")
+                _popularMoviesStatus.value = Status.SUCCESS
+                Log.i("MainViewModel", "time elapsed popular for fetching data end = ${System.currentTimeMillis() - startTime}")
             } catch (e: Exception) {
                 Log.i("MainViewModel", "failure e=$e")
-                _initialApiRequestStatus.value = Status.FAILURE
+                _popularMoviesStatus.value = Status.FAILURE
+            }
+        }
+    }
+
+
+    fun getTopRatedMovies(){
+        viewModelScope.launch {
+            try {
+                val startTime = System.currentTimeMillis()
+                _topRatedMoviesStatus.value = Status.LOADING
+                _topRatedMovies.value = repository.getTopRatedMovies()
+                _topRatedMoviesStatus.value = Status.SUCCESS
+                Log.i("MainViewModel", "time elapsed toprated for fetching data end = ${System.currentTimeMillis() - startTime}")
+            } catch (e: Exception) {
+                Log.i("MainViewModel", "failure e=$e")
+                _topRatedMoviesStatus.value = Status.FAILURE
             }
         }
     }

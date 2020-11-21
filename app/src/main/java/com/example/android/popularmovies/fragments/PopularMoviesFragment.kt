@@ -3,7 +3,6 @@ package com.example.android.popularmovies.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -45,13 +44,13 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
 
         setupViewModel()
-        viewModel.getMovies()
+        viewModel.getPopularMovies()
         setUpRecyclerView()
         setObservers()
 
 
         refreshButton.setOnClickListener {
-            viewModel.getMovies()
+            viewModel.getPopularMovies()
         }
         return view
     }
@@ -82,7 +81,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
             }
         })
 
-        viewModel.initialApiRequestStatus.observe(viewLifecycleOwner, Observer {
+        viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
@@ -109,6 +108,8 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         })
 
     }
+
+
 
 
     override fun onClick(movie: Movie) {

@@ -29,7 +29,7 @@ class MainRepository(application: Application) {
 
     suspend fun getPopularMovies(): List<Movie>{
         return withContext(IO){
-            delay(1000)
+            //delay(5000)
             val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
             movieInfoResponse.movies
         }
@@ -52,6 +52,7 @@ class MainRepository(application: Application) {
 
     suspend fun getTopRatedMovies(): List<Movie>{
         return withContext(IO){
+            //delay(10000)
             val response = TMDBApi.retrofitService.getTopRatedMovies()
             response.movies
         }
