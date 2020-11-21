@@ -1,11 +1,33 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/darkYellow</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/darkGrey</item>
+        <item name="android:textColor">@color/light</item>
+        <item name="actionBarTabStyle">@style/actionBarStyle</item>
+        <item name="android:actionBarStyle">@style/actionBarStyle</item>
     </style>
+
+    <style name="labels" parent="android:TextAppearance">
+        <item name="android:textColor">@color/yellow</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BottomNavigation">
+        <item name="android:background">@color/lightBlack</item>
+        <item name="itemIconTint">@color/light</item>
+        <item name="itemTextColor">@color/light</item>
+    </style>
+
+    <style name="actionBarStyle" parent="@style/Widget.AppCompat.Light.ActionButton">
+        <item name="titleTextColor">@color/darkGrey</item>
+        <item name="android:titleTextColor">@color/darkGrey</item>
+    </style>
+
 
 </resources>

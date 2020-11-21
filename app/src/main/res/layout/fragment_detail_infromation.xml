@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/detailHeaderBackground"
+            android:background="@color/lightBlack"
             android:paddingStart="8dp"
             android:paddingEnd="8dp">
 
@@ -46,11 +46,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/darkYellow"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 tools:text="@string/add_to_favourites"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/lightBlack"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/title"
                 app:layout_constraintStart_toStartOf="@+id/title" />
@@ -68,8 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/original_title_label"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/labels" />
             <TextView
                 android:id="@+id/original_title"
                 android:layout_width="wrap_content"
@@ -82,8 +81,7 @@
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
                 android:text = "@string/vote_average_label"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/labels" />
 
 
             <LinearLayout
@@ -113,8 +111,7 @@
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
                 android:text = "@string/release_date_label"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/labels" />
 
             <TextView android:id = "@+id/release_date"
                 android:layout_width = "wrap_content"
@@ -126,8 +123,7 @@
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
                 android:text = "@string/plot_label"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/labels"/>
 
             <TextView android:id = "@+id/overview"
                 android:layout_width = "wrap_content"
@@ -140,7 +136,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/videos_label"
-                android:textSize="32sp" />
+                android:textSize="32sp"
+                android:textColor="@color/darkYellow"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -150,7 +147,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reviews_label"
-                android:textSize="32sp"/>
+                android:textSize="32sp"
+                android:textColor="@color/darkYellow"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
