@@ -1,15 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/darkYellow</item>
         <item name="colorPrimaryDark">@color/darkGrey</item>
         <item name="colorAccent">@color/yellow</item>
         <item name="android:windowBackground">@color/darkGrey</item>
         <item name="android:textColor">@color/light</item>
-        <item name="actionBarTabStyle">@style/actionBarStyle</item>
         <item name="android:actionBarStyle">@style/actionBarStyle</item>
+
+        <item name="colorControlNormal">@color/darkGrey</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="labels" parent="android:TextAppearance">
@@ -24,12 +26,13 @@
         <item name="itemIconTint">@color/lightBlack</item>
     </style>
 
-    <style name="actionBarStyle" parent="Widget.AppCompat.Light.ActionButton">
+    <style name="actionBarStyle" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="titleTextColor">@color/darkGrey</item>
         <item name="android:titleTextColor">@color/darkGrey</item>
         <item name="android:background">@color/darkYellow</item>
         <item name="background">@color/darkYellow</item>
     </style>
+
 
 
 </resources>
