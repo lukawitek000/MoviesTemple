@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/popularMoviesFragment"
-        android:name="com.example.android.popularmovies.fragments.PopularMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.fragments.PopularMoviesFragment"
         android:label="Popular Movies" >
         <action
             android:id="@+id/action_popularMoviesFragment_to_detailInformationFragment"
@@ -19,11 +19,11 @@
     </fragment>
     <fragment
         android:id="@+id/detailInformationFragment"
-        android:name="com.example.android.popularmovies.fragments.DetailInformationFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment"
         android:label="Detail Information" />
     <fragment
         android:id="@+id/favouriteMoviesFragment"
-        android:name="com.example.android.popularmovies.fragments.FavouriteMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.fragments.FavouriteMoviesFragment"
         android:label="Favourite Movies"
         tools:layout="@layout/fragment_favourite_movies" >
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/topRatedMoviesFragment"
-        android:name="com.example.android.popularmovies.fragments.TopRatedMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.fragments.TopRatedMoviesFragment"
         android:label="Top Rated Movies"
         tools:layout="@layout/fragment_top_rated_movies" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/recommendMoviesFragment"
-        android:name="com.example.android.popularmovies.fragments.RecommendedMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.fragments.RecommendedMoviesFragment"
         android:label="Recommended Movies"
         tools:layout="@layout/fragment_recommended_movies" >
         <action
@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/loadingFragment"
-        android:name="com.example.android.popularmovies.fragments.LoadingFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.fragments.LoadingFragment"
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" >
         <action

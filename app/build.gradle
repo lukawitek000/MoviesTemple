@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.example.android.popularmovies"
+        applicationId "com.lukasz.witkowski.android.moviestemple"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
