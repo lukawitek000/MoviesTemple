@@ -24,16 +24,11 @@ class MainRepository(application: Application) {
         }
     }
 
-    init {
-        Log.i("MainRepository", "init block")
-    }
 
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
-     val databaseResponse = database!!.movieDao().loadAllMovies()
-
-
+    private val databaseResponse = database!!.movieDao().loadAllMovies()
 
     val favouriteMovies: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
         responseList.map {

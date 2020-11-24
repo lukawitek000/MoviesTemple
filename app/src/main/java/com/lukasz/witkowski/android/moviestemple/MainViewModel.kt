@@ -16,18 +16,8 @@ class MainViewModel(application: Application) : ViewModel() {
 
     private val repository = MainRepository.getInstance(application)
 
-
     val databaseValues: LiveData<List<Movie>>  = repository.favouriteMovies
 
-
-    private val _recommendedMovies = MutableLiveData<Set<Movie>>()
-    val recommendedMovies: LiveData<Set<Movie>>
-    get() = _recommendedMovies
-
-
-    private val _recommendedMoviesStatus = MutableLiveData<Status>()
-    val recommendedMoviesStatus: LiveData<Status>
-        get() = _recommendedMoviesStatus
 
     private val _selectedMovie = MutableLiveData<Movie>()
     val selectedMovie: LiveData<Movie>
@@ -106,27 +96,7 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-
-    fun getRecommendationsBasedOnFavouriteMovies(){
-        viewModelScope.launch {
-            try {
-                _recommendedMoviesStatus.value = Status.LOADING
-                val recommendationsList = mutableSetOf<Movie>()
-                for(movie in databaseValues.value!!){
-                    val response = repository.getRecommendationBasedOnMovieID(movie.id)
-                    recommendationsList.addAll(response)
-                }
-                _recommendedMovies.value = recommendationsList.shuffled().toSet()
-                _recommendedMoviesStatus.value = Status.SUCCESS
-            }catch (e: Exception){
-                Log.i("MainViewModel", "Error with fetching recommendations")
-                _recommendedMoviesStatus.value = Status.FAILURE
-            }
-        }
-    }
-
-
-
+    
     fun deleteAllFavouriteMovies(){
         viewModelScope.launch {
             repository.deleteAllFavouriteMovies()

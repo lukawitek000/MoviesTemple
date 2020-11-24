@@ -7,6 +7,8 @@ import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -20,16 +22,21 @@ import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModel
+import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModelFactory
 
 
 class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     private lateinit var moviesAdapter: MoviesAdapter
-    private lateinit var viewModel: MainViewModel
+
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var errorMessageTextView: TextView
     private lateinit var infoTextView: TextView
+
+    private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val viewModel by viewModels<RecommendedMoviesViewModel> { RecommendedMoviesViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -39,7 +46,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
         errorMessageTextView = view.findViewById(R.id.error_message_textview)
         infoTextView = view.findViewById(R.id.recommendations_info_textview)
 
-        setUpViewModel()
+        //setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
 
@@ -57,16 +64,14 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     }
 
     private fun setUpObservers() {
+        viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                viewModel.getRecommendationsBasedOnFavouriteMovies()
+            }
+        })
         viewModel.recommendedMovies.observe(viewLifecycleOwner, Observer {
             if(it != null){
                 moviesAdapter.submitList(it.toList())
-            }
-        })
-
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-               // viewModel.setResponseFromDatabaseToFavouriteMovies(it)
-                viewModel.getRecommendationsBasedOnFavouriteMovies()
             }
         })
 
@@ -102,11 +107,11 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
     }
 
-    private fun setUpViewModel() {
+  /*  private fun setUpViewModel() {
         val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+        shareViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
     }
-
+*/
     private fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
@@ -119,7 +124,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
 
     override fun onClick(movie: Movie) {
-        viewModel.selectMovie(movie)
+        shareViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_recommendMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.recommended_movies_title))
     }
