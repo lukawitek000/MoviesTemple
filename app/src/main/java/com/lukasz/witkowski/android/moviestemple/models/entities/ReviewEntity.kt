@@ -1,9 +1,9 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.models.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "Reviews")
 data class ReviewEntity(
         @PrimaryKey(autoGenerate = true)
         var reviewID: Long = 0L,
