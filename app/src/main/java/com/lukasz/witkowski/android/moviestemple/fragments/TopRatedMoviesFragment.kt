@@ -43,16 +43,16 @@ class TopRatedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHand
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.fragment_top_rated_movies, container, false)
-        moviesRecyclerView = view.findViewById(R.id.top_rated_movies_recyclerview)
-        errorMessageTextView = view.findViewById(R.id.error_message_textview)
-        progressBar = view.findViewById(R.id.top_rated_movies_progressbar)
+        val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
+        moviesRecyclerView = view.findViewById(R.id.movies_recyclerview)
+        //errorMessageTextView = view.findViewById(R.id.error_message_textview)
+       // progressBar = view.findViewById(R.id.top_rated_movies_progressbar)
        // setUpViewModel()
         viewModel.getTopRatedMovies()
         setUpRecyclerView()
         setUpObservers()
 
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_top_rated_layout)
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         refresh.setColorSchemeColors(Color.BLACK)
 
@@ -91,7 +91,8 @@ class TopRatedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHand
 
         viewModel.topRatedMoviesStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                when (it) {
+                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(it, "Cannot connect to server, check your favourite movies")
+                /*when (it) {
                     MainViewModel.Status.SUCCESS -> {
                         progressBar.visibility = View.GONE
                         moviesRecyclerView.visibility = View.VISIBLE
@@ -108,7 +109,7 @@ class TopRatedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHand
                         errorMessageTextView.visibility = View.VISIBLE
                     }
 
-                }
+                }*/
             }
         })
     }

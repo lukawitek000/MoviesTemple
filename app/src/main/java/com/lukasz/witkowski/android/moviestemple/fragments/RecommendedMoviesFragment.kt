@@ -40,17 +40,17 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.fragment_recommended_movies, container, false)
-        recyclerView = view.findViewById(R.id.recommended_movies_recyclerview)
-        progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
-        errorMessageTextView = view.findViewById(R.id.error_message_textview)
-        infoTextView = view.findViewById(R.id.recommendations_info_textview)
+        val view =  inflater.inflate(R.layout.movies_poster_list_layout, container, false)
+        recyclerView = view.findViewById(R.id.movies_recyclerview)
+        //progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
+        //errorMessageTextView = view.findViewById(R.id.error_message_textview)
+       // infoTextView = view.findViewById(R.id.recommendations_info_textview)
 
         //setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
 
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_recommendations_layout)
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         refresh.setColorSchemeColors(Color.BLACK)
 
@@ -77,7 +77,19 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
         viewModel.recommendedMoviesStatus.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                when(it){
+                if(viewModel.recommendedMovies.value.isNullOrEmpty()){
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                            it,
+                            "There aren't any movies to recommend you. Recommendations are based on you favourite movies.")
+
+                }else {
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                            it,
+                            "Cannot connect to server, check your favourite movies")
+                }
+
+                /*when(it){
+
                     MainViewModel.Status.LOADING -> {
                         progressBar.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
@@ -101,7 +113,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                         infoTextView.visibility = View.GONE
                     }
 
-                }
+                }*/
             }
         })
 

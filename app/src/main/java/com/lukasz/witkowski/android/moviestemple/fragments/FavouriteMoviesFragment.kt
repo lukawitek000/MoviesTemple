@@ -37,9 +37,9 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
                               savedInstanceState: Bundle?): View? {
 
 
-        val view = inflater.inflate(R.layout.fragment_favourite_movies, container, false)
-        recyclerView = view.findViewById(R.id.favourite_movies_recyclerview)
-        emptyFavouriteMoviesListTextView = view.findViewById(R.id.empty_list_favourite_movies_textview)
+        val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
+        recyclerView = view.findViewById(R.id.movies_recyclerview)
+       // emptyFavouriteMoviesListTextView = view.findViewById(R.id.empty_list_favourite_movies_textview)
         setUpRecyclerView()
         setUpObservers()
         setHasOptionsMenu(true)
@@ -64,11 +64,13 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
             if(it != null){
                 moviesAdapter.submitList(it)
                 if(it.isEmpty()){
-                    emptyFavouriteMoviesListTextView.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
+                    //emptyFavouriteMoviesListTextView.visibility = View.VISIBLE
+                   // recyclerView.visibility = View.GONE
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.FAILURE, "You don't have favourite movies yet")
                 }else{
-                    emptyFavouriteMoviesListTextView.visibility = View.GONE
-                    recyclerView.visibility = View.VISIBLE
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
+                   // emptyFavouriteMoviesListTextView.visibility = View.GONE
+                   // recyclerView.visibility = View.VISIBLE
                 }
             }
         })

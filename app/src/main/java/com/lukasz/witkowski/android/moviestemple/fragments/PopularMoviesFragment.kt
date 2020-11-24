@@ -44,11 +44,12 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.fragment_popular_movies, container, false)
+        val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
 
-        movieRecyclerView = view.findViewById(R.id.popular_movies_recyclerview)
-        errorMessageTextView = view.findViewById(R.id.error_message_textview)
-        progressBar = view.findViewById(R.id.popular_movies_progressbar)
+       // movieRecyclerView = view.findViewById(R.id.popular_movies_recyclerview)
+        movieRecyclerView = view.findViewById(R.id.movies_recyclerview)
+        //errorMessageTextView = view.findViewById(R.id.error_message_textview)
+       // progressBar = view.findViewById(R.id.popular_movies_progressbar)
 
 
         viewModel.getPopularMovies()
@@ -94,7 +95,8 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
         viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                when (it) {
+                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(it, "Cannot connect to server, check your favourite movies")
+                /*when (it) {
                     MainViewModel.Status.SUCCESS -> {
                         progressBar.visibility = View.GONE
                         movieRecyclerView.visibility = View.VISIBLE
@@ -111,7 +113,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
                         errorMessageTextView.visibility = View.VISIBLE
                     }
 
-                }
+                }*/
             }
         })
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toolbar
@@ -22,12 +23,15 @@ import androidx.navigation.ui.setupWithNavController
 import com.lukasz.witkowski.android.moviestemple.utilities.IMAGE_WIDTH
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.lukasz.witkowski.android.moviestemple.databinding.ActivityMainBinding
 import com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment
 
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
 
-    lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var binding: ActivityMainBinding
+
+    private lateinit var bottomNavigation: BottomNavigationView
 
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
 
@@ -44,15 +48,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
-        bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+       // bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigation = binding.bottomNavigation
         bottomNavigation.setupWithNavController(navController)
 
-        toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         navController.addOnDestinationChangedListener(this)
 
@@ -68,6 +74,32 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         )
 
     }
+
+    fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
+        Log.i("MainActivity", "set visibility status = ${status.name}")
+        binding.fragmentContainer.visibility = View.VISIBLE
+        when (status) {
+            MainViewModel.Status.SUCCESS -> {
+                binding.progressbar.visibility = View.GONE
+                //binding.fragmentContainer.visibility = View.VISIBLE
+                //animateInFragment()
+                binding.errorMessageTextview.visibility = View.GONE
+            }
+            MainViewModel.Status.LOADING -> {
+                binding.progressbar.visibility = View.VISIBLE
+               // binding.fragmentContainer.visibility = View.GONE
+                binding.errorMessageTextview.visibility = View.GONE
+            }
+            else -> {
+                binding.errorMessageTextview.text = failureMessage
+                binding.progressbar.visibility = View.GONE
+               // binding.fragmentContainer.visibility = View.GONE
+                binding.errorMessageTextview.visibility = View.VISIBLE
+            }
+
+        }
+    }
+
 
 
     override fun onSupportNavigateUp(): Boolean {
