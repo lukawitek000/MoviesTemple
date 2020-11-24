@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if(currentFragment.javaClass.simpleName == "DetailInformationFragment"){
                    // Log.i("MainActivity", "onDestinationChange set up with nav controller")
                     toolbar.setupWithNavController(controller, appBarConfiguration)
+                    setSupportActionBar(toolbar)
                     animateInToolbar()
                 }
             }
