@@ -1,12 +1,11 @@
 package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.utilities.TMDBApi
+import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 

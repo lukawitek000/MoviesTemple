@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.utilities
+package com.lukasz.witkowski.android.moviestemple.api
 
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
 import com.lukasz.witkowski.android.moviestemple.models.responses.ReviewsListResponse

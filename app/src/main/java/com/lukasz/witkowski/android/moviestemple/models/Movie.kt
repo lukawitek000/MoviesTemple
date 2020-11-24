@@ -1,11 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.models
 
 import android.net.Uri
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
-import com.lukasz.witkowski.android.moviestemple.utilities.POSTER_BASE_URI
-import com.squareup.moshi.Json
+import com.lukasz.witkowski.android.moviestemple.api.POSTER_BASE_URI
 
 
 data class Movie (
