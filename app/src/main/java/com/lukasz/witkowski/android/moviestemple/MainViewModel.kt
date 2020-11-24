@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.MovieWithReviewsAndVideos
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -14,44 +14,10 @@ class MainViewModel(application: Application) : ViewModel() {
         LOADING, SUCCESS, FAILURE
     }
 
-    private val repository = MainRepository(application)
+    private val repository = MainRepository.getInstance(application)
 
-    private val _popularMovies = MutableLiveData<List<Movie>>()
-    val popularMovies: LiveData<List<Movie>>
-        get() = _popularMovies
+    val databaseValues: LiveData<List<Movie>>  = repository.favouriteMovies
 
-
-
-    private val _topRatedMovies = MutableLiveData<List<Movie>>()
-    val topRatedMovies: LiveData<List<Movie>>
-        get() = _topRatedMovies
-
-    private val _topRatedMoviesStatus = MutableLiveData<Status>()
-    val topRatedMoviesStatus: LiveData<Status>
-        get() = _topRatedMoviesStatus
-
-
-    private val _popularMoviesStatus = MutableLiveData<Status>()
-    val popularMoviesStatus: LiveData<Status>
-        get() = _popularMoviesStatus
-
-
-    val databaseValues  = repository.favouriteMovies
-
-    private var favouriteMovies: List<Movie> = emptyList()
-    fun getFavouriteMovies(): List<Movie>{
-        return favouriteMovies
-    }
-
-
-    private val _recommendedMovies = MutableLiveData<Set<Movie>>()
-    val recommendedMovies: LiveData<Set<Movie>>
-    get() = _recommendedMovies
-
-
-    private val _recommendedMoviesStatus = MutableLiveData<Status>()
-    val recommendedMoviesStatus: LiveData<Status>
-        get() = _recommendedMoviesStatus
 
     private val _selectedMovie = MutableLiveData<Movie>()
     val selectedMovie: LiveData<Movie>
@@ -68,61 +34,17 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-
-
-    fun getPopularMovies(){
-        viewModelScope.launch {
-            try {
-                val startTime = System.currentTimeMillis()
-                _popularMoviesStatus.value = Status.LOADING
-                _popularMovies.value = repository.getPopularMovies()
-                _popularMoviesStatus.value = Status.SUCCESS
-                Log.i("MainViewModel", "time elapsed popular for fetching data end = ${System.currentTimeMillis() - startTime}")
-            } catch (e: Exception) {
-                Log.i("MainViewModel", "failure e=$e")
-                _popularMoviesStatus.value = Status.FAILURE
-            }
-        }
-    }
-
-
-    fun getTopRatedMovies(){
-        viewModelScope.launch {
-            try {
-                val startTime = System.currentTimeMillis()
-                _topRatedMoviesStatus.value = Status.LOADING
-                _topRatedMovies.value = repository.getTopRatedMovies()
-                _topRatedMoviesStatus.value = Status.SUCCESS
-                Log.i("MainViewModel", "time elapsed toprated for fetching data end = ${System.currentTimeMillis() - startTime}")
-            } catch (e: Exception) {
-                Log.i("MainViewModel", "failure e=$e")
-                _topRatedMoviesStatus.value = Status.FAILURE
-            }
-        }
-    }
-
-
     fun addMovieToDatabase() {
         viewModelScope.launch {
             repository.insertMovieToDatabase(_selectedMovie.value!!)
         }
     }
 
-    fun setResponseFromDatabaseToFavouriteMovies(response: List<MovieWithReviewsAndVideos>) {
-        val movies = mutableListOf<Movie>()
-        for(value in response){
-            val movie = value.movie
-            movie.videos = value.videos
-            movie.reviews = value.reviews
-            movies.add(movie)
-        }
-        favouriteMovies = movies
-    }
 
 
     fun deleteMovieFromDatabase(){
         viewModelScope.launch {
-            val movieToDelete = favouriteMovies.find {
+            val movieToDelete = databaseValues.value?.find {
                 it.id == _selectedMovie.value!!.id
             }
             repository.deleteMovieFromDatabase(movieToDelete!!)
@@ -130,17 +52,14 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     fun isSelectedMovieInDatabase(): Boolean{
-        Log.i("MainViewModel", "is selected in database selected: ${_selectedMovie.value} \n favourite: $favouriteMovies")
-        favouriteMovies.forEach {
+        Log.i("MainViewModel", "database values ${databaseValues.value} selected item ${_selectedMovie.value}")
+        databaseValues.value?.forEach {
             if(it.id == _selectedMovie.value!!.id){
                 return true
             }
         }
         return false
     }
-
-
-
 
 
     private fun getDetailInformation(){
@@ -152,6 +71,9 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     private fun getDetailInformationFromDatabase() {
+        _selectedMovie.value = databaseValues.value?.find {
+            it.id == _selectedMovie.value?.id
+        }
         _requestDetailInformationStatus.value = Status.SUCCESS
     }
 
@@ -172,30 +94,9 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    fun getRecommendationsBasedOnFavouriteMovies(){
-        viewModelScope.launch {
-            try {
-                _recommendedMoviesStatus.value = Status.LOADING
-                val recommendationsList = mutableSetOf<Movie>()
-                for(movie in favouriteMovies){
-                    val response = repository.getRecommendationBasedOnMovieID(movie.id)
-                    recommendationsList.addAll(response)
-                }
-                _recommendedMovies.value = recommendationsList.shuffled().toSet()
-                _recommendedMoviesStatus.value = Status.SUCCESS
-            }catch (e: Exception){
-                Log.i("MainViewModel", "Error with fetching recommendations")
-                _recommendedMoviesStatus.value = Status.FAILURE
-            }
-        }
-    }
-
-
-
     fun deleteAllFavouriteMovies(){
         viewModelScope.launch {
             repository.deleteAllFavouriteMovies()
-            favouriteMovies.toMutableList().clear()
         }
     }
 

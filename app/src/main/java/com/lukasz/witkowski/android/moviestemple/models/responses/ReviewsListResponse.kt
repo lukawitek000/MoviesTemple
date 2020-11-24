@@ -1,12 +1,10 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.models.responses
 
 import com.squareup.moshi.Json
 
-data class ReviewResponse(
-        @Transient
-        var id: Long = 0L,
+data class ReviewsListResponse(
         var page: Int,
-        var results: List<Review>,
+        var results: List<ReviewResponse>,
         @Json(name = "total_pages")
         var totalPages: Int,
         @Json(name = "total_results")

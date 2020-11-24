@@ -1,6 +1,9 @@
 package com.lukasz.witkowski.android.moviestemple.utilities
 
-import com.lukasz.witkowski.android.moviestemple.models.*
+import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
+import com.lukasz.witkowski.android.moviestemple.models.responses.ReviewsListResponse
+import com.lukasz.witkowski.android.moviestemple.models.responses.TMDBResponse
+import com.lukasz.witkowski.android.moviestemple.models.responses.VideosListResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -21,21 +24,21 @@ interface TMDBService{
 
     @GET("/3/movie/{movieId}/videos")
     suspend fun getVideos(
-            @Path("movieId") movieId: Long,
-            @Query(API_KEY) apiKey: String = api_key): VideoResponse
+            @Path("movieId") movieId: Int,
+            @Query(API_KEY) apiKey: String = api_key): VideosListResponse
 
     @GET("/3/movie/{movieId}/reviews")
     suspend fun getReviews(
-            @Path("movieId") movieId: Long,
-            @Query(API_KEY) apiKey: String = api_key): ReviewResponse
+            @Path("movieId") movieId: Int,
+            @Query(API_KEY) apiKey: String = api_key): ReviewsListResponse
 
     @GET("/3/movie/{movieId}/recommendations")
     suspend fun getRecommendationsBaseOnMovieID(
-            @Path("movieId") movieId: Long,
+            @Path("movieId") movieId: Int,
             @Query(API_KEY) apiKey: String = api_key): TMDBResponse
 
     @GET("/3/movie/{movieId}")
-    suspend fun getMovieDetailsVideosReviewsById( @Path("movieId") movieId: Long,
+    suspend fun getMovieDetailsVideosReviewsById( @Path("movieId") movieId: Int,
                                                   @Query("append_to_response") appendToResponse: String = append_to_response,
                                                   @Query(API_KEY) apiKey: String = api_key): MovieDetailsResponse
 

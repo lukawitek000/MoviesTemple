@@ -3,10 +3,13 @@ package com.lukasz.witkowski.android.moviestemple.fragments
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -20,30 +23,29 @@ import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModel
+import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModelFactory
 
 
 class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     private lateinit var moviesAdapter: MoviesAdapter
-    private lateinit var viewModel: MainViewModel
-    private lateinit var progressBar: ProgressBar
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var errorMessageTextView: TextView
-    private lateinit var infoTextView: TextView
+
+    private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val viewModel by viewModels<RecommendedMoviesViewModel> { RecommendedMoviesViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.fragment_recommended_movies, container, false)
-        recyclerView = view.findViewById(R.id.recommended_movies_recyclerview)
-        progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
-        errorMessageTextView = view.findViewById(R.id.error_message_textview)
-        infoTextView = view.findViewById(R.id.recommendations_info_textview)
+        val view =  inflater.inflate(R.layout.movies_poster_list_layout, container, false)
+        recyclerView = view.findViewById(R.id.movies_recyclerview)
 
-        setUpViewModel()
+
         setUpRecyclerView()
         setUpObservers()
 
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_recommendations_layout)
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         refresh.setColorSchemeColors(Color.BLACK)
 
@@ -57,55 +59,33 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     }
 
     private fun setUpObservers() {
+        viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                viewModel.getRecommendationsBasedOnFavouriteMovies()
+            }
+        })
         viewModel.recommendedMovies.observe(viewLifecycleOwner, Observer {
             if(it != null){
                 moviesAdapter.submitList(it.toList())
             }
         })
 
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
-                viewModel.getRecommendationsBasedOnFavouriteMovies()
-            }
-        })
-
         viewModel.recommendedMoviesStatus.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                when(it){
-                    MainViewModel.Status.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        recyclerView.visibility = View.GONE
-                        errorMessageTextView.visibility = View.GONE
-                        infoTextView.visibility = View.GONE
-                    }
-                    MainViewModel.Status.SUCCESS ->{
-                        progressBar.visibility = View.GONE
-                        recyclerView.visibility = View.VISIBLE
-                        errorMessageTextView.visibility = View.GONE
-                        if(viewModel.recommendedMovies.value.isNullOrEmpty()){
-                            infoTextView.visibility = View.VISIBLE
-                        }else {
-                            infoTextView.visibility = View.GONE
-                        }
-                    }
-                    else -> {
-                        progressBar.visibility = View.GONE
-                        recyclerView.visibility = View.GONE
-                        errorMessageTextView.visibility = View.VISIBLE
-                        infoTextView.visibility = View.GONE
-                    }
-
+                if(it == MainViewModel.Status.SUCCESS && viewModel.favouriteMovies.value.isNullOrEmpty()){
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                            MainViewModel.Status.FAILURE,
+                            "There aren't any movies to recommend you. Recommendations are based on your favourite movies.")
+                }else{
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                            it,
+                            "Cannot connect to server, check your favourite movies")
                 }
             }
         })
 
     }
 
-    private fun setUpViewModel() {
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-    }
 
     private fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
@@ -119,7 +99,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
 
     override fun onClick(movie: Movie) {
-        viewModel.selectMovie(movie)
+        shareViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_recommendMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.recommended_movies_title))
     }

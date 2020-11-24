@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.models.responses
 
 import com.squareup.moshi.Json
 

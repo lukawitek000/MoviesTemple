@@ -1,6 +1,7 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.models.responses
 
 import androidx.room.PrimaryKey
+import com.lukasz.witkowski.android.moviestemple.models.Genre
 import com.squareup.moshi.Json
 
 data class MovieDetailsResponse(
@@ -41,8 +42,8 @@ data class MovieDetailsResponse(
         @Json(name="vote_count")
         var voteCount: Int = 0,
 
-        var videos: VideoResponse,
-        var reviews: ReviewResponse,
+        var videos: VideosListResponse,
+        var reviews: ReviewsListResponse,
         //var recommendations: RecommendationsResponse
 
 )

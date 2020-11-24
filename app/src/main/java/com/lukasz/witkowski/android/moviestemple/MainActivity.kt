@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toolbar
@@ -22,14 +23,13 @@ import androidx.navigation.ui.setupWithNavController
 import com.lukasz.witkowski.android.moviestemple.utilities.IMAGE_WIDTH
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.lukasz.witkowski.android.moviestemple.databinding.ActivityMainBinding
 import com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment
 
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
 
-    lateinit var bottomNavigation: BottomNavigationView
-
-    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    private lateinit var binding: ActivityMainBinding
 
     private val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -44,29 +44,47 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
-        bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.setupWithNavController(navController)
 
-        toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+
+        setSupportActionBar(binding.toolbar)
         navController.addOnDestinationChangedListener(this)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
+
         val viewModelFactory = MainViewModelFactory(application)
         val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.databaseValues.observe(this, Observer {
-            if( it!= null){
-                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
-            }
         }
         )
-        
+
     }
+
+    fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
+        binding.fragmentContainer.visibility = View.VISIBLE
+        when (status) {
+            MainViewModel.Status.SUCCESS -> {
+                binding.progressbar.visibility = View.GONE
+                binding.errorMessageTextview.visibility = View.GONE
+            }
+            MainViewModel.Status.LOADING -> {
+                binding.progressbar.visibility = View.VISIBLE
+                binding.errorMessageTextview.visibility = View.GONE
+            }
+            else -> {
+                binding.errorMessageTextview.text = failureMessage
+                binding.progressbar.visibility = View.GONE
+                binding.errorMessageTextview.visibility = View.VISIBLE
+            }
+        }
+    }
+
 
 
     override fun onSupportNavigateUp(): Boolean {
@@ -79,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             override fun onAnimationEnd(p0: Animation?) {
-                bottomNavigation.visibility = value
+                binding.bottomNavigation.visibility = value
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
@@ -88,10 +106,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
         val anim: TranslateAnimation
         if(value == View.GONE){
-            anim = TranslateAnimation(0.0f, -bottomNavigation.width.toFloat(), 0.0f, 0.0f)
+            anim = TranslateAnimation(0.0f, -binding.bottomNavigation.width.toFloat(), 0.0f, 0.0f)
         }else{
-            bottomNavigation.visibility = value
-           anim = TranslateAnimation(-bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
+            binding.bottomNavigation.visibility = value
+           anim = TranslateAnimation(-binding.bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
 
         }
         anim.setAnimationListener(collapseListener)
@@ -100,7 +118,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }else{
             anim.duration = 0
         }
-        bottomNavigation.startAnimation(anim)
+        binding.bottomNavigation.startAnimation(anim)
     }
 
     fun calculateSpanCount(): Int {
@@ -111,8 +129,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun changeToolbarTitle(title: String){
-        toolbar.title = title
-        toolbar.navigationIcon = null
+        binding.toolbar.title = title
+        binding.toolbar.navigationIcon = null
     }
 
 
@@ -127,7 +145,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 //Log.i("MainActivity", "onDestinationChanged current fragment ${currentFragment.javaClass.simpleName}")
                 if(currentFragment.javaClass.simpleName == "DetailInformationFragment"){
                    // Log.i("MainActivity", "onDestinationChange set up with nav controller")
-                    toolbar.setupWithNavController(controller, appBarConfiguration)
+                    binding.toolbar.setupWithNavController(controller, appBarConfiguration)
+                    setSupportActionBar(binding.toolbar)
                     animateInToolbar()
                 }
             }
@@ -135,15 +154,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun animateInToolbar() {
-        val animation = TranslateAnimation(-toolbar.width.toFloat(), 0f, 0f, 0f)
+        val animation = TranslateAnimation(-binding.toolbar.width.toFloat(), 0f, 0f, 0f)
         animation.duration = resources.getInteger(R.integer.slide_animation_time).toLong()
-        toolbar.startAnimation(animation)
+        binding.toolbar.startAnimation(animation)
     }
 
     private fun animateOutToolbar() {
-        val animation = TranslateAnimation(0f, -toolbar.width.toFloat(), 0f, 0f)
+        val animation = TranslateAnimation(0f, -binding.toolbar.width.toFloat(), 0f, 0f)
         animation.duration = resources.getInteger(R.integer.slide_animation_time).toLong()
-        toolbar.startAnimation(animation)
+        binding.toolbar.startAnimation(animation)
     }
 
 }
