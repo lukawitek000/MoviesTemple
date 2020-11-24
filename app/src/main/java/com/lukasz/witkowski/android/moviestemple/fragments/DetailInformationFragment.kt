@@ -33,6 +33,8 @@ import java.io.InputStream
 
 class DetailInformationFragment : Fragment(), VideoClickListener {
 
+
+
     private lateinit var videosAdapter: VideosAdapter
 
     private lateinit var reviewsAdapter: ReviewsAdapter
@@ -58,25 +60,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         Log.i("DetailInformation", "on create view end")
 
         val toolbar = binding.detailInformationToolbar
-
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
-        Log.i("DetailInformation", "poster uri ${selectedMovie.posterUri}  path ${selectedMovie.posterUri?.path}")
-        Picasso.with(context).load(selectedMovie.posterUri).into(binding.toolbarPoster)
-        binding.detailInformationToolbar.title = selectedMovie.title
-
-        Log.i("DetailInformation", "poster width img")
-        val width = binding.toolbarPoster.measuredWidth
-        val dp = width / resources.displayMetrics.density;
-        Log.i("DetailInformation", "poster width px: $width dp $dp")
-        //binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-        //    val range = appBarLayout.totalScrollRange
-        //    binding.toolbarPoster.imageAlpha = (255 * (1 - verticalOffset/range))
-        //})
-
-
 
 
         return binding.root
@@ -92,16 +77,13 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             if (it != null) {
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
-                        //   binding.addToFavouriteButton.isEnabled = true
                         setVideosAndReviewsVisible(true)
                     }
                     MainViewModel.Status.FAILURE -> {
-                        //binding.addToFavouriteButton.isEnabled = false
                         setVideosAndReviewsVisible(false)
                         binding.detailInformationProgressbar.visibility = View.GONE
                     }
                     else -> {
-                        //  binding.addToFavouriteButton.isEnabled = false
                         binding.detailInformationProgressbar.visibility = View.VISIBLE
                         setVideosAndReviewsVisible(false)
                     }
@@ -119,7 +101,9 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
                 selectedMovie = it
-
+                Log.i("DetailInformation", "poster uri ${selectedMovie.posterUri}  path ${selectedMovie.posterUri?.path}")
+                Picasso.with(context).load(selectedMovie.posterUri).into(binding.toolbarPoster)
+                binding.detailInformationToolbar.title = selectedMovie.title
             }
         })
     }
@@ -154,14 +138,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
 
     private fun setDataToUI(){
-       // binding.title.text = selectedMovie.title
         binding.overview.text = selectedMovie.overview
         binding.originalTitle.text = selectedMovie.originalTitle
         binding.releaseDate.text = selectedMovie.releaseDate
         binding.voteAverageTextview.text = selectedMovie.voteAverage.toString()
-        //Picasso.with(context)
-        ///        .load(selectedMovie.posterUri)
-        //        .into(binding.poster)
     }
 
 
@@ -192,7 +172,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
 
     override fun onVideoClicked(video: Video) {
-        Toast.makeText(requireContext(), "clicked video ${video.name}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Open video ${video.name}", Toast.LENGTH_SHORT).show()
         val intent = Intent(Intent.ACTION_VIEW)
         if(video.site == "YouTube") {
             intent.data = video.videoUri
@@ -200,7 +180,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         }else{
             Toast.makeText(requireContext(), "Unknown site", Toast.LENGTH_SHORT).show()
         }
-        (requireActivity() as MainActivity).setIsMainToolbarVisible(false)
 
     }
 
@@ -208,7 +187,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     override fun onStop() {
         (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
-        (requireActivity() as MainActivity).setIsMainToolbarVisible(true)
         super.onStop()
     }
 
@@ -255,7 +233,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             true
         }
         android.R.id.home -> {
-            Toast.makeText(requireContext(), "go back", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
             true
         }

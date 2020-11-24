@@ -60,16 +60,4 @@
             app:popEnterAnim="@anim/slide_in_movies_list"
             app:popExitAnim="@anim/slide_out_detail_information" />
     </fragment>
-    <fragment
-        android:id="@+id/loadingFragment"
-        android:name="com.lukasz.witkowski.android.moviestemple.fragments.LoadingFragment"
-        android:label="fragment_loading"
-        tools:layout="@layout/fragment_loading" >
-        <action
-            android:id="@+id/action_loadingFragment_to_popularMoviesFragment"
-            app:destination="@id/popularMoviesFragment" />
-        <action
-            android:id="@+id/action_loadingFragment_to_favouriteMoviesFragment"
-            app:destination="@id/favouriteMoviesFragment" />
-    </fragment>
 </navigation>

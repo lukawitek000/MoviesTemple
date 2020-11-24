@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     private val appBarConfiguration = AppBarConfiguration(
             setOf(
-                    R.id.loadingFragment,
                     R.id.popularMoviesFragment,
                     R.id.topRatedMoviesFragment,
                     R.id.favouriteMoviesFragment,
@@ -48,7 +47,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         setContentView(R.layout.activity_main)
 
 
-
         navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -56,10 +54,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-
         navController.addOnDestinationChangedListener(this)
-
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         val viewModelFactory = MainViewModelFactory(application)
@@ -71,13 +66,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
         )
         
-        Log.i("MainActivity", "bottom nav height ${bottomNavigation.height} ")
-        
     }
 
 
     override fun onSupportNavigateUp(): Boolean {
-        Log.i("MainActivity", "on support navigate up")
         return findNavController(R.id.fragment_container).navigateUp() || super.onSupportNavigateUp()
     }
 
@@ -118,14 +110,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         return displayWidth/ IMAGE_WIDTH + 1
     }
 
-    fun setIsMainToolbarVisible(isVisible: Boolean){
-        if(isVisible){
-            toolbar.visibility = View.VISIBLE
-        }else{
-            toolbar.visibility = View.GONE
-        }
-    }
-
     fun changeToolbarTitle(title: String){
         toolbar.title = title
         toolbar.navigationIcon = null
@@ -134,21 +118,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
 
-        //toolbar.title = destination.label
-        Log.i("MainActivity", "onDestinationChanged dest ${destination.label}")
+        //Log.i("MainActivity", "onDestinationChanged dest ${destination.label}")
         if(destination.label == "Detail Information"){
             animateOutToolbar()
-            //toolbar.title = ""
-            //toolbar.navigationIcon = null
         }else{
             if(!navHostFragment.childFragmentManager.fragments.isNullOrEmpty()) {
                 val currentFragment = navHostFragment.childFragmentManager.fragments[0]
-                Log.i("MainActivity", "onDestinationChanged current fragment ${currentFragment.javaClass.simpleName}")
+                //Log.i("MainActivity", "onDestinationChanged current fragment ${currentFragment.javaClass.simpleName}")
                 if(currentFragment.javaClass.simpleName == "DetailInformationFragment"){
-                    Log.i("MainActivity", "onDestinationChange set up with nav controller")
+                   // Log.i("MainActivity", "onDestinationChange set up with nav controller")
                     toolbar.setupWithNavController(controller, appBarConfiguration)
                     animateInToolbar()
-
                 }
             }
         }
