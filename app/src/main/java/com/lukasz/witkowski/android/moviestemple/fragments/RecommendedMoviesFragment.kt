@@ -3,6 +3,7 @@ package com.lukasz.witkowski.android.moviestemple.fragments
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -30,10 +31,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
     private lateinit var moviesAdapter: MoviesAdapter
 
-    private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
-    private lateinit var errorMessageTextView: TextView
-    private lateinit var infoTextView: TextView
 
     private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
     private val viewModel by viewModels<RecommendedMoviesViewModel> { RecommendedMoviesViewModelFactory(requireActivity().application) }
@@ -42,11 +40,8 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                               savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.movies_poster_list_layout, container, false)
         recyclerView = view.findViewById(R.id.movies_recyclerview)
-        //progressBar  = view.findViewById(R.id.recommended_movies_progressbar)
-        //errorMessageTextView = view.findViewById(R.id.error_message_textview)
-       // infoTextView = view.findViewById(R.id.recommendations_info_textview)
 
-        //setUpViewModel()
+
         setUpRecyclerView()
         setUpObservers()
 
@@ -77,53 +72,21 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
         viewModel.recommendedMoviesStatus.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                if(viewModel.recommendedMovies.value.isNullOrEmpty()){
+                if(it == MainViewModel.Status.SUCCESS && viewModel.favouriteMovies.value.isNullOrEmpty()){
                     (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
-                            it,
-                            "There aren't any movies to recommend you. Recommendations are based on you favourite movies.")
-
-                }else {
+                            MainViewModel.Status.FAILURE,
+                            "There aren't any movies to recommend you. Recommendations are based on your favourite movies.")
+                }else{
                     (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
                             it,
                             "Cannot connect to server, check your favourite movies")
                 }
-
-                /*when(it){
-
-                    MainViewModel.Status.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        recyclerView.visibility = View.GONE
-                        errorMessageTextView.visibility = View.GONE
-                        infoTextView.visibility = View.GONE
-                    }
-                    MainViewModel.Status.SUCCESS ->{
-                        progressBar.visibility = View.GONE
-                        recyclerView.visibility = View.VISIBLE
-                        errorMessageTextView.visibility = View.GONE
-                        if(viewModel.recommendedMovies.value.isNullOrEmpty()){
-                            infoTextView.visibility = View.VISIBLE
-                        }else {
-                            infoTextView.visibility = View.GONE
-                        }
-                    }
-                    else -> {
-                        progressBar.visibility = View.GONE
-                        recyclerView.visibility = View.GONE
-                        errorMessageTextView.visibility = View.VISIBLE
-                        infoTextView.visibility = View.GONE
-                    }
-
-                }*/
             }
         })
 
     }
 
-  /*  private fun setUpViewModel() {
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        shareViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-    }
-*/
+
     private fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)

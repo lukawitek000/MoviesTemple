@@ -26,11 +26,7 @@ import com.lukasz.witkowski.android.moviestemple.models.Movie
 class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler{
 
     private lateinit var moviesAdapter: MoviesAdapter
-
-
     private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyFavouriteMoviesListTextView: TextView
-
     private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +35,6 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
 
         val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
         recyclerView = view.findViewById(R.id.movies_recyclerview)
-       // emptyFavouriteMoviesListTextView = view.findViewById(R.id.empty_list_favourite_movies_textview)
         setUpRecyclerView()
         setUpObservers()
         setHasOptionsMenu(true)
@@ -64,13 +59,12 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
             if(it != null){
                 moviesAdapter.submitList(it)
                 if(it.isEmpty()){
-                    //emptyFavouriteMoviesListTextView.visibility = View.VISIBLE
-                   // recyclerView.visibility = View.GONE
-                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.FAILURE, "You don't have favourite movies yet")
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                            MainViewModel.Status.FAILURE,
+                            "You don't have favourite movies yet")
                 }else{
-                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
-                   // emptyFavouriteMoviesListTextView.visibility = View.GONE
-                   // recyclerView.visibility = View.VISIBLE
+                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                            MainViewModel.Status.SUCCESS, "")
                 }
             }
         })

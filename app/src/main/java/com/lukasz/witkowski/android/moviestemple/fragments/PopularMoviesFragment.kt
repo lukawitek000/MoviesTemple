@@ -33,9 +33,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
     private var moviesAdapter: MoviesAdapter? = null
 
     private lateinit var movieRecyclerView: RecyclerView
-    private lateinit var errorMessageTextView: TextView
-    private lateinit var progressBar: ProgressBar
-
 
     private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
     private val viewModel by viewModels<PopularMoviesViewModel> { (PopularMoviesViewModelFactory(requireActivity().application)) }
@@ -45,12 +42,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
                               savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
-
-       // movieRecyclerView = view.findViewById(R.id.popular_movies_recyclerview)
         movieRecyclerView = view.findViewById(R.id.movies_recyclerview)
-        //errorMessageTextView = view.findViewById(R.id.error_message_textview)
-       // progressBar = view.findViewById(R.id.popular_movies_progressbar)
-
 
         viewModel.getPopularMovies()
         setUpRecyclerView()
@@ -95,25 +87,9 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
         viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(it, "Cannot connect to server, check your favourite movies")
-                /*when (it) {
-                    MainViewModel.Status.SUCCESS -> {
-                        progressBar.visibility = View.GONE
-                        movieRecyclerView.visibility = View.VISIBLE
-                        errorMessageTextView.visibility = View.GONE
-                    }
-                    MainViewModel.Status.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        movieRecyclerView.visibility = View.GONE
-                        errorMessageTextView.visibility = View.GONE
-                    }
-                    else -> {
-                        progressBar.visibility = View.GONE
-                        movieRecyclerView.visibility = View.GONE
-                        errorMessageTextView.visibility = View.VISIBLE
-                    }
-
-                }*/
+                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                        it,
+                        "Cannot connect to server, check your favourite movies")
             }
         })
 
