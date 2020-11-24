@@ -3,11 +3,18 @@ package com.lukasz.witkowski.android.moviestemple
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.lukasz.witkowski.android.moviestemple.api.MoviesPagingSource
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
+import com.lukasz.witkowski.android.moviestemple.api.TMDB_PAGE_SIZE
+import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.Flow
 
 class MainRepository(application: Application) {
 
@@ -48,7 +55,7 @@ class MainRepository(application: Application) {
         }
     }
 
-
+/*
     suspend fun getPopularMovies(): List<Movie>{
         return withContext(IO){
             //delay(5000)
@@ -57,6 +64,16 @@ class MainRepository(application: Application) {
                 it.toMovie()
             }
         }
+    }*/
+
+    fun getPopularMovies(): Flow<PagingData<Movie>> {
+        return Pager(
+                config = PagingConfig(
+                        pageSize = TMDB_PAGE_SIZE,
+                        enablePlaceholders = false
+                ),
+                pagingSourceFactory = {MoviesPagingSource("")}
+        ).flow
     }
 
 

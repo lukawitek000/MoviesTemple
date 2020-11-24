@@ -6,9 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.lukasz.witkowski.android.moviestemple.MainRepository
 import com.lukasz.witkowski.android.moviestemple.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -25,7 +29,7 @@ class PopularMoviesViewModel(application: Application): ViewModel() {
     val popularMoviesStatus: LiveData<MainViewModel.Status>
         get() = _popularMoviesStatus
 
-    fun getPopularMovies(){
+    /*fun getPopularMovies(){
         viewModelScope.launch {
             try {
                 val startTime = System.currentTimeMillis()
@@ -38,5 +42,13 @@ class PopularMoviesViewModel(application: Application): ViewModel() {
                 _popularMoviesStatus.value = MainViewModel.Status.FAILURE
             }
         }
+    }*/
+
+
+
+    fun getPopularMovies(): Flow<PagingData<Movie>>{
+        return repository.getPopularMovies().cachedIn(viewModelScope)
     }
+
+
 }

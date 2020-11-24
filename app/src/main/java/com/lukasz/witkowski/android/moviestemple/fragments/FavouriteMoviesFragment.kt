@@ -57,7 +57,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("FavouriteMoviesFragment", "database value $it")
             if(it != null){
-                moviesAdapter.submitList(it)
+               // moviesAdapter.submitList(it)
                 if(it.isEmpty()){
                     (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
                             MainViewModel.Status.FAILURE,

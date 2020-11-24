@@ -3,6 +3,7 @@ package com.lukasz.witkowski.android.moviestemple.adapters
 
 import android.view.*
 import android.widget.ImageView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.MoviesAdapterViewHolder
@@ -11,7 +12,7 @@ import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 
-class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : ListAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
+class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : PagingDataAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
     interface MovieAdapterOnClickHandler {
         fun onClick(movie: Movie)
@@ -27,7 +28,10 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = getItem(position)
 
-        if(movie.posterUri != null) {
+        if(movie != null){
+            holder.bind(movie)
+        }
+        /*if(movie?.posterUri != null) {
             Picasso.with(holder.posterImage.context)
                     .load(movie.posterUri)
                     .into(holder.posterImage)
@@ -35,16 +39,45 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : List
             Picasso.with(holder.posterImage.context)
                     .load(R.drawable.default_movie_poster)
                     .into(holder.posterImage)
-        }
+        }*/
 
+    }
+
+    override fun getItemViewType(position: Int): Int{
+        if(position == itemCount){
+            return 1
+        }else{
+            return 0
+        }
     }
 
 
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-        val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
+        private val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
+
+
+        private var movie: Movie? = null
+
         override fun onClick(view: View) {
-            val adapterPosition = adapterPosition
-            clickHandler.onClick(getItem(adapterPosition))
+            //val adapterPosition = adapterPosition
+           // clickHandler.onClick(getItem(adapterPosition)!!)
+            clickHandler.onClick(movie!!)
+        }
+
+
+        fun bind(movie: Movie?){
+            if (movie != null){
+                this.movie = movie
+                if(movie.posterUri != null) {
+                    Picasso.with(posterImage.context)
+                            .load(movie.posterUri)
+                            .into(posterImage)
+                }else{
+                    Picasso.with(posterImage.context)
+                            .load(R.drawable.default_movie_poster)
+                            .into(posterImage)
+                }
+            }
         }
 
 

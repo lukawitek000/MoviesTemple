@@ -66,7 +66,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
         })
         viewModel.recommendedMovies.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                moviesAdapter.submitList(it.toList())
+              //  moviesAdapter.submitList(it.toList())
             }
         })
 

@@ -77,7 +77,7 @@ class TopRatedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHand
     private fun setUpObservers() {
         viewModel.topRatedMovies.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                moviesAdapter.submitList(it)
+               // moviesAdapter.submitList(it)
             }
         })
 
