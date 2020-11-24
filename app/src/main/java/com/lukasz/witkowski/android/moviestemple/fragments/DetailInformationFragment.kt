@@ -90,11 +90,11 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 }
             }
         })
-        /*viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
+                //viewModel.setResponseFromDatabaseToFavouriteMovies(it)
             }
-        })*/
+        })
 
         viewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
             if (it != null) {

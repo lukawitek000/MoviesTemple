@@ -57,15 +57,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController.addOnDestinationChangedListener(this)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
-        /*
+
         val viewModelFactory = MainViewModelFactory(application)
         val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.databaseValues.observe(this, Observer {
             if( it!= null){
-                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
+               // viewModel.setResponseFromDatabaseToFavouriteMovies(it)
             }
         }
-        )*/
+        )
 
     }
 

@@ -3,10 +3,8 @@ package com.lukasz.witkowski.android.moviestemple.database
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
-import com.lukasz.witkowski.android.moviestemple.models.Review
-import com.lukasz.witkowski.android.moviestemple.models.Video
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
@@ -23,18 +21,20 @@ interface MovieDao {
     fun getAllMovies(): LiveData<List<MovieEntity>>
 
     @Transaction
-    suspend fun insert(movie: MovieEntity){
-        insertMovie(movie)
-        /*val videos = movie.videos
+    suspend fun insert(movie: Movie){
+        insertMovie(movie.toMovieEntity())
+        val videos = movie.videos
         videos.forEach {
-            it.movieOwnerID = movie.id
-            insertVideo(it)
+            val videoEntity = it.toVideoEntity()
+            videoEntity.movieOwnerID = movie.id.toLong()
+            insertVideo(videoEntity)
         }
         val reviews = movie.reviews
         reviews.forEach {
-            it.movieOwnerID = movie.id
-            insertReview(it)
-        }*/
+            val reviewEntity = it.toReviewEntity()
+            reviewEntity.movieOwnerID = movie.id.toLong()
+            insertReview(reviewEntity)
+        }
 
 
     }

@@ -31,11 +31,23 @@ fun VideoEntity.toVideo(): Video {
     return Video(key, name, site)
 }
 
+fun Video.toVideoEntity(): VideoEntity {
+    return VideoEntity(0L, 0L, key, name, site)
+}
+
+
+fun Review.toReviewEntity(): ReviewEntity{
+    return ReviewEntity(0L, 0L, author, content)
+}
+
+
 fun ReviewEntity.toReview(): Review{
     return  Review(author, content)
 }
 
 fun MovieWithReviewsAndVideos.toMovie(): Movie{
+    val videos = videos.map { it.toVideo() }
+    val reviews = reviews.map { it.toReview() }
     return Movie(movie.posterPath, movie.id, movie.originalTitle, movie.title, movie.voteAverage, movie.overview,
-    movie.releaseDate, emptyList(), videos.map { it.toVideo() }, reviews.map { it.toReview() })
+    movie.releaseDate, emptyList(), videos, reviews)
 }

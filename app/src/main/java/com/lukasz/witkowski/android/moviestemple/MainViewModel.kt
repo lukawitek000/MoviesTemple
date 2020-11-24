@@ -62,6 +62,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     fun isSelectedMovieInDatabase(): Boolean{
+        Log.i("MainViewModel", "database values ${databaseValues.value} selected item ${_selectedMovie.value}")
         databaseValues.value?.forEach {
             if(it.id == _selectedMovie.value!!.id){
                 return true
@@ -83,6 +84,9 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     private fun getDetailInformationFromDatabase() {
+        _selectedMovie.value = databaseValues.value?.find {
+            it.id == _selectedMovie.value?.id
+        }
         _requestDetailInformationStatus.value = Status.SUCCESS
     }
 

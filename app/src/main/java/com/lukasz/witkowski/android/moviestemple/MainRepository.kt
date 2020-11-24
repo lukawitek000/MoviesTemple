@@ -31,7 +31,9 @@ class MainRepository(application: Application) {
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
-    private val databaseResponse = database!!.movieDao().loadAllMovies()
+     val databaseResponse = database!!.movieDao().loadAllMovies()
+
+
 
     val favouriteMovies: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
         responseList.map {
@@ -48,7 +50,7 @@ class MainRepository(application: Application) {
 
     suspend fun insertMovieToDatabase(movie: Movie){
         withContext(IO){
-            database?.movieDao()?.insert(movie.toMovieEntity())
+            database?.movieDao()?.insert(movie)
         }
     }
 
