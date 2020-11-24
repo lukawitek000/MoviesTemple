@@ -62,9 +62,6 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-
-
-
     private fun getDetailInformation(){
         if(isSelectedMovieInDatabase()){
             getDetailInformationFromDatabase()
@@ -96,7 +93,7 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    
+
     fun deleteAllFavouriteMovies(){
         viewModelScope.launch {
             repository.deleteAllFavouriteMovies()

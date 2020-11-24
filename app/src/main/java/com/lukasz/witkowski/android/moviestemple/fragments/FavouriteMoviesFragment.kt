@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,10 +26,12 @@ import com.lukasz.witkowski.android.moviestemple.models.Movie
 class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler{
 
     private lateinit var moviesAdapter: MoviesAdapter
-    private lateinit var viewModel: MainViewModel
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyFavouriteMoviesListTextView: TextView
+
+    private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,17 +40,12 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         val view = inflater.inflate(R.layout.fragment_favourite_movies, container, false)
         recyclerView = view.findViewById(R.id.favourite_movies_recyclerview)
         emptyFavouriteMoviesListTextView = view.findViewById(R.id.empty_list_favourite_movies_textview)
-        setUpViewModel()
         setUpRecyclerView()
         setUpObservers()
         setHasOptionsMenu(true)
         return view
     }
 
-    private fun setUpViewModel() {
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-    }
 
     private fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
@@ -61,7 +59,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
 
 
     private fun setUpObservers() {
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+        shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("FavouriteMoviesFragment", "database value $it")
             if(it != null){
                 moviesAdapter.submitList(it)
@@ -77,7 +75,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
     }
 
     override fun onClick(movie: Movie) {
-        viewModel.selectMovie(movie)
+        shareViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.favourites_title))
     }
@@ -102,7 +100,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         builder.setView(view)
         val dialog = builder.create()
         view.findViewById<Button>(R.id.delete_all_yes_button).setOnClickListener {
-            viewModel.deleteAllFavouriteMovies()
+            shareViewModel.deleteAllFavouriteMovies()
             Toast.makeText(requireContext(), "All favourite movies deleted", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }

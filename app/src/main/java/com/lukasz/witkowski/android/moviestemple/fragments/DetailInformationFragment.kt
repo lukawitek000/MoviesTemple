@@ -1,8 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -11,11 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.appbar.AppBarLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
@@ -27,8 +25,6 @@ import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfro
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.Video
 import com.squareup.picasso.Picasso
-import java.io.FileNotFoundException
-import java.io.InputStream
 
 
 class DetailInformationFragment : Fragment(), VideoClickListener {
@@ -39,7 +35,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     private lateinit var reviewsAdapter: ReviewsAdapter
 
-    private lateinit var viewModel: MainViewModel
+    private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
     private lateinit var binding: FragmentDetailInfromationBinding
 
@@ -48,9 +44,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        Log.i("DetailInformation", "on create view")
-        setUpViewModel()
-        selectedMovie = viewModel.selectedMovie.value!!
+        selectedMovie = shareViewModel.selectedMovie.value!!
         setVideosAndReviewsVisible(false)
         setUpObservers()
         setUpReviewsRecyclerView()
@@ -73,7 +67,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
 
     private fun setUpObservers() {
-        viewModel.requestDetailInformationStatus.observe(viewLifecycleOwner, Observer {
+        shareViewModel.requestDetailInformationStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
@@ -90,13 +84,12 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 }
             }
         })
-        viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+        shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                //viewModel.setResponseFromDatabaseToFavouriteMovies(it)
             }
         })
 
-        viewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
+        shareViewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
@@ -144,13 +137,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         binding.voteAverageTextview.text = selectedMovie.voteAverage.toString()
     }
 
-
-
-
-    private fun setUpViewModel() {
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-    }
 
     private fun setUpVideosRecyclerView() {
         val videoManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -205,7 +191,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         val item = menu.findItem(R.id.like_item)
         Log.i("DetailInformationFra", "on create menu ${item?.itemId}")
         if(item != null) {
-            if (viewModel.isSelectedMovieInDatabase()) {
+            if (shareViewModel.isSelectedMovieInDatabase()) {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
             } else {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
@@ -221,12 +207,12 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             true
         }*/
         R.id.like_item -> {
-            if (viewModel.isSelectedMovieInDatabase()) {
-                viewModel.deleteMovieFromDatabase()
+            if (shareViewModel.isSelectedMovieInDatabase()) {
+                shareViewModel.deleteMovieFromDatabase()
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
                 Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.addMovieToDatabase()
+                shareViewModel.addMovieToDatabase()
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
                 Toast.makeText(requireContext(), "Added to favourites", Toast.LENGTH_SHORT).show()
             }
