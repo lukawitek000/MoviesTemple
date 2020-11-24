@@ -20,7 +20,7 @@ class PopularMoviesViewModel(application: Application): ViewModel() {
     val popularMovies: LiveData<List<Movie>>
         get() = _popularMovies
 
-    
+
     private val _popularMoviesStatus = MutableLiveData<MainViewModel.Status>()
     val popularMoviesStatus: LiveData<MainViewModel.Status>
         get() = _popularMoviesStatus
