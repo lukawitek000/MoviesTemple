@@ -1,5 +1,6 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.models.responses
 
+import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.squareup.moshi.Json
 
 data class RecommendationsResponse(

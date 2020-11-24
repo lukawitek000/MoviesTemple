@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.MovieWithReviewsAndVideos
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -36,12 +36,7 @@ class MainViewModel(application: Application) : ViewModel() {
         get() = _popularMoviesStatus
 
 
-    val databaseValues  = repository.favouriteMovies
-
-    private var favouriteMovies: List<Movie> = emptyList()
-    fun getFavouriteMovies(): List<Movie>{
-        return favouriteMovies
-    }
+    val databaseValues: LiveData<List<Movie>>  = repository.favouriteMovies
 
 
     private val _recommendedMovies = MutableLiveData<Set<Movie>>()
@@ -108,21 +103,11 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun setResponseFromDatabaseToFavouriteMovies(response: List<MovieWithReviewsAndVideos>) {
-        val movies = mutableListOf<Movie>()
-        for(value in response){
-            val movie = value.movie
-            movie.videos = value.videos
-            movie.reviews = value.reviews
-            movies.add(movie)
-        }
-        favouriteMovies = movies
-    }
 
 
     fun deleteMovieFromDatabase(){
         viewModelScope.launch {
-            val movieToDelete = favouriteMovies.find {
+            val movieToDelete = databaseValues.value?.find {
                 it.id == _selectedMovie.value!!.id
             }
             repository.deleteMovieFromDatabase(movieToDelete!!)
@@ -130,8 +115,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     fun isSelectedMovieInDatabase(): Boolean{
-        Log.i("MainViewModel", "is selected in database selected: ${_selectedMovie.value} \n favourite: $favouriteMovies")
-        favouriteMovies.forEach {
+        databaseValues.value?.forEach {
             if(it.id == _selectedMovie.value!!.id){
                 return true
             }
@@ -177,7 +161,7 @@ class MainViewModel(application: Application) : ViewModel() {
             try {
                 _recommendedMoviesStatus.value = Status.LOADING
                 val recommendationsList = mutableSetOf<Movie>()
-                for(movie in favouriteMovies){
+                for(movie in databaseValues.value!!){
                     val response = repository.getRecommendationBasedOnMovieID(movie.id)
                     recommendationsList.addAll(response)
                 }
@@ -195,7 +179,6 @@ class MainViewModel(application: Application) : ViewModel() {
     fun deleteAllFavouriteMovies(){
         viewModelScope.launch {
             repository.deleteAllFavouriteMovies()
-            favouriteMovies.toMutableList().clear()
         }
     }
 

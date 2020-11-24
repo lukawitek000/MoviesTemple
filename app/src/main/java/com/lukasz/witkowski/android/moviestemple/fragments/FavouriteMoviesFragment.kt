@@ -64,8 +64,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("FavouriteMoviesFragment", "database value $it")
             if(it != null){
-                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
-                moviesAdapter.submitList(viewModel.getFavouriteMovies())
+                moviesAdapter.submitList(it)
                 if(it.isEmpty()){
                     emptyFavouriteMoviesListTextView.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE

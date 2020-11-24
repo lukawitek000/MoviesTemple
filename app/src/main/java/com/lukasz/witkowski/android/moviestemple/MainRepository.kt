@@ -1,6 +1,8 @@
 package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.utilities.TMDBApi
@@ -11,18 +13,24 @@ class MainRepository(application: Application) {
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
-    val favouriteMovies = database!!.movieDao().loadAllMovies()
+    private val databaseResponse = database!!.movieDao().loadAllMovies()
+
+    val favouriteMovies: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
+        responseList.map {
+            it.toMovie()
+        }
+    }
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
         withContext(IO){
-            database!!.movieDao().deleteMovieReviewAndVideo(movie)
+            database!!.movieDao().deleteMovieReviewAndVideo(movie.toMovieEntity())
         }
     }
 
 
     suspend fun insertMovieToDatabase(movie: Movie){
         withContext(IO){
-            database?.movieDao()?.insert(movie)
+            database?.movieDao()?.insert(movie.toMovieEntity())
         }
     }
 
@@ -31,7 +39,9 @@ class MainRepository(application: Application) {
         return withContext(IO){
             //delay(5000)
             val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
-            movieInfoResponse.movies
+            movieInfoResponse.movies.map {
+                it.toMovie()
+            }
         }
     }
 
@@ -41,8 +51,12 @@ class MainRepository(application: Application) {
         return (IO) {
            // delay(10000)
             val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movie.id)
-            movie.reviews  = response.reviews.results
-            movie.videos = response.videos.results
+            movie.reviews  = response.reviews.results.map {
+                it.toReview()
+            }
+            movie.videos = response.videos.results.map {
+                it.toVideo()
+            }
             movie
         }
     }
@@ -54,14 +68,18 @@ class MainRepository(application: Application) {
         return withContext(IO){
             //delay(10000)
             val response = TMDBApi.retrofitService.getTopRatedMovies()
-            response.movies
+            response.movies.map {
+                it.toMovie()
+            }
         }
     }
 
-    suspend fun getRecommendationBasedOnMovieID(movieID: Long): List<Movie> {
+    suspend fun getRecommendationBasedOnMovieID(movieID: Int): List<Movie> {
         return withContext(IO){
             val response = TMDBApi.retrofitService.getRecommendationsBaseOnMovieID(movieID)
-            response.movies
+            response.movies.map {
+                it.toMovie()
+            }
         }
     }
 

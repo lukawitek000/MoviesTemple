@@ -65,7 +65,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
 
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                viewModel.setResponseFromDatabaseToFavouriteMovies(it)
+               // viewModel.setResponseFromDatabaseToFavouriteMovies(it)
                 viewModel.getRecommendationsBasedOnFavouriteMovies()
             }
         })
