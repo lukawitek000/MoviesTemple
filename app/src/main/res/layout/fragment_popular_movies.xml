@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="@dimen/bottom_navigation_height"
+    android:layout_marginTop="56dp"
     tools:context=".fragments.PopularMoviesFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

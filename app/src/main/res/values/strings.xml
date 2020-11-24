@@ -10,6 +10,7 @@
     <string name="plot_label">Plot synopsis:</string>
     <string name="popular_movie_title">Popular Movies</string>
     <string name="top_rated_title">Top Rated Movies</string>
+    <string name="recommended_movies_title">Recommended Movies</string>
     <string name="poster_description">Poster</string>
     <string name="favourites_title">Favourites</string>
     <string name="remove_from_favourites">Remove from favourites</string>

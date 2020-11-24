@@ -31,8 +31,14 @@
         <item name="android:titleTextColor">@color/darkGrey</item>
         <item name="android:background">@color/darkYellow</item>
         <item name="background">@color/darkYellow</item>
+        <item name="colorControlNormal">@color/darkGrey</item>
+        <item name="android:colorControlNormal">@color/darkGrey</item>
     </style>
 
-
+    <style name="expandedToolBar">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/darkGrey</item>
+        <item name="android:textAlignment">center</item>
+    </style>
 
 </resources>

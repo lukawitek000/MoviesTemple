@@ -1,16 +1,21 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.AppBarLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
@@ -22,6 +27,9 @@ import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfro
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.Video
 import com.squareup.picasso.Picasso
+import java.io.FileNotFoundException
+import java.io.InputStream
+
 
 class DetailInformationFragment : Fragment(), VideoClickListener {
 
@@ -48,15 +56,41 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         setDataToUI()
         setHasOptionsMenu(true)
         Log.i("DetailInformation", "on create view end")
+
+        val toolbar = binding.detailInformationToolbar
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+        Log.i("DetailInformation", "poster uri ${selectedMovie.posterUri}  path ${selectedMovie.posterUri?.path}")
+        Picasso.with(context).load(selectedMovie.posterUri).into(binding.toolbarPoster)
+        binding.detailInformationToolbar.title = selectedMovie.title
+
+        Log.i("DetailInformation", "poster width img")
+        val width = binding.toolbarPoster.measuredWidth
+        val dp = width / resources.displayMetrics.density;
+        Log.i("DetailInformation", "poster width px: $width dp $dp")
+        //binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        //    val range = appBarLayout.totalScrollRange
+        //    binding.toolbarPoster.imageAlpha = (255 * (1 - verticalOffset/range))
+        //})
+
+
+
+
         return binding.root
     }
 
 
 
+
+
+
     private fun setUpObservers() {
         viewModel.requestDetailInformationStatus.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                when(it){
+            if (it != null) {
+                when (it) {
                     MainViewModel.Status.SUCCESS -> {
                         //   binding.addToFavouriteButton.isEnabled = true
                         setVideosAndReviewsVisible(true)
@@ -75,16 +109,17 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             }
         })
         viewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            if(it != null){
+            if (it != null) {
                 viewModel.setResponseFromDatabaseToFavouriteMovies(it)
             }
         })
 
         viewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
-            if(it != null){
+            if (it != null) {
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
                 selectedMovie = it
+
             }
         })
     }
@@ -119,14 +154,14 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
 
     private fun setDataToUI(){
-        binding.title.text = selectedMovie.title
+       // binding.title.text = selectedMovie.title
         binding.overview.text = selectedMovie.overview
         binding.originalTitle.text = selectedMovie.originalTitle
         binding.releaseDate.text = selectedMovie.releaseDate
         binding.voteAverageTextview.text = selectedMovie.voteAverage.toString()
-        Picasso.with(context)
-                .load(selectedMovie.posterUri)
-                .into(binding.poster)
+        //Picasso.with(context)
+        ///        .load(selectedMovie.posterUri)
+        //        .into(binding.poster)
     }
 
 
@@ -165,6 +200,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         }else{
             Toast.makeText(requireContext(), "Unknown site", Toast.LENGTH_SHORT).show()
         }
+        (requireActivity() as MainActivity).setIsMainToolbarVisible(false)
 
     }
 
@@ -172,6 +208,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     override fun onStop() {
         (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
+        (requireActivity() as MainActivity).setIsMainToolbarVisible(true)
         super.onStop()
     }
 
@@ -206,15 +243,20 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             true
         }*/
         R.id.like_item -> {
-            if(viewModel.isSelectedMovieInDatabase()){
+            if (viewModel.isSelectedMovieInDatabase()) {
                 viewModel.deleteMovieFromDatabase()
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
                 Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()
-            }else {
+            } else {
                 viewModel.addMovieToDatabase()
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
                 Toast.makeText(requireContext(), "Added to favourites", Toast.LENGTH_SHORT).show()
             }
+            true
+        }
+        android.R.id.home -> {
+            Toast.makeText(requireContext(), "go back", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
             true
         }
         else -> false

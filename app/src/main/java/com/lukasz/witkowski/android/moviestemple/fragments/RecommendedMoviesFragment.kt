@@ -121,6 +121,7 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
     override fun onClick(movie: Movie) {
         viewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_recommendMoviesFragment_to_detailInformationFragment)
+        (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.recommended_movies_title))
     }
 
 

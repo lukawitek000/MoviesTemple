@@ -80,6 +80,7 @@ class FavouriteMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHan
     override fun onClick(movie: Movie) {
         viewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
+        (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.favourites_title))
     }
 
 

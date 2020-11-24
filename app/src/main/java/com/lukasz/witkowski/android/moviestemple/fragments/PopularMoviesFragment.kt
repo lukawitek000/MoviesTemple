@@ -123,5 +123,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
     override fun onClick(movie: Movie) {
         viewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
+        (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.popular_movie_title))
     }
 }

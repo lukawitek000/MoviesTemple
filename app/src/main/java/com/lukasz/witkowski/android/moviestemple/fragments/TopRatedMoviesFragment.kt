@@ -110,6 +110,7 @@ class TopRatedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHand
     override fun onClick(movie: Movie) {
         viewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_topRatedMoviesFragment_to_detailInformationFragment)
+        (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.top_rated_title))
     }
 
 

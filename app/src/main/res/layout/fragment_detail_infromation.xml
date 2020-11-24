@@ -2,145 +2,205 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<androidx.core.widget.NestedScrollView
-    tools:context=".fragments.DetailInformationFragment"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        >
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lightBlack"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:theme="@style/actionBarStyle"
+            >
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/poster"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Detail information layout" />
-
-            <ImageView
-                android:id="@+id/poster"
-                android:layout_width="wrap_content"
-                android:layout_height="250dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/poster_description"
-                tools:layout_width="200dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:id="@+id/collapsing_toolbar_layout"
+                app:contentScrim="@color/darkYellow"
+                app:scrimVisibleHeightTrigger="200dp"
+                app:scrimAnimationDuration="1000"
+                app:expandedTitleGravity="center_horizontal|center_vertical"
+                app:expandedTitleMarginStart="8dp"
+                app:expandedTitleMarginEnd="178dp"
+                app:maxLines="7"
+                app:expandedTitleTextAppearance="@style/expandedToolBar">
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginTop="56dp"
+                        android:layout_marginBottom="4dp"
+                        android:id="@+id/toolbar_poster"
+                        android:layout_width="170dp"
+                        android:layout_height="match_parent"
+                        android:maxWidth="170dp"
+                        android:layout_gravity="end"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_share_icon"
+                        app:layout_collapseMode="pin" />
 
-        <LinearLayout
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/detail_information_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin"
+                        style="@style/actionBarStyle"
+                        app:popupTheme="@style/actionBarStyle" />
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+        <androidx.core.widget.NestedScrollView
+            tools:context=".fragments.DetailInformationFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding = "8dp">
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <TextView
-                android:id="@+id/original_title_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/original_title_label"
-                style="@style/labels" />
-            <TextView
-                android:id="@+id/original_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                />
-
-            <TextView android:id = "@+id/vote_average_label"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:text = "@string/vote_average_label"
-                style="@style/labels"
-                android:layout_marginTop="8dp"/>
-
-            <TextView
-                android:id="@+id/vote_average_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"/>
-
-
-
-            <TextView android:id = "@+id/release_date_label"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:text = "@string/release_date_label"
-                style="@style/labels"
-                android:layout_marginTop="8dp"/>
-
-            <TextView android:id = "@+id/release_date"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:textSize = "24sp" />
-
-            <TextView android:id = "@+id/overview_label"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:text = "@string/plot_label"
-                style="@style/labels"
-                android:layout_marginTop="8dp"/>
-
-            <TextView android:id = "@+id/overview"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:textSize = "24sp"
-                />
-
-            <TextView
-                android:id="@+id/videos_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/videos_label"
-                android:textSize="32sp"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/darkYellow"/>
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recyclerview_videos"/>
-            <TextView
-                android:id="@+id/reviews_label"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/reviews_label"
-                android:textSize="32sp"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/darkYellow"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recyclerview_reviews"/>
+                android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/detail_information_progressbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
-        </LinearLayout>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+              <!--  <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lightBlack"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/poster"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Detail information layout" />
+
+                    <ImageView
+                        android:id="@+id/poster"
+                        android:layout_width="wrap_content"
+                        android:layout_height="250dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/poster_description"
+                        tools:layout_width="200dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding = "8dp">
+
+                    <TextView
+                        android:id="@+id/original_title_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/original_title_label"
+                        style="@style/labels" />
+                    <TextView
+                        android:id="@+id/original_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="24sp"
+                        />
+
+                    <TextView android:id = "@+id/vote_average_label"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:text = "@string/vote_average_label"
+                        style="@style/labels"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        android:id="@+id/vote_average_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="24sp"/>
+
+
+
+                    <TextView android:id = "@+id/release_date_label"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:text = "@string/release_date_label"
+                        style="@style/labels"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView android:id = "@+id/release_date"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:textSize = "24sp" />
+
+                    <TextView android:id = "@+id/overview_label"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:text = "@string/plot_label"
+                        style="@style/labels"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView android:id = "@+id/overview"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:textSize = "24sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/videos_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/videos_label"
+                        android:textSize="32sp"
+                        android:layout_marginTop="16dp"
+                        android:textColor="@color/darkYellow"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/recyclerview_videos"/>
+                    <TextView
+                        android:id="@+id/reviews_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reviews_label"
+                        android:textSize="32sp"
+                        android:layout_marginTop="16dp"
+                        android:textColor="@color/darkYellow"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/recyclerview_reviews"/>
+
+                    <ProgressBar
+                        android:id="@+id/detail_information_progressbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
