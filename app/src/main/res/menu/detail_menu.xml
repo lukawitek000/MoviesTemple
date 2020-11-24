@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="@string/share"
+
+    <item android:title="Like"
+        android:id="@+id/like_item"
+        android:icon="@drawable/ic_empty_favourite_icon"
+        app:showAsAction="always"/>
+
+ <!--   <item android:title="@string/share"
         android:id="@+id/share_item"
         android:icon = "@drawable/ic_share_icon"
         app:showAsAction="always"/>
+
+-->
 </menu>

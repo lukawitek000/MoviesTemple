@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="poster_margin">0.01dp</dimen>
+    <dimen name="bottom_navigation_height">56dp</dimen>
+    <integer name="slide_animation_time">300</integer>
 </resources>

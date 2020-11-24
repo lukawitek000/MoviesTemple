@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name">Movies Temple</string>
     <string name="sort_by_popularity">Sort By Popularity</string>
     <string name="sort_by_top_rated">Sort By Top-rate</string>
     <string name="share">Share</string>
@@ -10,13 +10,12 @@
     <string name="plot_label">Plot synopsis:</string>
     <string name="popular_movie_title">Popular Movies</string>
     <string name="top_rated_title">Top Rated Movies</string>
+    <string name="recommended_movies_title">Recommended Movies</string>
     <string name="poster_description">Poster</string>
     <string name="favourites_title">Favourites</string>
     <string name="remove_from_favourites">Remove from favourites</string>
     <string name="add_to_favourites">Add to favourites</string>
-    <string name="author_label">Author</string>
-    <string name="videos_label">VIDEO</string>
+    <string name="author_label">Author:</string>
+    <string name="videos_label">VIDEOS</string>
     <string name="reviews_label">REVIEWS</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
