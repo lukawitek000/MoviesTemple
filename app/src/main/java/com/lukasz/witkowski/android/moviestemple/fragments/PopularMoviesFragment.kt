@@ -9,6 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,15 +24,21 @@ import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModel
+import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModelFactory
 
 
 class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     private var moviesAdapter: MoviesAdapter? = null
-    private lateinit var viewModel: MainViewModel
+
     private lateinit var movieRecyclerView: RecyclerView
     private lateinit var errorMessageTextView: TextView
     private lateinit var progressBar: ProgressBar
+
+
+    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val viewModel by viewModels<PopularMoviesViewModel> { (PopularMoviesViewModelFactory(requireActivity().application)) }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +51,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         progressBar = view.findViewById(R.id.popular_movies_progressbar)
 
 
-
-        setupViewModel()
         viewModel.getPopularMovies()
         setUpRecyclerView()
         setObservers()
@@ -64,12 +70,6 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         }
 
         return view
-    }
-
-
-    private fun setupViewModel() {
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
     }
 
 
@@ -121,7 +121,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
 
     override fun onClick(movie: Movie) {
-        viewModel.selectMovie(movie)
+        sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.popular_movie_title))
     }

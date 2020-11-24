@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
@@ -10,6 +11,23 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
 class MainRepository(application: Application) {
+
+
+    companion object {
+        private val LOCK = Any()
+        @Volatile
+        private var instance: MainRepository? = null
+        fun getInstance(application: Application): MainRepository {
+            return instance ?: synchronized(LOCK){
+                MainRepository(application)
+            }
+        }
+    }
+
+    init {
+        Log.i("MainRepository", "init block")
+    }
+
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
