@@ -52,7 +52,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
         movieRecyclerView = view.findViewById(R.id.movies_recyclerview)
 
-        viewModel.getPopularMovies()
+        //viewModel.getPopularMovies()
         setUpRecyclerView()
         setObservers()
 
@@ -105,7 +105,9 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
             }else if(loadState.source.refresh is LoadState.NotLoading){
                 (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
             }else if(loadState.source.refresh is LoadState.Error){
-                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.FAILURE, "Cannot connect Paging")
+                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                        MainViewModel.Status.FAILURE,
+                        "Cannot connect to server, check your favourite movies")
             }
 
 
