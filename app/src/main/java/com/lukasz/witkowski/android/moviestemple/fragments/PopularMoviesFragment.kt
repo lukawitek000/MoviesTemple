@@ -60,7 +60,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
 
 
-        /*val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         refresh.setColorSchemeColors(Color.BLACK)
 
@@ -69,7 +69,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
             //viewModel.getPopularMovies()
             moviesAdapter.retry()
             refresh.isRefreshing = false
-        }*/
+        }
 
         initAdapter()
         getPopularMovies()
@@ -95,6 +95,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
                 footer = MoviesLoadStateAdapter{moviesAdapter.retry()},
                 header = MoviesLoadStateAdapter{moviesAdapter.retry()}
         )
+
 
         moviesAdapter.addLoadStateListener { loadState ->
 

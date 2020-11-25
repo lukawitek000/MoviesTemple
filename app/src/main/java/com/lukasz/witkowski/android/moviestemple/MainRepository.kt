@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.lukasz.witkowski.android.moviestemple.api.MoviesPagingSource
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
@@ -70,7 +71,9 @@ class MainRepository(application: Application) {
         return Pager(
                 config = PagingConfig(
                         pageSize = TMDB_PAGE_SIZE,
-                        enablePlaceholders = false
+                        enablePlaceholders = false,
+                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                        prefetchDistance = 10 * TMDB_PAGE_SIZE
                 ),
                 pagingSourceFactory = {MoviesPagingSource("")}
         ).flow

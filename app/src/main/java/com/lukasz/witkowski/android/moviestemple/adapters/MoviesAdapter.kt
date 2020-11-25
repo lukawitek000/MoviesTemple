@@ -1,16 +1,20 @@
 package com.lukasz.witkowski.android.moviestemple.adapters
 
 
+import android.content.Context
+import android.util.Log
 import android.view.*
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.MoviesAdapterViewHolder
-import com.lukasz.witkowski.android.moviestemple.R
-import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
+import com.lukasz.witkowski.android.moviestemple.R
+import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.MoviesAdapterViewHolder
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.squareup.picasso.Picasso
+
 
 class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : PagingDataAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
@@ -47,9 +51,12 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
         if(position == itemCount){
             return 1
         }else{
+
             return 0
         }
     }
+
+
 
 
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
@@ -58,6 +65,7 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
 
         private var movie: Movie? = null
 
+
         override fun onClick(view: View) {
             //val adapterPosition = adapterPosition
            // clickHandler.onClick(getItem(adapterPosition)!!)
@@ -65,20 +73,32 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
         }
 
 
+
         fun bind(movie: Movie?){
             if (movie != null){
                 this.movie = movie
+                itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+
+                val  width = posterImage.measuredWidth
+                val  height = posterImage.measuredHeight
+                Log.i("MoviesAdapter", "width $width height $height")
                 if(movie.posterUri != null) {
-                    Picasso.with(posterImage.context)
+                    Glide.with(posterImage.context)
                             .load(movie.posterUri)
+                           // .resize(width, height)
+                            .placeholder(R.drawable.poster_placeholder)
                             .into(posterImage)
                 }else{
-                    Picasso.with(posterImage.context)
+                    Glide.with(posterImage.context)
                             .load(R.drawable.default_movie_poster)
+                           // .resize(width, height)
+                            .placeholder(R.drawable.poster_placeholder)
                             .into(posterImage)
                 }
             }
         }
+
+
 
 
         init {
