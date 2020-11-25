@@ -33,11 +33,7 @@ import kotlinx.coroutines.launch
 
 class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
-   // private lateinit var moviesAdapter: MoviesAdapter
 
-    //private lateinit var recyclerView: RecyclerView
-
-    //private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
     private val viewModel by viewModels<RecommendedMoviesViewModel> { RecommendedMoviesViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,21 +41,12 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
         val view =  inflater.inflate(R.layout.movies_poster_list_layout, container, false)
         moviesRecyclerView = view.findViewById(R.id.movies_recyclerview)
 
-
         moviesAdapter = MoviesAdapter((this))
         setUpRecyclerView()
         setUpObservers()
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         refreshOnSwipe(refresh)
-       /* refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
-        refresh.setColorSchemeColors(Color.BLACK)
-
-        refresh.setOnRefreshListener {
-            Toast.makeText(requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
-            viewModel.getRecommendationsBasedOnFavouriteMovies()
-            refresh.isRefreshing = false
-        }*/
 
         initAdapter()
         getRecommendedMovies()
@@ -87,37 +74,8 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
                // viewModel.getRecommendationsBasedOnFavouriteMovies()
             }
         })
-       /*  viewModel.recommendedMovies.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-              //  moviesAdapter.submitList(it.toList())
-            }
-        })
-
-        viewModel.recommendedMoviesStatus.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                if(it == MainViewModel.Status.SUCCESS && viewModel.favouriteMovies.value.isNullOrEmpty()){
-                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
-                            MainViewModel.Status.FAILURE,
-                            "There aren't any movies to recommend you. Recommendations are based on your favourite movies.")
-                }else{
-                    (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
-                            it,
-                            "Cannot connect to server, check your favourite movies")
-                }
-            }
-        })*/
 
     }
-
-
-   /* private fun setUpRecyclerView() {
-        val spanCount = (activity as MainActivity).calculateSpanCount()
-        val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.setHasFixedSize(true)
-        moviesAdapter = MoviesAdapter(this)
-        recyclerView.adapter = moviesAdapter
-    }*/
 
 
 

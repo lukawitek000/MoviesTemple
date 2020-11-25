@@ -19,40 +19,12 @@ class RecommendedMoviesViewModel(application: Application): ViewModel() {
     private val repository = MainRepository.getInstance(application)
 
     val favouriteMovies = repository.favouriteMovies
-
-    private val _recommendedMovies = MutableLiveData<Set<Movie>>()
-    val recommendedMovies: LiveData<Set<Movie>>
-        get() = _recommendedMovies
-
-
-    private val _recommendedMoviesStatus = MutableLiveData<MainViewModel.Status>()
-    val recommendedMoviesStatus: LiveData<MainViewModel.Status>
-        get() = _recommendedMoviesStatus
-
+    
 
     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
         Log.i("RecommendedMoviesModel", "favouriteMovies = ${favouriteMovies.value}")
         return repository.getRecommendationsBasedOnFavouriteMovies(favouriteMovies.value!!)
     }
 
-    /*fun getRecommendationsBasedOnFavouriteMovies(){
-        viewModelScope.launch {
-            try {
-                _recommendedMoviesStatus.value = MainViewModel.Status.LOADING
-                val recommendationsList = mutableSetOf<Movie>()
-                for(movie in favouriteMovies.value!!){
-                    Log.i("RecommendedMoviesModel", "fetching recommendations ${movie.title}")
-                    val response = repository.getRecommendationBasedOnMovieID(movie.id)
-                    recommendationsList.addAll(response)
-                }
-               // _recommendedMovies.value = recommendationsList.shuffled().toSet()
-                Log.i("RecommendedMoviesModel", "fetching recommendations")
-                _recommendedMovies.value = recommendationsList.toSet()
-                _recommendedMoviesStatus.value = MainViewModel.Status.SUCCESS
-            }catch (e: Exception){
-                Log.i("RecommendedMoviesModel", "Error with fetching recommendations")
-                _recommendedMoviesStatus.value = MainViewModel.Status.FAILURE
-            }
-        }
-    }*/
+
 }
