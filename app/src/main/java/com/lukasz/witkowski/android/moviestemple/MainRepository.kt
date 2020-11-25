@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Pager
@@ -59,7 +60,7 @@ class MainRepository(application: Application) {
             database?.movieDao()?.insert(movie)
         }
     }
-    
+
 
     fun getPopularMovies(): Flow<PagingData<Movie>> {
         return Pager(
@@ -88,6 +89,26 @@ class MainRepository(application: Application) {
 
 
 
+    fun getRecommendationsBasedOnFavouriteMovies(favouriteMovies: List<Movie>): Flow<PagingData<Movie>>{
+        val listOfIds = favouriteMovies.map {
+            it.id
+        }
+        Log.i("RecommendedMoviesModel", "main repo listof ids $listOfIds")
+        return Pager(
+                config = PagingConfig(
+                        pageSize = TMDB_PAGE_SIZE,
+                        enablePlaceholders = false,
+                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                        prefetchDistance = TMDB_PAGE_SIZE
+                ),
+                pagingSourceFactory = { MoviesPagingSource(RECOMMENDATIONS_QUERY, listOfIds) }
+        ).flow
+
+
+    }
+
+
+
     suspend fun getMovieDetails(movie: Movie): Movie {
         return (IO) {
            // delay(10000)
@@ -106,14 +127,14 @@ class MainRepository(application: Application) {
 
 
 
-    suspend fun getRecommendationBasedOnMovieID(movieID: Int): List<Movie> {
+    /*suspend fun getRecommendationBasedOnMovieID(movieID: Int): List<Movie> {
         return withContext(IO){
             val response = TMDBApi.retrofitService.getRecommendationsBaseOnMovieID(movieID)
             response.movies.map {
                 it.toMovie()
             }
         }
-    }
+    }*/
 
 
     suspend fun deleteAllFavouriteMovies(){

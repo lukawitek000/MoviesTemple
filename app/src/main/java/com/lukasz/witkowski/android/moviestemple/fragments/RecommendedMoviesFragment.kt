@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,46 +26,68 @@ import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModel
 import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModelFactory
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
-class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
+class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
-    private lateinit var moviesAdapter: MoviesAdapter
+   // private lateinit var moviesAdapter: MoviesAdapter
 
-    private lateinit var recyclerView: RecyclerView
+    //private lateinit var recyclerView: RecyclerView
 
-    private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    //private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
     private val viewModel by viewModels<RecommendedMoviesViewModel> { RecommendedMoviesViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.movies_poster_list_layout, container, false)
-        recyclerView = view.findViewById(R.id.movies_recyclerview)
+        moviesRecyclerView = view.findViewById(R.id.movies_recyclerview)
 
 
+        moviesAdapter = MoviesAdapter((this))
         setUpRecyclerView()
         setUpObservers()
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
+        refreshOnSwipe(refresh)
+       /* refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         refresh.setColorSchemeColors(Color.BLACK)
 
         refresh.setOnRefreshListener {
             Toast.makeText(requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
             viewModel.getRecommendationsBasedOnFavouriteMovies()
             refresh.isRefreshing = false
-        }
+        }*/
+
+        initAdapter()
+        getRecommendedMovies()
+
         setHasOptionsMenu(true)
         return view
     }
 
+    private var job: Job? = null
+
+    private fun getRecommendedMovies() {
+        job?.cancel()
+        job = lifecycleScope.launch {
+            sharedViewModel.getRecommendationsBasedOnFavouriteMovies().collectLatest {
+                moviesAdapter.submitData(it)
+            }
+        }
+    }
+
+
     private fun setUpObservers() {
-        viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
+       viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
+           Log.i("RecommendedMoviesModel", " fragment observerfavouriteMovies = ${it}")
             if(it != null){
-                viewModel.getRecommendationsBasedOnFavouriteMovies()
+               // viewModel.getRecommendationsBasedOnFavouriteMovies()
             }
         })
-        viewModel.recommendedMovies.observe(viewLifecycleOwner, Observer {
+       /*  viewModel.recommendedMovies.observe(viewLifecycleOwner, Observer {
             if(it != null){
               //  moviesAdapter.submitList(it.toList())
             }
@@ -82,24 +105,24 @@ class RecommendedMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickH
                             "Cannot connect to server, check your favourite movies")
                 }
             }
-        })
+        })*/
 
     }
 
 
-    private fun setUpRecyclerView() {
+   /* private fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
         moviesAdapter = MoviesAdapter(this)
         recyclerView.adapter = moviesAdapter
-    }
+    }*/
 
 
 
     override fun onClick(movie: Movie) {
-        shareViewModel.selectMovie(movie)
+        sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_recommendMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.recommended_movies_title))
     }

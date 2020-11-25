@@ -3,9 +3,11 @@ package com.lukasz.witkowski.android.moviestemple
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.paging.PagingData
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import java.lang.Exception
 
 class MainViewModel(application: Application) : ViewModel() {
@@ -98,6 +100,11 @@ class MainViewModel(application: Application) : ViewModel() {
         viewModelScope.launch {
             repository.deleteAllFavouriteMovies()
         }
+    }
+
+    fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
+        Log.i("RecommendedMoviesModel", "favouriteMovies = ${databaseValues.value}")
+        return repository.getRecommendationsBasedOnFavouriteMovies(databaseValues.value!!)
     }
 
 }
