@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
 import kotlinx.coroutines.*
@@ -18,7 +19,10 @@ class MainViewModel(application: Application) : ViewModel() {
 
     private val repository = MainRepository.getInstance(application)
 
-    val databaseValues: LiveData<List<Movie>>  = repository.favouriteMovies
+    val databaseValues: LiveData<List<Movie>>  = repository.databaseValues
+
+    val favouriteMovies = repository.favouriteMovies.cachedIn(viewModelScope)
+
 
 
     private val _selectedMovie = MutableLiveData<Movie>()

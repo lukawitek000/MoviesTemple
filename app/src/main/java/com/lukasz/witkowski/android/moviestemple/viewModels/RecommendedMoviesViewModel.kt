@@ -16,15 +16,15 @@ import java.lang.Exception
 
 class RecommendedMoviesViewModel(application: Application): ViewModel() {
 
-    private val repository = MainRepository.getInstance(application)
+  /*  private val repository = MainRepository.getInstance(application)
 
     val favouriteMovies = repository.favouriteMovies
-    
+
 
     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
         Log.i("RecommendedMoviesModel", "favouriteMovies = ${favouriteMovies.value}")
         return repository.getRecommendationsBasedOnFavouriteMovies(favouriteMovies.value!!)
-    }
+    }*/
 
 
 }

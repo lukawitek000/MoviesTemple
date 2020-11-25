@@ -2,20 +2,30 @@ package com.lukasz.witkowski.android.moviestemple.database
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
 
     @Transaction
-    @Query("SELECT * FROM Movies")
-    fun loadAllMovies(): LiveData<List<MovieWithReviewsAndVideos>>
+    @Query("SELECT * FROM Movies ORDER BY id")
+    fun loadAllMovies(): PagingSource<Int, MovieWithReviewsAndVideos>
 
+    @Transaction
+    @Query("SELECT * FROM Movies")
+    fun getAllData(): LiveData<List<MovieWithReviewsAndVideos>>
+
+
+    @Query("SELECT * FROM Movies ORDER BY id DESC")
+    fun getAllMoviesPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM Movies")
     fun getAllMovies(): LiveData<List<MovieEntity>>

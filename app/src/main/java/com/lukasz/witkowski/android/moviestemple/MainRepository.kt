@@ -40,13 +40,26 @@ class MainRepository(application: Application) {
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
-    private val databaseResponse = database!!.movieDao().loadAllMovies()
+    private val databaseResponse = database!!.movieDao().getAllData()
 
-    val favouriteMovies: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
+    val databaseValues: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
         responseList.map {
             it.toMovie()
         }
     }
+
+
+    val favouriteMovies = Pager(
+            config = PagingConfig(
+                    pageSize = 20,
+                    enablePlaceholders = false
+            ),
+            pagingSourceFactory = { database!!.movieDao().getAllMoviesPagingSource() }
+    ).flow
+
+
+
+
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
         withContext(IO){

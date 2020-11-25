@@ -68,12 +68,12 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
 
 
     private fun setUpObservers() {
-       viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
+  /*     viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
            Log.i("RecommendedMoviesModel", " fragment observerfavouriteMovies = ${it}")
             if(it != null){
                // viewModel.getRecommendationsBasedOnFavouriteMovies()
             }
-        })
+        })*/
 
     }
 
