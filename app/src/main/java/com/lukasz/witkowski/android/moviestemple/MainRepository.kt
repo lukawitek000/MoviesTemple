@@ -59,17 +59,7 @@ class MainRepository(application: Application) {
             database?.movieDao()?.insert(movie)
         }
     }
-
-/*
-    suspend fun getPopularMovies(): List<Movie>{
-        return withContext(IO){
-            //delay(5000)
-            val movieInfoResponse = TMDBApi.retrofitService.getPopularMovies()
-            movieInfoResponse.movies.map {
-                it.toMovie()
-            }
-        }
-    }*/
+    
 
     fun getPopularMovies(): Flow<PagingData<Movie>> {
         return Pager(
@@ -115,15 +105,6 @@ class MainRepository(application: Application) {
 
 
 
-  /*  suspend fun getTopRatedMovies(): List<Movie>{
-        return withContext(IO){
-            //delay(10000)
-            val response = TMDBApi.retrofitService.getTopRatedMovies()
-            response.movies.map {
-                it.toMovie()
-            }
-        }
-    }*/
 
     suspend fun getRecommendationBasedOnMovieID(movieID: Int): List<Movie> {
         return withContext(IO){
