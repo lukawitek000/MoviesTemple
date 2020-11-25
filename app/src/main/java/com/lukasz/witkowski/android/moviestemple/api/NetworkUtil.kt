@@ -19,7 +19,7 @@ interface TMDBService{
     suspend fun getPopularMovies(@Query(API_KEY) apiKey: String = api_key, @Query("page") page: Int = 1): TMDBResponse
 
     @GET("/3/movie/top_rated")
-    suspend fun getTopRatedMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
+    suspend fun getTopRatedMovies(@Query(API_KEY) apiKey: String = api_key, @Query("page") page: Int = 1): TMDBResponse
 
 
     @GET("/3/movie/{movieId}/videos")

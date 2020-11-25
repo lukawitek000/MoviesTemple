@@ -1,11 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.graphics.Color
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,7 +23,7 @@ open class BaseListMoviesFragment : Fragment() {
 
     protected lateinit var moviesAdapter: MoviesAdapter
 
-    protected lateinit var movieRecyclerView: RecyclerView
+    protected lateinit var moviesRecyclerView: RecyclerView
 
     protected val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
@@ -42,8 +38,8 @@ open class BaseListMoviesFragment : Fragment() {
             }
 
         }
-        movieRecyclerView.layoutManager = layoutManager
-        movieRecyclerView.setHasFixedSize(true)
+        moviesRecyclerView.layoutManager = layoutManager
+        moviesRecyclerView.setHasFixedSize(true)
     }
 
 
@@ -60,7 +56,7 @@ open class BaseListMoviesFragment : Fragment() {
 
 
     protected fun initAdapter() {
-        movieRecyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
+        moviesRecyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
                 footer = MoviesLoadStateAdapter{moviesAdapter.retry()},
                 header = MoviesLoadStateAdapter{moviesAdapter.retry()}
         )

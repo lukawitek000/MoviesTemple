@@ -29,6 +29,10 @@ class MainRepository(application: Application) {
                 MainRepository(application)
             }
         }
+
+        const val TOP_RATED_MOVIES_QUERY = "top rated movies"
+        const val POPULAR_MOVIES_QUERY = "popular movies"
+        const val RECOMMENDATIONS_QUERY = "recommendations"
     }
 
 
@@ -73,9 +77,22 @@ class MainRepository(application: Application) {
                         pageSize = TMDB_PAGE_SIZE,
                         enablePlaceholders = false,
                         initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                        prefetchDistance = 10 * TMDB_PAGE_SIZE
+                        prefetchDistance = TMDB_PAGE_SIZE
                 ),
-                pagingSourceFactory = {MoviesPagingSource("")}
+                pagingSourceFactory = { MoviesPagingSource(POPULAR_MOVIES_QUERY) }
+        ).flow
+    }
+
+
+    fun getTopRatedMovies(): Flow<PagingData<Movie>> {
+        return Pager(
+                config = PagingConfig(
+                        pageSize = TMDB_PAGE_SIZE,
+                        enablePlaceholders = false,
+                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                        prefetchDistance = TMDB_PAGE_SIZE
+                ),
+                pagingSourceFactory = { MoviesPagingSource(TOP_RATED_MOVIES_QUERY) }
         ).flow
     }
 
@@ -98,7 +115,7 @@ class MainRepository(application: Application) {
 
 
 
-    suspend fun getTopRatedMovies(): List<Movie>{
+  /*  suspend fun getTopRatedMovies(): List<Movie>{
         return withContext(IO){
             //delay(10000)
             val response = TMDBApi.retrofitService.getTopRatedMovies()
@@ -106,7 +123,7 @@ class MainRepository(application: Application) {
                 it.toMovie()
             }
         }
-    }
+    }*/
 
     suspend fun getRecommendationBasedOnMovieID(movieID: Int): List<Movie> {
         return withContext(IO){
