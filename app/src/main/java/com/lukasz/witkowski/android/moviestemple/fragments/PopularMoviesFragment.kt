@@ -36,32 +36,36 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 
-class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
+class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
-    private var moviesAdapter: MoviesAdapter = MoviesAdapter(this)
+   /* private var moviesAdapter: MoviesAdapter = MoviesAdapter(this)
 
     private lateinit var movieRecyclerView: RecyclerView
 
-    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }*/
     private val viewModel by viewModels<PopularMoviesViewModel> { (PopularMoviesViewModelFactory(requireActivity().application)) }
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+
         val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
         movieRecyclerView = view.findViewById(R.id.movies_recyclerview)
 
         //viewModel.getPopularMovies()
+        moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-        setObservers()
+        //setObservers()
 
 
 
 
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
+        refreshOnSwipe(refresh)
+        /*refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         refresh.setColorSchemeColors(Color.BLACK)
 
         refresh.setOnRefreshListener {
@@ -69,7 +73,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
             //viewModel.getPopularMovies()
             moviesAdapter.retry()
             refresh.isRefreshing = false
-        }
+        }*/
 
         initAdapter()
         getPopularMovies()
@@ -90,7 +94,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         }
     }
 
-    private fun initAdapter() {
+    /*private fun initAdapter() {
         movieRecyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
                 footer = MoviesLoadStateAdapter{moviesAdapter.retry()},
                 header = MoviesLoadStateAdapter{moviesAdapter.retry()}
@@ -123,10 +127,10 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
 
 
 
-    }
+    }*/
 
 
-    private fun setUpRecyclerView() {
+    /*private fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
@@ -140,11 +144,11 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         movieRecyclerView.setHasFixedSize(true)
        // moviesAdapter = MoviesAdapter(this)
        // movieRecyclerView.adapter = moviesAdapter
-    }
+    }*/
 
 
 
-    private fun setObservers(){
+   /* private fun setObservers(){
         viewModel.popularMovies.observe(viewLifecycleOwner, Observer {
             Log.i("PopularMoviesFragment", "movies observer = $it")
             if(it != null) {
@@ -160,7 +164,7 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
             }
         })
 
-    }
+    }*/
 
 
 

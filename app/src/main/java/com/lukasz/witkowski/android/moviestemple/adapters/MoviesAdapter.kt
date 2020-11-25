@@ -18,6 +18,13 @@ import com.squareup.picasso.Picasso
 
 class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : PagingDataAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
+
+    companion object {
+        const val MOVIE_POSTER = 1
+        const val LOADING_FOOTER = 0
+    }
+
+
     interface MovieAdapterOnClickHandler {
         fun onClick(movie: Movie)
     }
@@ -31,28 +38,17 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
 
     override fun onBindViewHolder(holder: MoviesAdapterViewHolder, position: Int) {
         val movie = getItem(position)
-
         if(movie != null){
             holder.bind(movie)
         }
-        /*if(movie?.posterUri != null) {
-            Picasso.with(holder.posterImage.context)
-                    .load(movie.posterUri)
-                    .into(holder.posterImage)
-        }else{
-            Picasso.with(holder.posterImage.context)
-                    .load(R.drawable.default_movie_poster)
-                    .into(holder.posterImage)
-        }*/
 
     }
 
     override fun getItemViewType(position: Int): Int{
-        if(position == itemCount){
-            return 1
+        return if(position == itemCount){
+            MOVIE_POSTER
         }else{
-
-            return 0
+            LOADING_FOOTER
         }
     }
 
