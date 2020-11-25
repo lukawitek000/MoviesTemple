@@ -29,6 +29,7 @@ import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.toMovie
 import com.lukasz.witkowski.android.moviestemple.models.toReview
 import com.lukasz.witkowski.android.moviestemple.models.toVideo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -53,8 +54,8 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
 
        // val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         //refresh.visibility = View.GONE
-       // initAdapter()
-        (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
+        initAdapter()
+       // (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
         getFavouriteMovies()
         //moviesAdapter.refresh()
         setHasOptionsMenu(true)
@@ -66,7 +67,9 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
     private fun getFavouriteMovies() {
         job?.cancel()
         job = lifecycleScope.launch {
+            @OptIn(ExperimentalCoroutinesApi::class)
             sharedViewModel.favouriteMovies.collectLatest { pagingData ->
+
                 val movies: PagingData<Movie> = pagingData.mapSync { pagingData ->
                     Movie(pagingData.posterPath, pagingData.id, pagingData.originalTitle, pagingData.title,
                             pagingData.voteAverage, pagingData.overview, pagingData.releaseDate)
