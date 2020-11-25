@@ -22,14 +22,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>
-        <Button
+        <ImageButton
             android:id="@+id/retry_button"
-            android:background="@color/darkYellow"
+            android:src="@drawable/retry_icon"
+            android:background="@drawable/refresh_button_shape"
             android:textColor="@color/darkGrey"
             android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             android:text="Retry"/>
     </LinearLayout>
 </layout>

@@ -13,7 +13,6 @@
         android:top="1dp"
         android:bottom="1dp"/>
 
-    <solid android:color="@color/yellow"/>
     <size
         android:width="50dp"
         android:height="50dp"
