@@ -20,35 +20,8 @@ class PopularMoviesViewModel(application: Application): ViewModel() {
 
     private val repository = MainRepository.getInstance(application)
 
-    private val _popularMovies = MutableLiveData<List<Movie>>()
-    val popularMovies: LiveData<List<Movie>>
-        get() = _popularMovies
-
-
-    private val _popularMoviesStatus = MutableLiveData<MainViewModel.Status>()
-    val popularMoviesStatus: LiveData<MainViewModel.Status>
-        get() = _popularMoviesStatus
-
-    /*fun getPopularMovies(){
-        viewModelScope.launch {
-            try {
-                val startTime = System.currentTimeMillis()
-                _popularMoviesStatus.value = MainViewModel.Status.LOADING
-                _popularMovies.value = repository.getPopularMovies()
-                _popularMoviesStatus.value = MainViewModel.Status.SUCCESS
-                Log.i("PopularMoviesViewModel", "time elapsed popular for fetching data end = ${System.currentTimeMillis() - startTime}")
-            } catch (e: Exception) {
-                Log.i("PopularMoviesViewModel", "failure e=$e")
-                _popularMoviesStatus.value = MainViewModel.Status.FAILURE
-            }
-        }
-    }*/
-
-
-
     fun getPopularMovies(): Flow<PagingData<Movie>>{
         return repository.getPopularMovies().cachedIn(viewModelScope)
     }
-
 
 }

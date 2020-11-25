@@ -63,8 +63,6 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
 
 
         override fun onClick(view: View) {
-            //val adapterPosition = adapterPosition
-           // clickHandler.onClick(getItem(adapterPosition)!!)
             clickHandler.onClick(movie!!)
         }
 
@@ -73,21 +71,14 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
         fun bind(movie: Movie?){
             if (movie != null){
                 this.movie = movie
-                itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-
-                val  width = posterImage.measuredWidth
-                val  height = posterImage.measuredHeight
-                Log.i("MoviesAdapter", "width $width height $height")
                 if(movie.posterUri != null) {
                     Glide.with(posterImage.context)
                             .load(movie.posterUri)
-                           // .resize(width, height)
                             .placeholder(R.drawable.poster_placeholder)
                             .into(posterImage)
                 }else{
                     Glide.with(posterImage.context)
                             .load(R.drawable.default_movie_poster)
-                           // .resize(width, height)
                             .placeholder(R.drawable.poster_placeholder)
                             .into(posterImage)
                 }

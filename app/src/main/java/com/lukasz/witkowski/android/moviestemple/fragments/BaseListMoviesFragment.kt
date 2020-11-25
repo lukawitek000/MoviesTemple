@@ -32,8 +32,6 @@ open class BaseListMoviesFragment : Fragment() {
     protected val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
 
-
-
     protected fun setUpRecyclerView() {
         val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
