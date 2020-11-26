@@ -11,9 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
@@ -22,7 +22,6 @@ import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
-import com.lukasz.witkowski.android.moviestemple.models.Genre
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.Video
 import com.lukasz.witkowski.android.moviestemple.models.toText
@@ -48,13 +47,14 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
         selectedMovie = shareViewModel.selectedMovie.value!!
 
-        setVideosAndReviewsVisible(false)
+        setIsDetailInformationVisible(false)
         setUpObservers()
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
         setHasOptionsMenu(true)
 
         val toolbar = binding.detailInformationToolbar
+        binding.appBarLayout.setExpanded(true)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -74,15 +74,15 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 setDataToUI()
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
-                        setVideosAndReviewsVisible(true)
+                        setIsDetailInformationVisible(true)
                     }
                     MainViewModel.Status.FAILURE -> {
-                        setVideosAndReviewsVisible(false)
-                        binding.detailInformationProgressbar.visibility = View.GONE
+                        setIsDetailInformationVisible(false)
+                        setProgressBarsVisibility(View.GONE)
                     }
                     else -> {
-                        binding.detailInformationProgressbar.visibility = View.VISIBLE
-                        setVideosAndReviewsVisible(false)
+                        setProgressBarsVisibility(View.VISIBLE)
+                        setIsDetailInformationVisible(false)
                     }
                 }
             }
@@ -95,27 +95,37 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 reviewsAdapter.reviews = it.reviews
                 selectedMovie = it
                 Log.i("DetailInformation", "poster uri ${selectedMovie.posterUri}  path ${selectedMovie.posterUri?.path}")
-                Picasso.with(context).load(selectedMovie.posterUri).into(binding.toolbarPoster)
+                Glide.with(requireContext())
+                        .load(selectedMovie.posterUri)
+                        .placeholder(R.drawable.poster_placeholder)
+                        .into(binding.toolbarPoster)
                 binding.detailInformationToolbar.title = selectedMovie.title
             }
         })
     }
 
-    private fun setVideosAndReviewsVisible(isVisible: Boolean) {
+    private fun setProgressBarsVisibility(visibility: Int) {
+        binding.videosAndReviewsProgressbar.visibility = visibility
+        binding.genresProgressBar.visibility = visibility
+    }
+
+    private fun setIsDetailInformationVisible(isVisible: Boolean) {
         if(isVisible){
-            binding.detailInformationProgressbar.visibility = View.GONE
-            setVideosAndReviewsVisibility(View.VISIBLE)
+            setDetailInformationVisibility(View.VISIBLE)
             hideRecyclerViewsIfTheyAreEmpty()
+            setProgressBarsVisibility(View.GONE)
         }else{
-            setVideosAndReviewsVisibility(View.GONE)
+            setDetailInformationVisibility(View.GONE)
         }
     }
 
-    private fun setVideosAndReviewsVisibility(visibility: Int){
+    private fun setDetailInformationVisibility(visibility: Int){
         binding.videosLabel.visibility = visibility
         binding.recyclerviewVideos.visibility = visibility
         binding.reviewsLabel.visibility = visibility
         binding.recyclerviewReviews.visibility = visibility
+        binding.genreLabel.visibility = visibility
+        binding.genres.visibility = visibility
     }
 
     private fun hideRecyclerViewsIfTheyAreEmpty(){

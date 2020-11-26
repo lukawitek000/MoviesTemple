@@ -20,8 +20,6 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 android:id="@+id/collapsing_toolbar_layout"
                 app:contentScrim="@color/darkYellow"
-                app:scrimVisibleHeightTrigger="100dp"
-                app:scrimAnimationDuration="1000"
                 app:expandedTitleGravity="center_horizontal|center_vertical"
                 app:expandedTitleMarginStart="8dp"
                 app:expandedTitleMarginEnd="178dp"
@@ -244,7 +242,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/reviews_label" />
 
                     <ProgressBar
-                        android:id="@+id/detail_information_progressbar"
+                        android:id="@+id/videos_and_reviews_progressbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -252,7 +250,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/recyclerview_reviews" />
 
-
+                    <ProgressBar
+                        android:id="@+id/genres_progressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/genres"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/genre_label" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
