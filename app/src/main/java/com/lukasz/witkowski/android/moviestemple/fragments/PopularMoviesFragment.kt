@@ -95,9 +95,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
                     }
 
                 }
-
         )
     }
-
 
 }

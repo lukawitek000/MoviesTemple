@@ -59,7 +59,7 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
     private fun getRecommendedMovies() {
         job?.cancel()
         job = lifecycleScope.launch {
-            sharedViewModel.getRecommendationsBasedOnFavouriteMovies().collectLatest {
+            viewModel.getRecommendationsBasedOnFavouriteMovies().collectLatest {
                 moviesAdapter.submitData(it)
             }
         }

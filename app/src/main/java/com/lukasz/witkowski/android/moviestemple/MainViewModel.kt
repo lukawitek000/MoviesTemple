@@ -77,8 +77,5 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
-       return repository.getRecommendationsBasedOnFavouriteMovies()
-    }
 
 }
