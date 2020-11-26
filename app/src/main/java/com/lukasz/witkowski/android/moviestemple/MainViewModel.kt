@@ -16,11 +16,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     private val repository = MainRepository.getInstance(application)
 
-   // val databaseValues: LiveData<List<Movie>>  = repository.databaseValues
-
     val favouriteMovies = repository.favouriteMovies.cachedIn(viewModelScope)
-
-
 
     private val _selectedMovie = MutableLiveData<Movie>()
     val selectedMovie: LiveData<Movie>
@@ -67,13 +63,9 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    //var isMovieInDatabase = false
 
 
     fun isSelectedMovieInDatabase(): Boolean{
-        //viewModelScope.launch {
-        //    isMovieInDatabase = repository.isMovieInDatabase(_selectedMovie.value!!.id)
-        //}
         return repository.isMovieInFavourites(_selectedMovie.value!!.id)
     }
 

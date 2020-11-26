@@ -51,13 +51,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        val viewModelFactory = MainViewModelFactory(application)
-        val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-       // viewModel.databaseValues.observe(this, Observer {
-        //    Log.i("RecommendedMoviesModel", "Main acitvity favourite $it")
-        //}
-        //)
-
     }
 
 

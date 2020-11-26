@@ -51,3 +51,8 @@ fun MovieWithReviewsAndVideos.toMovie(): Movie{
     return Movie(movie.posterPath, movie.id, movie.originalTitle, movie.title, movie.voteAverage, movie.overview,
     movie.releaseDate, emptyList(), videos, reviews)
 }
+
+
+fun MovieEntity.toMovie() : Movie {
+    return Movie(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+}
