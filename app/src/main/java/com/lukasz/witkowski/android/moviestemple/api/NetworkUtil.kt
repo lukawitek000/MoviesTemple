@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.utilities
+package com.lukasz.witkowski.android.moviestemple.api
 
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
 import com.lukasz.witkowski.android.moviestemple.models.responses.ReviewsListResponse
@@ -16,31 +16,34 @@ import retrofit2.http.Query
 interface TMDBService{
 
     @GET("/3/movie/popular")
-    suspend fun getPopularMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
+    suspend fun getPopularMovies(@Query(API_KEY) apiKey: String = api_key,
+                                 @Query("page") page: Int = 1): TMDBResponse
 
     @GET("/3/movie/top_rated")
-    suspend fun getTopRatedMovies(@Query(API_KEY) apiKey: String = api_key): TMDBResponse
+    suspend fun getTopRatedMovies(@Query(API_KEY) apiKey: String = api_key,
+                                  @Query("page") page: Int = 1): TMDBResponse
 
 
-    @GET("/3/movie/{movieId}/videos")
-    suspend fun getVideos(
-            @Path("movieId") movieId: Int,
-            @Query(API_KEY) apiKey: String = api_key): VideosListResponse
-
-    @GET("/3/movie/{movieId}/reviews")
-    suspend fun getReviews(
-            @Path("movieId") movieId: Int,
-            @Query(API_KEY) apiKey: String = api_key): ReviewsListResponse
 
     @GET("/3/movie/{movieId}/recommendations")
     suspend fun getRecommendationsBaseOnMovieID(
             @Path("movieId") movieId: Int,
-            @Query(API_KEY) apiKey: String = api_key): TMDBResponse
+            @Query(API_KEY) apiKey: String = api_key,
+            @Query("page") page: Int = 1): TMDBResponse
+
 
     @GET("/3/movie/{movieId}")
     suspend fun getMovieDetailsVideosReviewsById( @Path("movieId") movieId: Int,
-                                                  @Query("append_to_response") appendToResponse: String = append_to_response,
+                                                  @Query(APPEND_TO_RESPONSE) appendToResponse: String = append_to_response,
                                                   @Query(API_KEY) apiKey: String = api_key): MovieDetailsResponse
+
+    @GET("/3/search/movie")
+    suspend fun getSearchMovies(
+            @Query(API_KEY) apiKey: String = api_key,
+            @Query("query") query: String,
+            @Query("page") page: Int = 1
+    ): TMDBResponse
+
 
 }
 
@@ -55,6 +58,8 @@ const val VIDEO_BASE_URI = "https://www.youtube.com/watch?v="
 private const val append_to_response = "videos,reviews"
 private const val APPEND_TO_RESPONSE = "append_to_response"
 
+const val TMDB_STARTING_PAGE_INDEX = 1
+const val TMDB_PAGE_SIZE = 20
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 

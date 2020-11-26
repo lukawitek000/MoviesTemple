@@ -1,101 +1,68 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
-import android.graphics.Color
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
-import com.lukasz.witkowski.android.moviestemple.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
+import com.lukasz.witkowski.android.moviestemple.MainRepository.Companion.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModel
 import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModelFactory
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
-class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandler {
+class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
-    private var moviesAdapter: MoviesAdapter? = null
-
-    private lateinit var movieRecyclerView: RecyclerView
-
-    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
     private val viewModel by viewModels<PopularMoviesViewModel> { (PopularMoviesViewModelFactory(requireActivity().application)) }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
-        movieRecyclerView = view.findViewById(R.id.movies_recyclerview)
-
-        viewModel.getPopularMovies()
-        setUpRecyclerView()
-        setObservers()
-
-
-
-
-
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
-        refresh.setColorSchemeColors(Color.BLACK)
-
-        refresh.setOnRefreshListener {
-            Toast.makeText(requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
-            viewModel.getPopularMovies()
-            refresh.isRefreshing = false
-        }
-
-        return view
-    }
-
-
-    private fun setUpRecyclerView() {
-        val spanCount = (activity as MainActivity).calculateSpanCount()
-        val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
-        movieRecyclerView.layoutManager = layoutManager
-        movieRecyclerView.setHasFixedSize(true)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
         moviesAdapter = MoviesAdapter(this)
-        movieRecyclerView.adapter = moviesAdapter
+        setUpRecyclerView()
+        refreshOnSwipe()
+        initAdapter()
+        getPopularMovies()
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
 
+    private var job: Job? = null
 
-    private fun setObservers(){
-        viewModel.popularMovies.observe(viewLifecycleOwner, Observer {
-            Log.i("PopularMoviesFragment", "movies observer = $it")
-            if(it != null) {
-                moviesAdapter?.submitList(it)
+    private fun getPopularMovies() {
+        job?.cancel()
+        job = lifecycleScope.launch {
+            viewModel.getPopularMovies().collectLatest {
+                moviesAdapter.submitData(it)
             }
-        })
-
-        viewModel.popularMoviesStatus.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
-                        it,
-                        "Cannot connect to server, check your favourite movies")
-            }
-        })
-
+        }
     }
 
 
+    private var searchJob: Job? = null
+
+    private fun getSearchedMovies(query: String){
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            viewModel.getSearchedMovies(query).collectLatest {
+                moviesAdapter.submitData(it)
+            }
+        }
+    }
 
 
     override fun onClick(movie: Movie) {
@@ -103,4 +70,32 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieAdapterOnClickHandl
         findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.popular_movie_title))
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu, menu)
+        val menuItem = menu.findItem(R.id.search_icon)
+        val searchView = menuItem.actionView as SearchView
+        searchView.queryHint = "Search Here"
+        searchView.setOnQueryTextListener(
+                object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        getSearchedMovies(query ?: POPULAR_MOVIES_QUERY)
+                        val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        Log.i("SearchTest", "on text changed $newText")
+                        if(newText.isNullOrEmpty()){
+                            getPopularMovies()
+                        }
+                        return true
+                    }
+
+                }
+        )
+    }
+
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="56dp"
+    android:layout_marginTop="?attr/actionBarSize"
     android:layout_marginBottom="56dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -17,4 +18,22 @@
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/error_message_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Cannot connect to server, check your favourite movies"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:layout_centerInParent="true"/>
+
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
+</layout>

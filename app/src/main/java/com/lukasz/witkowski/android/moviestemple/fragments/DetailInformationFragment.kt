@@ -84,10 +84,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 }
             }
         })
-        shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-            }
-        })
+       // shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+       //     if (it != null) {
+       //     }
+      //  })
 
         shareViewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
             if (it != null) {
