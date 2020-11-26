@@ -68,10 +68,10 @@ fun List<Genre>.toText(): String {
     return textBuilder.toString()
 }
 
-fun ActorResponse.toFilmMaker(): FilmMaker{
-    return FilmMaker(id, name, profilePath, character)
+fun ActorResponse.toActor(): Actor{
+    return Actor(id, name, profilePath, character)
 }
 
-fun CrewMemberResponse.toFilmMaker(): FilmMaker{
-    return FilmMaker(id, name, profilePath, "", job)
+fun CrewMemberResponse.toActor(): Actor{
+    return Actor(id, name, profilePath, "", job)
 }

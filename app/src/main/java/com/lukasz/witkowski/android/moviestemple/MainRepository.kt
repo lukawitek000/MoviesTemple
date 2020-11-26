@@ -2,9 +2,6 @@ package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -74,12 +71,12 @@ class MainRepository(application: Application) {
                 it.toVideo()
             }
             movie.genres = response.genres
-            val filmMakers: MutableList<FilmMaker> = response.credits.cast.map {
-                it.toFilmMaker()
-            } as MutableList<FilmMaker>
-            filmMakers.addAll(response.credits.crew.map {
-                it.toFilmMaker()
-            })
+            val filmMakers: MutableList<Actor> = response.credits.cast.map {
+                it.toActor()
+            } as MutableList<Actor>
+            /*filmMakers.addAll(response.credits.crew.map {
+                it.toActor()
+            })*/
             movie.filmMakers = filmMakers
             movie
         }
