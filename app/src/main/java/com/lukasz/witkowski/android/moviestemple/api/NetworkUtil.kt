@@ -37,6 +37,14 @@ interface TMDBService{
                                                   @Query(APPEND_TO_RESPONSE) appendToResponse: String = append_to_response,
                                                   @Query(API_KEY) apiKey: String = api_key): MovieDetailsResponse
 
+    @GET("/3/search/movie")
+    suspend fun getSearchMovies(
+            @Query(API_KEY) apiKey: String = api_key,
+            @Query("query") query: String,
+            @Query("page") page: Int = 1
+    ): TMDBResponse
+
+
 }
 
 

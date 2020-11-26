@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
+import android.app.DownloadManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +23,10 @@ class PopularMoviesViewModel(application: Application): ViewModel() {
 
     fun getPopularMovies(): Flow<PagingData<Movie>>{
         return repository.getPopularMovies().cachedIn(viewModelScope)
+    }
+
+    fun getSearchedMovies(query: String): Flow<PagingData<Movie>> {
+        return repository.getSearchedMovies(query).cachedIn(viewModelScope)
     }
 
 }

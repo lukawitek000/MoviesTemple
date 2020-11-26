@@ -173,4 +173,15 @@ class MainRepository(application: Application) {
         }
     }
 
+    fun getSearchedMovies(query: String): Flow<PagingData<Movie>> {
+        return Pager(
+                config = PagingConfig(
+                        pageSize = 10,
+                        enablePlaceholders = false
+                ),
+                pagingSourceFactory = { MoviesPagingSource(query)}
+        ).flow
+
+    }
+
 }

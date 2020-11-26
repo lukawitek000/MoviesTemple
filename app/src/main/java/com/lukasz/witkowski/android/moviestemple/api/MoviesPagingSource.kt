@@ -33,7 +33,7 @@ class MoviesPagingSource(private val query: String, private val favouriteMoviesI
                 POPULAR_MOVIES_QUERY -> TMDBApi.retrofitService.getPopularMovies(page = position)
                 TOP_RATED_MOVIES_QUERY -> TMDBApi.retrofitService.getTopRatedMovies(page = position)
                 else -> {
-                    TMDBResponse()
+                    TMDBApi.retrofitService.getSearchMovies(query = query, page = position)
                 }
             }
 
