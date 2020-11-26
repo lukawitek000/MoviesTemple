@@ -60,24 +60,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-    fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
-        binding.fragmentContainer.visibility = View.VISIBLE
-        when (status) {
-            MainViewModel.Status.SUCCESS -> {
-                binding.progressbar.visibility = View.GONE
-                binding.errorMessageTextview.visibility = View.GONE
-            }
-            MainViewModel.Status.LOADING -> {
-                binding.progressbar.visibility = View.VISIBLE
-                binding.errorMessageTextview.visibility = View.GONE
-            }
-            else -> {
-                binding.errorMessageTextview.text = failureMessage
-                binding.progressbar.visibility = View.GONE
-                binding.errorMessageTextview.visibility = View.VISIBLE
-            }
-        }
-    }
+
 
 
 

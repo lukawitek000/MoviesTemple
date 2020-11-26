@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -39,20 +40,18 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.movies_poster_list_layout, container, false)
-        moviesRecyclerView = view.findViewById(R.id.movies_recyclerview)
+        binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
 
         moviesAdapter = MoviesAdapter((this))
         setUpRecyclerView()
 
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        refreshOnSwipe(refresh)
+        refreshOnSwipe()
 
         initAdapter()
         getRecommendedMovies()
 
         setHasOptionsMenu(true)
-        return view
+        return binding.root
     }
 
     private var job: Job? = null

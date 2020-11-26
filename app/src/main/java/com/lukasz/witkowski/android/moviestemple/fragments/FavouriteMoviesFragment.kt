@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -44,22 +45,20 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
 
-        val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
-        moviesRecyclerView = view.findViewById(R.id.movies_recyclerview)
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
 
         setUpObservers()
 
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        refreshOnSwipe(refresh)
+        refreshOnSwipe()
         initAdapter()
        // (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
         getFavouriteMovies()
         //moviesAdapter.refresh()
         setHasOptionsMenu(true)
-        return view
+        return binding.root
     }
 
     private var job: Job? = null

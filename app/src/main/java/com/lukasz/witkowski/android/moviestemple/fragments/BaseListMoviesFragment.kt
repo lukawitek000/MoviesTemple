@@ -2,6 +2,7 @@ package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.graphics.Color
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.Companion.MOVIE_POSTER
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesLoadStateAdapter
+import com.lukasz.witkowski.android.moviestemple.databinding.MoviesPosterListLayoutBinding
 
 open class BaseListMoviesFragment : Fragment() {
 
@@ -27,8 +29,11 @@ open class BaseListMoviesFragment : Fragment() {
 
     protected val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
+    protected lateinit var binding: MoviesPosterListLayoutBinding
+
 
     protected fun setUpRecyclerView() {
+        moviesRecyclerView = binding.moviesRecyclerview
         val spanCount = (activity as MainActivity).calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
@@ -43,14 +48,15 @@ open class BaseListMoviesFragment : Fragment() {
     }
 
 
-    protected fun refreshOnSwipe(refresh: SwipeRefreshLayout){
-        refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
-        refresh.setColorSchemeColors(Color.BLACK)
+    protected fun refreshOnSwipe(){
 
-        refresh.setOnRefreshListener {
+        binding.swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
+        binding.swipeRefreshLayout.setColorSchemeColors(Color.BLACK)
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
             Toast.makeText(requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
             moviesAdapter.retry()
-            refresh.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -66,11 +72,11 @@ open class BaseListMoviesFragment : Fragment() {
 
             Log.i("Paging", "load state ${loadState.source.refresh}   remote ${loadState.refresh}")
             if(loadState.source.refresh is LoadState.Loading){
-                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.LOADING, "")
+                setVisibilityBaseOnStatus(MainViewModel.Status.LOADING, "")
             }else if(loadState.source.refresh is LoadState.NotLoading){
-                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
+               setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
             }else if(loadState.source.refresh is LoadState.Error){
-                (requireActivity() as MainActivity).setVisibilityBaseOnStatus(
+                setVisibilityBaseOnStatus(
                         MainViewModel.Status.FAILURE,
                         "Cannot connect to server, check your favourite movies")
             }
@@ -88,6 +94,26 @@ open class BaseListMoviesFragment : Fragment() {
 
 
 
+    }
+
+
+    fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
+        binding.moviesRecyclerview.visibility = View.VISIBLE
+        when (status) {
+            MainViewModel.Status.SUCCESS -> {
+                binding.progressbar.visibility = View.GONE
+                binding.errorMessageTextview.visibility = View.GONE
+            }
+            MainViewModel.Status.LOADING -> {
+                binding.progressbar.visibility = View.VISIBLE
+                binding.errorMessageTextview.visibility = View.GONE
+            }
+            else -> {
+                binding.errorMessageTextview.text = failureMessage
+                binding.progressbar.visibility = View.GONE
+                binding.errorMessageTextview.visibility = View.VISIBLE
+            }
+        }
     }
 
 }

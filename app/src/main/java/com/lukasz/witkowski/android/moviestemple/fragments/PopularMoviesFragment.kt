@@ -2,10 +2,10 @@ package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.os.Bundle
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
@@ -22,20 +22,14 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     private val viewModel by viewModels<PopularMoviesViewModel> { (PopularMoviesViewModelFactory(requireActivity().application)) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.movies_poster_list_layout, container, false)
-        moviesRecyclerView = view.findViewById(R.id.movies_recyclerview)
-
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-
-        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        refreshOnSwipe(refresh)
-
+        refreshOnSwipe()
         initAdapter()
         getPopularMovies()
-
-        return view
+        return binding.root
     }
 
 
