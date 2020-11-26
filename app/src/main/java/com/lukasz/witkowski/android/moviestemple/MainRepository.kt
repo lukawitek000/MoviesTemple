@@ -3,23 +3,19 @@ package com.lukasz.witkowski.android.moviestemple
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
 import com.lukasz.witkowski.android.moviestemple.api.MoviesPagingSource
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
 import com.lukasz.witkowski.android.moviestemple.api.TMDB_PAGE_SIZE
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 
 class MainRepository(application: Application) {
 
@@ -58,8 +54,10 @@ class MainRepository(application: Application) {
     suspend fun getDetailInformation(movie: Movie): Movie{
         return withContext(IO) {
             if (isMovieInDatabase(movie.id)) {
-                getMovieDetailsFromDatabase(movie.id).value!!
+                Log.i("Database debug", "movie details from database ")
+                getMovieDetailsFromDatabase(movie.id)
             } else {
+                Log.i("Database debug", "movie details from api ")
                 getMovieDetailsFromApi(movie)
             }
         }
@@ -79,12 +77,11 @@ class MainRepository(application: Application) {
         }
     }
 
-    private suspend fun getMovieDetailsFromDatabase(id: Int): LiveData<Movie> {
+    private suspend fun getMovieDetailsFromDatabase(id: Int): Movie {
         return withContext(IO){
-            val databaseEntities = database?.movieDao()?.getMovieWithVideosAndReviews(id)
-            Transformations.map(databaseEntities!!){
-                it.toMovie()
-            }
+            val databaseEntity = database?.movieDao()?.getMovieWithVideosAndReviews(id)
+            Log.i("Database debug", "movie details ${databaseEntity}")
+            databaseEntity!!.toMovie()
         }
     }
 
@@ -147,7 +144,7 @@ class MainRepository(application: Application) {
     private suspend fun getFavouriteMoviesId(): List<Int> {
         return withContext(IO){
             val listOfIds: List<Int> =  database!!.movieDao().getAllMovies().map {
-                it.id
+                it.movieId
             }
             listOfIds
         }

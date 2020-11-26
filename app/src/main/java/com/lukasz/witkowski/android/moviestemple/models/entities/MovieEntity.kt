@@ -10,7 +10,7 @@ import com.squareup.moshi.Json
 data class MovieEntity(
         var posterPath: String? = "",
         @PrimaryKey
-        var id: Int = 0,
+        var movieId: Int = 0,
         var originalTitle: String = "",
         var title: String,
         var voteAverage: Float = 0f,

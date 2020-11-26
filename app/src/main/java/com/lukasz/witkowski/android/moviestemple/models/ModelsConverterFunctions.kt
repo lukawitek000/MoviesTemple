@@ -1,7 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.models
 
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithGenresReviewsAndVideos
 import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
@@ -45,16 +45,16 @@ fun ReviewEntity.toReview(): Review{
     return  Review(author, content)
 }
 
-fun MovieWithReviewsAndVideos.toMovie(): Movie{
+fun MovieWithGenresReviewsAndVideos.toMovie(): Movie{
     val videos = videos.map { it.toVideo() }
     val reviews = reviews.map { it.toReview() }
-    return Movie(movie.posterPath, movie.id, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
-    movie.releaseDate, emptyList(), videos, reviews)
+    return Movie(movie.posterPath, movie.movieId, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
+    movie.releaseDate, genres, videos, reviews)
 }
 
 
 fun MovieEntity.toMovie() : Movie {
-    return Movie(posterPath, id, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+    return Movie(posterPath, movieId, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
 }
 
 fun List<Genre>.toText(): String {
