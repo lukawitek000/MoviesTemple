@@ -10,6 +10,7 @@ data class Movie (
         var originalTitle: String = "",
         var title: String,
         var voteAverage: Float = 0f,
+        var voteCount: Int = 0,
         var overview: String = "",
         var releaseDate: String = "",
         var genres: List<Genre> = emptyList(),

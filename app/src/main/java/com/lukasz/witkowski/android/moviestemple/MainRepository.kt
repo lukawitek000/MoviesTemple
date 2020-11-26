@@ -56,10 +56,12 @@ class MainRepository(application: Application) {
 
 
     suspend fun getDetailInformation(movie: Movie): Movie{
-        return if(isMovieInDatabase(movie.id)){
-            getMovieDetailsFromDatabase(movie.id).value!!
-        }else{
-            getMovieDetailsFromApi(movie)
+        return withContext(IO) {
+            if (isMovieInDatabase(movie.id)) {
+                getMovieDetailsFromDatabase(movie.id).value!!
+            } else {
+                getMovieDetailsFromApi(movie)
+            }
         }
     }
 
@@ -72,6 +74,7 @@ class MainRepository(application: Application) {
             movie.videos = response.videos.results.map {
                 it.toVideo()
             }
+            movie.genres = response.genres
             movie
         }
     }

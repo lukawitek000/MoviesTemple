@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -29,7 +30,6 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun selectMovie(movie: Movie) {
         _selectedMovie.value = movie
-        isSelectedMovieInDatabase()
         getDetailInformation()
     }
 
@@ -54,12 +54,14 @@ class MainViewModel(application: Application) : ViewModel() {
         viewModelScope.launch {
             try {
                 _requestDetailInformationStatus.value = Status.LOADING
-                repository.getDetailInformation(_selectedMovie.value!!)
+                Log.i("DetailInformation", "loading selectedmovie.value ${selectedMovie.value}")
+                _selectedMovie.value = repository.getDetailInformation(_selectedMovie.value!!)
                 _requestDetailInformationStatus.value = Status.SUCCESS
+                Log.i("DetailInformation", "success selectedmovie.value ${selectedMovie.value}")
             }catch (e: Exception){
+                Log.i("DetailInformation", "failure $e selectedmovie.value ${selectedMovie.value}")
                 _requestDetailInformationStatus.value = Status.FAILURE
             }
-
         }
     }
 

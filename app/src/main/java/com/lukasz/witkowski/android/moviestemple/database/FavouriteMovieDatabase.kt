@@ -12,7 +12,7 @@ import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
 
 
-@Database(entities = [MovieEntity::class, ReviewEntity::class, VideoEntity::class], version = 13, exportSchema = false)
+@Database(entities = [MovieEntity::class, ReviewEntity::class, VideoEntity::class], version = 14, exportSchema = false)
 abstract class FavouriteMovieDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 

@@ -10,11 +10,11 @@ import com.lukasz.witkowski.android.moviestemple.models.responses.VideoResponse
 
 
 fun Movie.toMovieEntity(): MovieEntity{
-    return MovieEntity(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+    return MovieEntity(posterPath, id, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
 }
 
 fun MovieGeneralInfoResponse.toMovie(): Movie {
-    return Movie(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+    return Movie(posterPath, id, originalTitle, title, voteAverage, voteCount,  overview, releaseDate)
 }
 
 
@@ -48,11 +48,25 @@ fun ReviewEntity.toReview(): Review{
 fun MovieWithReviewsAndVideos.toMovie(): Movie{
     val videos = videos.map { it.toVideo() }
     val reviews = reviews.map { it.toReview() }
-    return Movie(movie.posterPath, movie.id, movie.originalTitle, movie.title, movie.voteAverage, movie.overview,
+    return Movie(movie.posterPath, movie.id, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
     movie.releaseDate, emptyList(), videos, reviews)
 }
 
 
 fun MovieEntity.toMovie() : Movie {
-    return Movie(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+    return Movie(posterPath, id, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+}
+
+fun List<Genre>.toText(): String {
+    val textBuilder = StringBuilder()
+    this.forEachIndexed{ i, genre ->
+
+        if(i == this.size-1){
+            textBuilder.append(genre.name)
+
+        }else{
+            textBuilder.append(genre.name).append(", ")
+        }
+    }
+    return textBuilder.toString()
 }

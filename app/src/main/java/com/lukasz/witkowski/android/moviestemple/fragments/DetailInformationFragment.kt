@@ -22,8 +22,10 @@ import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
+import com.lukasz.witkowski.android.moviestemple.models.Genre
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.Video
+import com.lukasz.witkowski.android.moviestemple.models.toText
 import com.squareup.picasso.Picasso
 
 
@@ -45,17 +47,17 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
         selectedMovie = shareViewModel.selectedMovie.value!!
+
         setVideosAndReviewsVisible(false)
         setUpObservers()
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
-        setDataToUI()
         setHasOptionsMenu(true)
-        Log.i("DetailInformation", "on create view end")
 
         val toolbar = binding.detailInformationToolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
 
         return binding.root
@@ -69,6 +71,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
     private fun setUpObservers() {
         shareViewModel.requestDetailInformationStatus.observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                setDataToUI()
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
                         setVideosAndReviewsVisible(true)
@@ -84,13 +87,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 }
             }
         })
-       // shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-       //     if (it != null) {
-       //     }
-      //  })
 
         shareViewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                Log.i("DetailInformation", "observer ${it}")
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
                 selectedMovie = it
@@ -135,7 +135,12 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         binding.originalTitle.text = selectedMovie.originalTitle
         binding.releaseDate.text = selectedMovie.releaseDate
         binding.voteAverageTextview.text = selectedMovie.voteAverage.toString()
+        binding.votesNumber.text = selectedMovie.voteCount.toString()
+        Log.i("DetailInformation", "genres ${selectedMovie.genres}")
+        binding.genres.text = selectedMovie.genres.toText()
     }
+
+
 
 
     private fun setUpVideosRecyclerView() {
@@ -148,7 +153,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
     private fun setUpReviewsRecyclerView() {
         val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        Log.i("DetailInformation", "set up recycler view reviews = ")
+        Log.i("DetailInformation", "set up recycler view reviews = ${selectedMovie.reviews}")
         reviewsAdapter = ReviewsAdapter()
         binding.recyclerviewReviews.layoutManager = linearLayoutManager
         binding.recyclerviewReviews.adapter = reviewsAdapter
@@ -202,10 +207,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
-       /* R.id.share_item -> {
-            Toast.makeText(requireContext(), "Share", Toast.LENGTH_SHORT).show()
-            true
-        }*/
         R.id.like_item -> {
             if (shareViewModel.isSelectedMovieInDatabase()) {
                 shareViewModel.deleteMovieFromDatabase()
