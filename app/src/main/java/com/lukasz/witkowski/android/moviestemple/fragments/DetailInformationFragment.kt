@@ -94,7 +94,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
                 selectedMovie = it
-                Log.i("DetailInformation", "poster uri ${selectedMovie.posterUri}  path ${selectedMovie.posterUri?.path}")
+                Log.i("DetailInformation", "film makers = ${selectedMovie.filmMakers}")
                 Glide.with(requireContext())
                         .load(selectedMovie.posterUri)
                         .placeholder(R.drawable.poster_placeholder)

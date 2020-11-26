@@ -2,7 +2,7 @@ package com.lukasz.witkowski.android.moviestemple.models.responses
 
 import com.squareup.moshi.Json
 
-data class Actor(
+data class CrewMemberResponse(
         var adult: Boolean = false,
         var gender: Int? = null,
         var id: Int = 0,
@@ -14,10 +14,8 @@ data class Actor(
         var popularity: Float = 0f,
         @Json(name = "profile_path")
         var profilePath: String? = null,
-        @Json(name = "cast_id")
-        var castId: Int = 0,
-        var character: String = "",
         @Json(name = "credit_id")
         var creditId: String = "",
-        var order: Int = 0
+        var department: String = "",
+        var job: String = ""
 )

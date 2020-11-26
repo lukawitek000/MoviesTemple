@@ -4,9 +4,7 @@ import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithGenresReviewsAndVideos
 import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
-import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.ReviewResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.VideoResponse
+import com.lukasz.witkowski.android.moviestemple.models.responses.*
 
 
 fun Movie.toMovieEntity(): MovieEntity{
@@ -63,10 +61,17 @@ fun List<Genre>.toText(): String {
 
         if(i == this.size-1){
             textBuilder.append(genre.name)
-
         }else{
             textBuilder.append(genre.name).append(", ")
         }
     }
     return textBuilder.toString()
+}
+
+fun ActorResponse.toFilmMaker(): FilmMaker{
+    return FilmMaker(id, name, profilePath, character)
+}
+
+fun CrewMemberResponse.toFilmMaker(): FilmMaker{
+    return FilmMaker(id, name, profilePath, "", job)
 }

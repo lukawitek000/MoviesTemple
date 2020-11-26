@@ -66,6 +66,7 @@ class MainRepository(application: Application) {
     private suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
         return withContext(IO) {
             val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movieId = movie.id)
+            Log.i("MainRepository", "detail response credits = ${response.credits}")
             movie.reviews  = response.reviews.results.map {
                 it.toReview()
             }
@@ -73,6 +74,13 @@ class MainRepository(application: Application) {
                 it.toVideo()
             }
             movie.genres = response.genres
+            val filmMakers: MutableList<FilmMaker> = response.credits.cast.map {
+                it.toFilmMaker()
+            } as MutableList<FilmMaker>
+            filmMakers.addAll(response.credits.crew.map {
+                it.toFilmMaker()
+            })
+            movie.filmMakers = filmMakers
             movie
         }
     }

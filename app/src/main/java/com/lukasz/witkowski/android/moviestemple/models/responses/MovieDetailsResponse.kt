@@ -44,6 +44,6 @@ data class MovieDetailsResponse(
 
         var videos: VideosListResponse,
         var reviews: ReviewsListResponse,
-        var credits: People
+        var credits: CreditsResponse
 
 )

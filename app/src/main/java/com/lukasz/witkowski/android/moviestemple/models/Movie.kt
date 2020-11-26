@@ -15,7 +15,8 @@ data class Movie (
         var releaseDate: String = "",
         var genres: List<Genre> = emptyList(),
         var videos: List<Video> = emptyList(),
-        var reviews: List<Review> = emptyList()
+        var reviews: List<Review> = emptyList(),
+        var filmMakers: List<FilmMaker> = emptyList()
 ){
         val posterUri: Uri?
         get() {

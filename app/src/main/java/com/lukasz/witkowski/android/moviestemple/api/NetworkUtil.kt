@@ -55,7 +55,7 @@ private const val API_KEY = "api_key"
 private const val api_key = "3b623a17f57eb4da612b3871d3f78ced"
 const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w500"
 const val VIDEO_BASE_URI = "https://www.youtube.com/watch?v="
-private const val append_to_response = "videos,reviews"
+private const val append_to_response = "videos,reviews,credits"
 private const val APPEND_TO_RESPONSE = "append_to_response"
 
 const val TMDB_STARTING_PAGE_INDEX = 1
