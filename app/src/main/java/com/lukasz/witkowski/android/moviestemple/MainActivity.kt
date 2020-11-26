@@ -53,10 +53,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         val viewModelFactory = MainViewModelFactory(application)
         val viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.databaseValues.observe(this, Observer {
-            Log.i("RecommendedMoviesModel", "Main acitvity favourite $it")
-        }
-        )
+       // viewModel.databaseValues.observe(this, Observer {
+       //     Log.i("RecommendedMoviesModel", "Main acitvity favourite $it")
+       // }
+       // )
 
     }
 

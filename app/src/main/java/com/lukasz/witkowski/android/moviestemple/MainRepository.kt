@@ -17,6 +17,8 @@ import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralIn
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 
 class MainRepository(application: Application) {
 
@@ -40,13 +42,15 @@ class MainRepository(application: Application) {
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
 
-    private val databaseResponse = database!!.movieDao().getAllData()
+    //private val databaseResponse = database!!.movieDao().getAllData()
 
-    val databaseValues: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
+   /* val databaseValues: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
         responseList.map {
             it.toMovie()
         }
-    }
+    }*/
+
+
 
 
     val favouriteMovies = Pager(
@@ -59,6 +63,43 @@ class MainRepository(application: Application) {
 
 
 
+
+    suspend fun getDetailInformation(movie: Movie): Movie{
+        return if(isMovieInDatabase(movie.id)){
+            getMovieDetailsFromDatabase(movie.id).value!!
+        }else{
+            getMovieDetailsFromApi(movie)
+        }
+    }
+
+    private suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
+        return withContext(IO) {
+            val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movieId = movie.id)
+            movie.reviews  = response.reviews.results.map {
+                it.toReview()
+            }
+            movie.videos = response.videos.results.map {
+                it.toVideo()
+            }
+            movie
+        }
+    }
+
+    private suspend fun getMovieDetailsFromDatabase(id: Int): LiveData<Movie> {
+        return withContext(IO){
+            val databaseEntities = database?.movieDao()?.getMovieWithVideosAndReviews(id)
+            Transformations.map(databaseEntities!!){
+                it.toMovie()
+            }
+        }
+    }
+
+
+    suspend fun isMovieInDatabase(id: Int): Boolean {
+        return withContext(IO){
+            database?.movieDao()?.isMovieInDatabase(id) ?: false
+        }
+    }
 
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
@@ -102,27 +143,30 @@ class MainRepository(application: Application) {
 
 
 
-    fun getRecommendationsBasedOnFavouriteMovies(favouriteMovies: List<Movie>): Flow<PagingData<Movie>>{
-        val listOfIds = favouriteMovies.map {
-            it.id
+    suspend fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>>{
+        return withContext(IO){
+            val listOfIds = database!!.movieDao().getAllMovies().map {
+                it.id
+            }
+            Log.i("RecommendedMoviesModel", "main repo listof ids $listOfIds")
+             Pager(
+                    config = PagingConfig(
+                            pageSize = TMDB_PAGE_SIZE,
+                            enablePlaceholders = false,
+                            initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                            prefetchDistance = TMDB_PAGE_SIZE
+                    ),
+                    pagingSourceFactory = { MoviesPagingSource(RECOMMENDATIONS_QUERY, listOfIds) }
+            ).flow
         }
-        Log.i("RecommendedMoviesModel", "main repo listof ids $listOfIds")
-        return Pager(
-                config = PagingConfig(
-                        pageSize = TMDB_PAGE_SIZE,
-                        enablePlaceholders = false,
-                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                        prefetchDistance = TMDB_PAGE_SIZE
-                ),
-                pagingSourceFactory = { MoviesPagingSource(RECOMMENDATIONS_QUERY, listOfIds) }
-        ).flow
+
 
 
     }
 
 
 
-    suspend fun getMovieDetails(movie: Movie): Movie {
+   /* suspend fun getMovieDetails(movie: Movie): Movie {
         return (IO) {
            // delay(10000)
             val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movie.id)
@@ -134,7 +178,7 @@ class MainRepository(application: Application) {
             }
             movie
         }
-    }
+    }*/
 
 
 

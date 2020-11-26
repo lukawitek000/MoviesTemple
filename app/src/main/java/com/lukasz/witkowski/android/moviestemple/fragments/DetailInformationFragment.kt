@@ -84,10 +84,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 }
             }
         })
-        shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-            }
-        })
+       // shareViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+       //     if (it != null) {
+       //     }
+      //  })
 
         shareViewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
             if (it != null) {
@@ -191,7 +191,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         val item = menu.findItem(R.id.like_item)
         Log.i("DetailInformationFra", "on create menu ${item?.itemId}")
         if(item != null) {
-            if (shareViewModel.isSelectedMovieInDatabase()) {
+            if (shareViewModel.isMovieInDatabase) {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
             } else {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
@@ -207,7 +207,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             true
         }*/
         R.id.like_item -> {
-            if (shareViewModel.isSelectedMovieInDatabase()) {
+            if (shareViewModel.isMovieInDatabase) {
                 shareViewModel.deleteMovieFromDatabase()
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
                 Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()

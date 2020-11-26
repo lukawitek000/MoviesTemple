@@ -96,7 +96,7 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
 
 
     private fun setUpObservers() {
-        sharedViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
+        /*sharedViewModel.databaseValues.observe(viewLifecycleOwner, Observer {
             Log.i("FavouriteMoviesFragment", "database value $it")
             if(it != null){
                // moviesAdapter.submitList(it)
@@ -109,7 +109,7 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
                             MainViewModel.Status.SUCCESS, "")
                 }
             }
-        })
+        })*/
     }
 
     override fun onClick(movie: Movie) {

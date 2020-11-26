@@ -15,20 +15,30 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDao {
 
-    @Transaction
-    @Query("SELECT * FROM Movies ORDER BY id")
-    fun loadAllMovies(): PagingSource<Int, MovieWithReviewsAndVideos>
+   // @Transaction
+   // @Query("SELECT * FROM Movies ORDER BY id")
+   // fun loadAllMovies(): PagingSource<Int, MovieWithReviewsAndVideos>
 
-    @Transaction
-    @Query("SELECT * FROM Movies")
-    fun getAllData(): LiveData<List<MovieWithReviewsAndVideos>>
+  //  @Transaction
+   // @Query("SELECT * FROM Movies")
+   // fun getAllData(): LiveData<List<MovieWithReviewsAndVideos>>
 
 
     @Query("SELECT * FROM Movies ORDER BY id DESC")
     fun getAllMoviesPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM Movies")
-    fun getAllMovies(): LiveData<List<MovieEntity>>
+    suspend fun getAllMovies(): List<MovieEntity>
+
+
+    @Transaction
+    @Query("SELECT * FROM Movies WHERE id = :id")
+    fun getMovieWithVideosAndReviews(id: Int): LiveData<MovieWithReviewsAndVideos>
+
+
+    @Query("SELECT EXISTS (SELECT 1 FROM Movies WHERE id = :id)")
+    suspend fun isMovieInDatabase(id: Int): Boolean
+
 
     @Transaction
     suspend fun insert(movie: Movie){

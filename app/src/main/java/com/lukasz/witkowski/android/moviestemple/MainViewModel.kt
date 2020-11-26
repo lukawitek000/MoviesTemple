@@ -9,7 +9,6 @@ import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import java.lang.Exception
 
 class MainViewModel(application: Application) : ViewModel() {
 
@@ -19,7 +18,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     private val repository = MainRepository.getInstance(application)
 
-    val databaseValues: LiveData<List<Movie>>  = repository.databaseValues
+    //val databaseValues: LiveData<List<Movie>>  = repository.databaseValues
 
     val favouriteMovies = repository.favouriteMovies.cachedIn(viewModelScope)
 
@@ -36,6 +35,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun selectMovie(movie: Movie) {
         _selectedMovie.value = movie
+        isSelectedMovieInDatabase()
         getDetailInformation()
     }
 
@@ -50,14 +50,15 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun deleteMovieFromDatabase(){
         viewModelScope.launch {
-            val movieToDelete = databaseValues.value?.find {
+            /*val movieToDelete = databaseValues.value?.find {
                 it.id == _selectedMovie.value!!.id
             }
-            repository.deleteMovieFromDatabase(movieToDelete!!)
+            repository.deleteMovieFromDatabase(movieToDelete!!)*/
+            repository.deleteMovieFromDatabase(_selectedMovie.value!!)
         }
     }
 
-    fun isSelectedMovieInDatabase(): Boolean{
+   /* fun isSelectedMovieInDatabase(): Boolean{
         Log.i("MainViewModel", "database values ${databaseValues.value} selected item ${_selectedMovie.value}")
         databaseValues.value?.forEach {
             if(it.id == _selectedMovie.value!!.id){
@@ -65,26 +66,47 @@ class MainViewModel(application: Application) : ViewModel() {
             }
         }
         return false
-    }
+    }*/
 
 
     private fun getDetailInformation(){
-        if(isSelectedMovieInDatabase()){
+        viewModelScope.launch {
+            try {
+                _requestDetailInformationStatus.value = Status.LOADING
+                repository.getDetailInformation(_selectedMovie.value!!)
+                _requestDetailInformationStatus.value = Status.SUCCESS
+            }catch (e: Exception){
+                _requestDetailInformationStatus.value = Status.FAILURE
+            }
+
+        }
+
+       /* if(isSelectedMovieInDatabase()){
             getDetailInformationFromDatabase()
         }else{
             requestApiForDetailInformation()
-        }
+        }*/
     }
 
-    private fun getDetailInformationFromDatabase() {
+    var isMovieInDatabase = false
+
+
+    fun isSelectedMovieInDatabase(){
+        viewModelScope.launch {
+            isMovieInDatabase = repository.isMovieInDatabase(_selectedMovie.value!!.id)
+        }
+        //return repository.isMovieInDatabase(_selectedMovie.value!!.id)
+    }
+
+   /* private fun getDetailInformationFromDatabase() {
         _selectedMovie.value = databaseValues.value?.find {
             it.id == _selectedMovie.value?.id
         }
         _requestDetailInformationStatus.value = Status.SUCCESS
-    }
+    }*/
 
 
-    private fun requestApiForDetailInformation(){
+    /*private fun requestApiForDetailInformation(){
         viewModelScope.launch {
             try{
                 val start = System.currentTimeMillis()
@@ -98,7 +120,7 @@ class MainViewModel(application: Application) : ViewModel() {
             }
         }
     }
-
+*/
 
     fun deleteAllFavouriteMovies(){
         viewModelScope.launch {
@@ -106,9 +128,13 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
-        Log.i("RecommendedMoviesModel", "favouriteMovies = ${databaseValues.value}")
-        return repository.getRecommendationsBasedOnFavouriteMovies(databaseValues.value!!)
+    fun getRecommendationsBasedOnFavouriteMovies() {
+        viewModelScope.launch {
+             val recommends = repository.getRecommendationsBasedOnFavouriteMovies()
+            Log.i("RecommendedMoviesModel", "recommends: $recommends")
+        }
+        Log.i("RecommendedMoviesModel", "favouriteMovies")
+       // return repository.getRecommendationsBasedOnFavouriteMovies()
     }
 
 }
