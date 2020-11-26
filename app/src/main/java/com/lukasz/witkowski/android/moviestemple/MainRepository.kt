@@ -13,6 +13,7 @@ import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
 import com.lukasz.witkowski.android.moviestemple.api.TMDB_PAGE_SIZE
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -41,16 +42,6 @@ class MainRepository(application: Application) {
 
 
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
-
-    //private val databaseResponse = database!!.movieDao().getAllData()
-
-   /* val databaseValues: LiveData<List<Movie>> = Transformations.map(databaseResponse){ responseList ->
-        responseList.map {
-            it.toMovie()
-        }
-    }*/
-
-
 
 
     val favouriteMovies = Pager(
@@ -94,12 +85,19 @@ class MainRepository(application: Application) {
         }
     }
 
-
-    suspend fun isMovieInDatabase(id: Int): Boolean {
-        return withContext(IO){
+    private suspend fun isMovieInDatabase(id: Int): Boolean {
+        return withContext(IO) {
             database?.movieDao()?.isMovieInDatabase(id) ?: false
         }
     }
+
+
+     fun isMovieInFavourites(id: Int): Boolean {
+        return runBlocking {
+            isMovieInDatabase(id)
+        }
+     }
+
 
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
@@ -143,55 +141,30 @@ class MainRepository(application: Application) {
 
 
 
-    suspend fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>>{
+    private suspend fun getFavouriteMoviesId(): List<Int> {
         return withContext(IO){
-            val listOfIds = database!!.movieDao().getAllMovies().map {
+            val listOfIds: List<Int> =  database!!.movieDao().getAllMovies().map {
                 it.id
             }
-            Log.i("RecommendedMoviesModel", "main repo listof ids $listOfIds")
-             Pager(
-                    config = PagingConfig(
-                            pageSize = TMDB_PAGE_SIZE,
-                            enablePlaceholders = false,
-                            initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                            prefetchDistance = TMDB_PAGE_SIZE
-                    ),
-                    pagingSourceFactory = { MoviesPagingSource(RECOMMENDATIONS_QUERY, listOfIds) }
-            ).flow
+            listOfIds
         }
-
-
-
     }
 
+     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>>{
+         return runBlocking {
+             val listOfIds: List<Int> = getFavouriteMoviesId()
+             Pager(
+                     config = PagingConfig(
+                             pageSize = TMDB_PAGE_SIZE,
+                             enablePlaceholders = false,
+                             initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                             prefetchDistance = TMDB_PAGE_SIZE
+                     ),
+                     pagingSourceFactory = { MoviesPagingSource(RECOMMENDATIONS_QUERY, listOfIds) }
+             ).flow
+         }
+    }
 
-
-   /* suspend fun getMovieDetails(movie: Movie): Movie {
-        return (IO) {
-           // delay(10000)
-            val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movie.id)
-            movie.reviews  = response.reviews.results.map {
-                it.toReview()
-            }
-            movie.videos = response.videos.results.map {
-                it.toVideo()
-            }
-            movie
-        }
-    }*/
-
-
-
-
-
-    /*suspend fun getRecommendationBasedOnMovieID(movieID: Int): List<Movie> {
-        return withContext(IO){
-            val response = TMDBApi.retrofitService.getRecommendationsBaseOnMovieID(movieID)
-            response.movies.map {
-                it.toMovie()
-            }
-        }
-    }*/
 
 
     suspend fun deleteAllFavouriteMovies(){

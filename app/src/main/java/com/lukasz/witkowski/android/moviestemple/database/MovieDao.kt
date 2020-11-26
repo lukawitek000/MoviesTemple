@@ -15,14 +15,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDao {
 
-   // @Transaction
-   // @Query("SELECT * FROM Movies ORDER BY id")
-   // fun loadAllMovies(): PagingSource<Int, MovieWithReviewsAndVideos>
-
-  //  @Transaction
-   // @Query("SELECT * FROM Movies")
-   // fun getAllData(): LiveData<List<MovieWithReviewsAndVideos>>
-
 
     @Query("SELECT * FROM Movies ORDER BY id DESC")
     fun getAllMoviesPagingSource(): PagingSource<Int, MovieEntity>

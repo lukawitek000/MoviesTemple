@@ -191,7 +191,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         val item = menu.findItem(R.id.like_item)
         Log.i("DetailInformationFra", "on create menu ${item?.itemId}")
         if(item != null) {
-            if (shareViewModel.isMovieInDatabase) {
+            if (shareViewModel.isSelectedMovieInDatabase()) {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
             } else {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
@@ -207,7 +207,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
             true
         }*/
         R.id.like_item -> {
-            if (shareViewModel.isMovieInDatabase) {
+            if (shareViewModel.isSelectedMovieInDatabase()) {
                 shareViewModel.deleteMovieFromDatabase()
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
                 Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()

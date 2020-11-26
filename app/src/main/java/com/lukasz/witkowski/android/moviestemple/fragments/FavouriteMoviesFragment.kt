@@ -52,8 +52,8 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
 
         setUpObservers()
 
-       // val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        //refresh.visibility = View.GONE
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
+        refreshOnSwipe(refresh)
         initAdapter()
        // (requireActivity() as MainActivity).setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
         getFavouriteMovies()

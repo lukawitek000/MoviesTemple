@@ -27,6 +27,7 @@ import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModel
 import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModelFactory
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -43,7 +44,6 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
 
         moviesAdapter = MoviesAdapter((this))
         setUpRecyclerView()
-        setUpObservers()
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         refreshOnSwipe(refresh)
@@ -60,22 +60,14 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
     private fun getRecommendedMovies() {
         job?.cancel()
         job = lifecycleScope.launch {
-            sharedViewModel.getRecommendationsBasedOnFavouriteMovies()//.collectLatest {
-            //    moviesAdapter.submitData(it)
-           // }
+            sharedViewModel.getRecommendationsBasedOnFavouriteMovies().collectLatest {
+                moviesAdapter.submitData(it)
+            }
         }
     }
 
 
-    private fun setUpObservers() {
-  /*     viewModel.favouriteMovies.observe(viewLifecycleOwner, Observer {
-           Log.i("RecommendedMoviesModel", " fragment observerfavouriteMovies = ${it}")
-            if(it != null){
-               // viewModel.getRecommendationsBasedOnFavouriteMovies()
-            }
-        })*/
 
-    }
 
 
 
