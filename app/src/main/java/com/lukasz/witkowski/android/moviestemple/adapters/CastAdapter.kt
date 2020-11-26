@@ -14,8 +14,7 @@ class CastAdapter: RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
     private var castList: List<Actor> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cast_list_item, parent)
-        val binding = CastListItemBinding.bind(view)
+        val binding = CastListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CastViewHolder(binding)
     }
 
@@ -28,7 +27,9 @@ class CastAdapter: RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
         return castList.size
     }
 
-
+    fun setCastAdapterList(cast: List<Actor>){
+        castList = cast
+    }
 
 
     inner class CastViewHolder(private val binding: CastListItemBinding): RecyclerView.ViewHolder(binding.root){

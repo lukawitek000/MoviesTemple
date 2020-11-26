@@ -18,6 +18,7 @@ import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
+import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
@@ -30,6 +31,7 @@ import com.squareup.picasso.Picasso
 
 class DetailInformationFragment : Fragment(), VideoClickListener {
 
+    private lateinit var castAdapter: CastAdapter
 
 
     private lateinit var videosAdapter: VideosAdapter
@@ -51,6 +53,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         setUpObservers()
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
+        setUpCastRecyclerView()
         setHasOptionsMenu(true)
 
         val toolbar = binding.detailInformationToolbar
@@ -59,13 +62,15 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-
         return binding.root
     }
 
-
-
-
+    private fun setUpCastRecyclerView() {
+        castAdapter = CastAdapter()
+        binding.castRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.castRecyclerView.adapter = castAdapter
+        binding.castRecyclerView.setHasFixedSize(true)
+    }
 
 
     private fun setUpObservers() {
@@ -93,8 +98,9 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
                 Log.i("DetailInformation", "observer ${it}")
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
+                castAdapter.setCastAdapterList(it.cast)
                 selectedMovie = it
-                Log.i("DetailInformation", "film makers = ${selectedMovie.filmMakers}")
+                Log.i("DetailInformation", "film makers = ${selectedMovie.cast}")
                 Glide.with(requireContext())
                         .load(selectedMovie.posterUri)
                         .placeholder(R.drawable.poster_placeholder)

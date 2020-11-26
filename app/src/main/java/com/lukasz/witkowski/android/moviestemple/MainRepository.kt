@@ -77,7 +77,7 @@ class MainRepository(application: Application) {
             /*filmMakers.addAll(response.credits.crew.map {
                 it.toActor()
             })*/
-            movie.filmMakers = filmMakers
+            movie.cast = filmMakers
             movie
         }
     }
