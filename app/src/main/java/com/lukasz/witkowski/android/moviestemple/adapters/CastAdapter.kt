@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -8,7 +9,12 @@ import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.databinding.CastListItemBinding
 import com.lukasz.witkowski.android.moviestemple.models.Actor
 
-class CastAdapter: RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
+class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
+
+
+    interface CastOnClickListener{
+        fun onClick(actor: Actor)
+    }
 
 
     private var castList: List<Actor> = emptyList()
@@ -32,7 +38,14 @@ class CastAdapter: RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
     }
 
 
-    inner class CastViewHolder(private val binding: CastListItemBinding): RecyclerView.ViewHolder(binding.root){
+    inner class CastViewHolder(private val binding: CastListItemBinding): RecyclerView.ViewHolder(binding.root),
+    View.OnClickListener{
+
+        init {
+            binding.root.setOnClickListener(this)
+        }
+
+        private var actor: Actor? = null
 
         fun bind(actor: Actor){
             Glide.with(binding.actorImageview.context)
@@ -42,6 +55,13 @@ class CastAdapter: RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
             binding.actorNameTextview.text = actor.name
             binding.characterNameTextView.text = actor.character
+            this.actor = actor
+        }
+
+        override fun onClick(p0: View?) {
+            if(actor != null){
+                onClickListener.onClick(actor!!)
+            }
         }
     }
 

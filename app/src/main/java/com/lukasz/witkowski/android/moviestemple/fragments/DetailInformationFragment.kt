@@ -1,9 +1,13 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -22,14 +26,16 @@ import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
+import com.lukasz.witkowski.android.moviestemple.databinding.ActorCustomDialogBinding
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
+import com.lukasz.witkowski.android.moviestemple.models.Actor
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.Video
 import com.lukasz.witkowski.android.moviestemple.models.toText
 import com.squareup.picasso.Picasso
 
 
-class DetailInformationFragment : Fragment(), VideoClickListener {
+class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.CastOnClickListener {
 
     private lateinit var castAdapter: CastAdapter
 
@@ -66,7 +72,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
     }
 
     private fun setUpCastRecyclerView() {
-        castAdapter = CastAdapter()
+        castAdapter = CastAdapter(this)
         binding.castRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.castRecyclerView.adapter = castAdapter
         binding.castRecyclerView.setHasFixedSize(true)
@@ -243,6 +249,38 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         }
         else -> false
 
+
+    }
+
+    override fun onClick(actor: Actor) {
+        createAlertDialog(actor).show()
+    }
+
+
+    private fun createAlertDialog(actor: Actor): AlertDialog {
+        val builder = AlertDialog.Builder(requireContext())
+
+        val view = layoutInflater.inflate(R.layout.actor_custom_dialog, null)
+        val binding = ActorCustomDialogBinding.bind(view)
+        builder.setView(view)
+        val dialog = builder.create()
+       binding.moreInfoButton.setOnClickListener {
+            //https://www.themoviedb.org/person/
+            //dialog.dismiss()
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://www.themoviedb.org/person/${actor.actorId}")
+            startActivity(intent)
+        }
+        binding.exitIcon.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.actorName.text = actor.name
+        Glide.with(view)
+                .load(actor.actorPhoto)
+                .placeholder(R.drawable.actor_photo_default)
+                .into(binding.actorPhoto)
+        return dialog
 
     }
 }
