@@ -1,7 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.models
 
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithGenresReviewsAndVideos
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieAllInformation
 import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
 import com.lukasz.witkowski.android.moviestemple.models.responses.*
@@ -43,11 +43,13 @@ fun ReviewEntity.toReview(): Review{
     return  Review(author, content)
 }
 
-fun MovieWithGenresReviewsAndVideos.toMovie(): Movie{
+fun MovieAllInformation.toMovie(): Movie{
     val videos = videos.map { it.toVideo() }
     val reviews = reviews.map { it.toReview() }
     return Movie(movie.posterPath, movie.movieId, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
-    movie.releaseDate, genres, videos, reviews)
+    movie.releaseDate, genres, videos, reviews, cast.sortedBy {
+        it.order
+    })
 }
 
 
@@ -69,9 +71,10 @@ fun List<Genre>.toText(): String {
 }
 
 fun ActorResponse.toActor(): Actor{
-    return Actor(id, name, profilePath, character)
+    return Actor(id, name, profilePath, character, order)
 }
 
+/*
 fun CrewMemberResponse.toActor(): Actor{
     return Actor(id, name, profilePath, "", job)
-}
+}*/

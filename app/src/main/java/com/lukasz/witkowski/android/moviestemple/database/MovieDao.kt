@@ -1,7 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.database
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.lukasz.witkowski.android.moviestemple.models.*
@@ -20,7 +19,7 @@ interface MovieDao {
 
     @Transaction
     @Query("SELECT * FROM Movies WHERE movieId = :id")
-    suspend fun getMovieWithVideosAndReviews(id: Int): MovieWithGenresReviewsAndVideos
+    suspend fun getMovieWithVideosAndReviews(id: Int): MovieAllInformation
 
 
     @Query("SELECT EXISTS (SELECT 1 FROM Movies WHERE movieId = :id)")
@@ -30,6 +29,12 @@ interface MovieDao {
 
     @Transaction
     suspend fun insert(movie: Movie){
+
+        movie.cast.forEach {
+            insertMovieWithActor(MovieWithActor(movie.id, it.actorId))
+            insertActor(it)
+        }
+
         movie.genres.forEach {
             insertMovieWithGenres(MovieWithGenre(movie.id, it.genreId))
             insertGenres(it)
@@ -51,6 +56,12 @@ interface MovieDao {
 
 
     }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertActor(actor: Actor)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieWithActor(movieWithActor: MovieWithActor)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGenres(genre: Genre)

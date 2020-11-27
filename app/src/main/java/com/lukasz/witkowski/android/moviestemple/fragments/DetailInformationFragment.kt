@@ -132,6 +132,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener {
         binding.recyclerviewReviews.visibility = visibility
         binding.genreLabel.visibility = visibility
         binding.genres.visibility = visibility
+        binding.castLabel.visibility = visibility
+        binding.castRecyclerView.visibility = visibility
     }
 
     private fun hideRecyclerViewsIfTheyAreEmpty(){

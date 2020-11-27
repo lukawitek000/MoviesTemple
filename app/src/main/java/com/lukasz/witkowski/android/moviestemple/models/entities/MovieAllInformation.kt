@@ -3,15 +3,24 @@ package com.lukasz.witkowski.android.moviestemple.models.entities
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import com.lukasz.witkowski.android.moviestemple.models.Genre
-import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.Review
-import com.lukasz.witkowski.android.moviestemple.models.Video
+import com.lukasz.witkowski.android.moviestemple.models.*
 
 
-data class MovieWithGenresReviewsAndVideos(
+data class MovieAllInformation(
         @Embedded
         val movie: MovieEntity,
+
+        @Relation(
+                parentColumn = "movieId",
+                entity = Actor::class,
+                entityColumn = "actorId",
+                associateBy = Junction(
+                        value = MovieWithActor::class,
+                        parentColumn = "movieId",
+                        entityColumn = "actorId"
+                )
+        )
+        var cast: List<Actor>,
 
         @Relation(
                 parentColumn = "movieId",

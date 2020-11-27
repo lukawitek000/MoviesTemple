@@ -1,15 +1,18 @@
 package com.lukasz.witkowski.android.moviestemple.models
 
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.lukasz.witkowski.android.moviestemple.api.POSTER_BASE_URI
 
-
+@Entity(tableName = "Actors")
 data class Actor(
-        var id: Int = 0,
+        @PrimaryKey
+        var actorId: Int = 0,
         var name: String = "",
         var profilePath: String? = null,
         var character: String = "",
-        var job: String = "Acting"
+        var order: Int = 0
 ){
     val actorPhoto : Uri?
     get() {
