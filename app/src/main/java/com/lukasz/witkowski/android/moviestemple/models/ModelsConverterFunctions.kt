@@ -74,7 +74,11 @@ fun ActorResponse.toActor(): Actor{
     return Actor(id, name, profilePath, character, order)
 }
 
-/*
-fun CrewMemberResponse.toActor(): Actor{
-    return Actor(id, name, profilePath, "", job)
-}*/
+
+fun CrewMemberResponse.toDirector(): Director{
+    return Director(id, name, profilePath)
+}
+
+fun CrewMemberResponse.toWriter(): Writer {
+    return Writer(id, name, profilePath)
+}

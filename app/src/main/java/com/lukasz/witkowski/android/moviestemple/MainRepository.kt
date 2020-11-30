@@ -74,10 +74,29 @@ class MainRepository(application: Application) {
             val filmMakers: MutableList<Actor> = response.credits.cast.map {
                 it.toActor()
             } as MutableList<Actor>
+            val director = response.credits.crew.filter {
+                it.job == "Director"
+            }
+            val writer = response.credits.crew.filter {
+                it.job == "Writer"
+            }
+            val producer = response.credits.crew.filter {
+                it.job == "Producer"
+            }
+            Log.i("MainRepo", "\ndirector = $director \n writer = $writer \n producer = $producer")
             /*filmMakers.addAll(response.credits.crew.map {
                 it.toActor()
             })*/
+            movie.directors = director.map {
+                it.toDirector()
+            }
+            movie.writers = writer.map {
+                it.toWriter()
+            }
+
             movie.cast = filmMakers
+            Log.i("MainRepo", "whole detail info $movie")
+
             movie
         }
     }
