@@ -58,6 +58,7 @@
 
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
@@ -208,15 +209,58 @@
                     tools:text="Lopsum ipsum" />
 
                 <TextView
+                    android:id="@+id/director_label"
+                    style="@style/labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/director_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/overview" />
+
+                <TextView
+                    android:id="@+id/director_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="24sp"
+                    tools:text="Woody Allen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/director_label" />
+
+                <TextView
+                    android:id="@+id/writers_label"
+                    style="@style/labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/writers_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/director_textView" />
+
+                <TextView
+                    android:id="@+id/writers_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_marginTop="8dp"
+                    tools:text="Quentin Tarantino"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/writers_label" />
+
+
+
+
+                <TextView
                     android:id="@+id/cast_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/cast_label"
                     android:textColor="@color/darkYellow"
                     android:textSize="32sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/overview" />
+                    app:layout_constraintTop_toBottomOf="@+id/writers_textView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/cast_recyclerView"
@@ -226,7 +270,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cast_label" />
-
 
 
                 <TextView
@@ -281,9 +324,8 @@
 
 
 
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

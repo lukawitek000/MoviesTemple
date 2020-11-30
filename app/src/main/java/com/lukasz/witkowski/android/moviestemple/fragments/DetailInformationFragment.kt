@@ -28,10 +28,7 @@ import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
 import com.lukasz.witkowski.android.moviestemple.databinding.ActorCustomDialogBinding
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
-import com.lukasz.witkowski.android.moviestemple.models.Actor
-import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.Video
-import com.lukasz.witkowski.android.moviestemple.models.toText
+import com.lukasz.witkowski.android.moviestemple.models.*
 import com.squareup.picasso.Picasso
 
 
@@ -105,6 +102,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
                 castAdapter.setCastAdapterList(it.cast)
+                binding.directorTextView.text = it.directors.directorToString()
+                binding.writersTextView.text = it.writers.writerToString()
                 selectedMovie = it
                 Log.i("DetailInformation", "film makers = ${selectedMovie.cast}")
                 Glide.with(requireContext())
