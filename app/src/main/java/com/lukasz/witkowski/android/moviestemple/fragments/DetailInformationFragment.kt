@@ -178,7 +178,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         }
     }
 
-    
+
     private fun setDataToUI(){
         binding.overview.text = selectedMovie.overview
         binding.originalTitle.text = selectedMovie.originalTitle
