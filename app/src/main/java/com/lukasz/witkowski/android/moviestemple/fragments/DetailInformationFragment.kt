@@ -52,7 +52,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
         selectedMovie = shareViewModel.selectedMovie.value!!
 
-        setIsDetailInformationVisible(false)
+        //setIsDetailInformationVisible(false)
         setUpObservers()
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
@@ -82,15 +82,24 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 setDataToUI()
                 when (it) {
                     MainViewModel.Status.SUCCESS -> {
-                        setIsDetailInformationVisible(true)
+                        setDetailInformationVisible(true)
+                        setMainInformationVisible(true)
+                        setProgressBarVisible(false)
+                        binding.detailInformationLayout.visibility = View.VISIBLE
                     }
                     MainViewModel.Status.FAILURE -> {
-                        setIsDetailInformationVisible(false)
-                        setProgressBarsVisibility(View.GONE)
+                        binding.detailInformationLayout.visibility = View.GONE
+                        setDetailInformationVisible(false)
+                        setMainInformationVisible(true)
+                        setProgressBarVisible(false)
                     }
                     else -> {
-                        setProgressBarsVisibility(View.VISIBLE)
-                        setIsDetailInformationVisible(false)
+                        binding.detailInformationLayout.visibility = View.GONE
+                        setDetailInformationVisible(false)
+                        setMainInformationVisible(false)
+                        setProgressBarVisible(true)
+                       // setProgressBarsVisibility(View.VISIBLE)
+                       // setIsDetailInformationVisible(false)
                     }
                 }
             }
@@ -115,44 +124,61 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         })
     }
 
-    private fun setProgressBarsVisibility(visibility: Int) {
-        binding.videosAndReviewsProgressbar.visibility = visibility
-        binding.genresProgressBar.visibility = visibility
-    }
-
-    private fun setIsDetailInformationVisible(isVisible: Boolean) {
+    private fun setProgressBarVisible(isVisible: Boolean) {
         if(isVisible){
-            setDetailInformationVisibility(View.VISIBLE)
-            hideRecyclerViewsIfTheyAreEmpty()
-            setProgressBarsVisibility(View.GONE)
+            binding.progressBar.visibility = View.VISIBLE
         }else{
-            setDetailInformationVisibility(View.GONE)
+            binding.progressBar.visibility = View.GONE
         }
     }
 
-    private fun setDetailInformationVisibility(visibility: Int){
-        binding.videosLabel.visibility = visibility
-        binding.recyclerviewVideos.visibility = visibility
-        binding.reviewsLabel.visibility = visibility
-        binding.recyclerviewReviews.visibility = visibility
-        binding.genreLabel.visibility = visibility
-        binding.genres.visibility = visibility
-        binding.castLabel.visibility = visibility
-        binding.castRecyclerView.visibility = visibility
+    private fun setMainInformationVisible(isVisible: Boolean) {
+        if(isVisible){
+            binding.detailInformationLayout.visibility = View.VISIBLE
+        }else{
+            binding.detailInformationLayout.visibility = View.GONE
+        }
     }
 
-    private fun hideRecyclerViewsIfTheyAreEmpty(){
-        if(selectedMovie.reviews.isEmpty()){
-            binding.reviewsLabel.visibility = View.GONE
-            binding.recyclerviewReviews.visibility = View.GONE
-        }
-        if(selectedMovie.videos.isEmpty()){
+    private fun setDetailInformationVisible(isVisible: Boolean) {
+        if(!isVisible){
+            binding.genreLabel.visibility = View.GONE
+            binding.genres.visibility = View.GONE
+            binding.directorLabel.visibility = View.GONE
+            binding.directorTextView.visibility = View.GONE
+            binding.writersLabel.visibility = View.GONE
+            binding.writersTextView.visibility = View.GONE
+            binding.castLabel.visibility = View.GONE
+            binding.castRecyclerView.visibility = View.GONE
             binding.videosLabel.visibility = View.GONE
             binding.recyclerviewVideos.visibility = View.GONE
+            binding.reviewsLabel.visibility = View.GONE
+            binding.recyclerviewReviews.visibility = View.GONE
+        }else{
+            binding.genreLabel.visibility = checkListIfIsEmpty(selectedMovie.genres)
+            binding.genres.visibility = checkListIfIsEmpty(selectedMovie.genres)
+            binding.directorLabel.visibility = checkListIfIsEmpty(selectedMovie.directors)
+            binding.directorTextView.visibility = checkListIfIsEmpty(selectedMovie.directors)
+            binding.writersLabel.visibility = checkListIfIsEmpty(selectedMovie.writers)
+            binding.writersTextView.visibility = checkListIfIsEmpty(selectedMovie.writers)
+            binding.castLabel.visibility = checkListIfIsEmpty(selectedMovie.cast)
+            binding.castRecyclerView.visibility = checkListIfIsEmpty(selectedMovie.cast)
+            binding.videosLabel.visibility = checkListIfIsEmpty(selectedMovie.videos)
+            binding.recyclerviewVideos.visibility = checkListIfIsEmpty(selectedMovie.videos)
+            binding.reviewsLabel.visibility = checkListIfIsEmpty(selectedMovie.reviews)
+            binding.recyclerviewReviews.visibility = checkListIfIsEmpty(selectedMovie.reviews)
         }
     }
 
+    private fun <T> checkListIfIsEmpty(list: List<T>): Int{
+        return if(list.isNullOrEmpty()){
+            View.GONE
+        }else{
+            View.VISIBLE
+        }
+    }
 
+    
     private fun setDataToUI(){
         binding.overview.text = selectedMovie.overview
         binding.originalTitle.text = selectedMovie.originalTitle
