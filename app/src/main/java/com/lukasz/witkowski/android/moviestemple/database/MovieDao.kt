@@ -30,6 +30,11 @@ interface MovieDao {
     @Transaction
     suspend fun insert(movie: Movie){
 
+        movie.writers.forEach {
+            insertMovieWithWriter(MovieWithWriter(movie.id, it.writerId))
+            insertWriter(it)
+        }
+
         movie.directors.forEach {
             insertMovieWithDirector(MovieWithDirector(movie.id, it.directorId))
             insertDirector(it)
@@ -61,6 +66,12 @@ interface MovieDao {
 
 
     }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWriter(writer: Writer)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieWithWriter(movieWithWriter: MovieWithWriter)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDirector(director: Director)

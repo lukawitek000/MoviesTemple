@@ -58,5 +58,17 @@ data class MovieAllInformation(
                         entityColumn = "directorId"
                 )
         )
-        var directors: List<Director>
+        var directors: List<Director>,
+
+        @Relation(
+                parentColumn = "movieId",
+                entity = Writer::class,
+                entityColumn = "writerId",
+                associateBy = Junction(
+                        value = MovieWithWriter::class,
+                        parentColumn = "movieId",
+                        entityColumn = "writerId"
+                )
+        )
+        var writers: List<Writer>
 )

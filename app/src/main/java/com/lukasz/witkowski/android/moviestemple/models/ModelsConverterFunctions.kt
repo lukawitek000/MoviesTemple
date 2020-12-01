@@ -49,7 +49,7 @@ fun MovieAllInformation.toMovie(): Movie{
     return Movie(movie.posterPath, movie.movieId, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
     movie.releaseDate, genres, videos, reviews, cast.sortedBy {
         it.order
-    }, directors)
+    }, directors, writers)
 }
 
 
