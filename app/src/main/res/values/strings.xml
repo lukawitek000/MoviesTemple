@@ -18,4 +18,9 @@
     <string name="author_label">Author:</string>
     <string name="videos_label">VIDEOS</string>
     <string name="reviews_label">REVIEWS</string>
+    <string name="genres_label">Genres:</string>
+    <string name="votes_number_label">Votes:</string>
+    <string name="cast_label">CAST</string>
+    <string name="director_label">Director:</string>
+    <string name="writers_label">Writer:</string>
 </resources>

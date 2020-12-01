@@ -2,24 +2,17 @@ package com.lukasz.witkowski.android.moviestemple
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
 import com.lukasz.witkowski.android.moviestemple.api.MoviesPagingSource
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
 import com.lukasz.witkowski.android.moviestemple.api.TMDB_PAGE_SIZE
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 
 class MainRepository(application: Application) {
 
@@ -56,32 +49,63 @@ class MainRepository(application: Application) {
 
 
     suspend fun getDetailInformation(movie: Movie): Movie{
-        return if(isMovieInDatabase(movie.id)){
-            getMovieDetailsFromDatabase(movie.id).value!!
-        }else{
-            getMovieDetailsFromApi(movie)
+        return withContext(IO) {
+            if (isMovieInDatabase(movie.id)) {
+                Log.i("Database debug", "movie details from database ")
+                getMovieDetailsFromDatabase(movie.id)
+            } else {
+                Log.i("Database debug", "movie details from api ")
+                getMovieDetailsFromApi(movie)
+            }
         }
     }
 
     private suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
         return withContext(IO) {
             val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movieId = movie.id)
+            Log.i("MainRepository", "detail response credits = ${response.credits}")
             movie.reviews  = response.reviews.results.map {
                 it.toReview()
             }
             movie.videos = response.videos.results.map {
                 it.toVideo()
             }
+            movie.genres = response.genres
+            val filmMakers: MutableList<Actor> = response.credits.cast.map {
+                it.toActor()
+            } as MutableList<Actor>
+            val director = response.credits.crew.filter {
+                it.job == "Director"
+            }
+            val writer = response.credits.crew.filter {
+                it.job == "Writer"
+            }
+            val producer = response.credits.crew.filter {
+                it.job == "Producer"
+            }
+            Log.i("MainRepo", "\ndirector = $director \n writer = $writer \n producer = $producer")
+            /*filmMakers.addAll(response.credits.crew.map {
+                it.toActor()
+            })*/
+            movie.directors = director.map {
+                it.toDirector()
+            }
+            movie.writers = writer.map {
+                it.toWriter()
+            }
+
+            movie.cast = filmMakers
+            Log.i("MainRepo", "whole detail info $movie")
+
             movie
         }
     }
 
-    private suspend fun getMovieDetailsFromDatabase(id: Int): LiveData<Movie> {
+    private suspend fun getMovieDetailsFromDatabase(id: Int): Movie {
         return withContext(IO){
-            val databaseEntities = database?.movieDao()?.getMovieWithVideosAndReviews(id)
-            Transformations.map(databaseEntities!!){
-                it.toMovie()
-            }
+            val databaseEntity = database?.movieDao()?.getMovieWithVideosAndReviews(id)
+            Log.i("Database debug", "movie details ${databaseEntity}")
+            databaseEntity!!.toMovie()
         }
     }
 
@@ -144,7 +168,7 @@ class MainRepository(application: Application) {
     private suspend fun getFavouriteMoviesId(): List<Int> {
         return withContext(IO){
             val listOfIds: List<Int> =  database!!.movieDao().getAllMovies().map {
-                it.id
+                it.movieId
             }
             listOfIds
         }

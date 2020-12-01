@@ -10,11 +10,15 @@ data class Movie (
         var originalTitle: String = "",
         var title: String,
         var voteAverage: Float = 0f,
+        var voteCount: Int = 0,
         var overview: String = "",
         var releaseDate: String = "",
         var genres: List<Genre> = emptyList(),
         var videos: List<Video> = emptyList(),
-        var reviews: List<Review> = emptyList()
+        var reviews: List<Review> = emptyList(),
+        var cast: List<Actor> = emptyList(),
+        var directors: List<Director> = emptyList(),
+        var writers: List<Writer> = emptyList()
 ){
         val posterUri: Uri?
         get() {

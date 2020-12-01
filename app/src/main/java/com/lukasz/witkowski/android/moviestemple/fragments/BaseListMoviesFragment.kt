@@ -96,6 +96,16 @@ open class BaseListMoviesFragment : Fragment() {
 
     }
 
+    fun setTextWhenFavouriteMoviesIsEmpty(text: String){
+        moviesAdapter.addLoadStateListener { loadState ->
+            if(loadState.append.endOfPaginationReached){
+                if(moviesAdapter.itemCount < 1){
+                    setVisibilityBaseOnStatus(MainViewModel.Status.FAILURE, text)
+                }
+            }
+        }
+    }
+
 
     fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
         binding.moviesRecyclerview.visibility = View.VISIBLE

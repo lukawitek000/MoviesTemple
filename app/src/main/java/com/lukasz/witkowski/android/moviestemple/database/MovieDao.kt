@@ -1,22 +1,16 @@
 package com.lukasz.witkowski.android.moviestemple.database
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
-import kotlinx.coroutines.flow.Flow
+import com.lukasz.witkowski.android.moviestemple.models.entities.*
 
 @Dao
 interface MovieDao {
 
 
-    @Query("SELECT * FROM Movies ORDER BY id DESC")
+    @Query("SELECT * FROM Movies ORDER BY movieId DESC")
     fun getAllMoviesPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM Movies")
@@ -24,16 +18,38 @@ interface MovieDao {
 
 
     @Transaction
-    @Query("SELECT * FROM Movies WHERE id = :id")
-    fun getMovieWithVideosAndReviews(id: Int): LiveData<MovieWithReviewsAndVideos>
+    @Query("SELECT * FROM Movies WHERE movieId = :id")
+    suspend fun getMovieWithVideosAndReviews(id: Int): MovieAllInformation
 
 
-    @Query("SELECT EXISTS (SELECT 1 FROM Movies WHERE id = :id)")
+    @Query("SELECT EXISTS (SELECT 1 FROM Movies WHERE movieId = :id)")
     suspend fun isMovieInDatabase(id: Int): Boolean
+
 
 
     @Transaction
     suspend fun insert(movie: Movie){
+
+        movie.writers.forEach {
+            insertMovieWithWriter(MovieWithWriter(movie.id, it.writerId))
+            insertWriter(it)
+        }
+
+        movie.directors.forEach {
+            insertMovieWithDirector(MovieWithDirector(movie.id, it.directorId))
+            insertDirector(it)
+        }
+
+        movie.cast.forEach {
+            insertMovieWithActor(MovieWithActor(movie.id, it.actorId))
+            insertActor(it)
+        }
+
+        movie.genres.forEach {
+            insertMovieWithGenres(MovieWithGenre(movie.id, it.genreId))
+            insertGenres(it)
+        }
+
         insertMovie(movie.toMovieEntity())
         val videos = movie.videos
         videos.forEach {
@@ -51,6 +67,32 @@ interface MovieDao {
 
     }
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWriter(writer: Writer)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieWithWriter(movieWithWriter: MovieWithWriter)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertDirector(director: Director)
+
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieWithDirector(movieWithDirector: MovieWithDirector)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertActor(actor: Actor)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieWithActor(movieWithActor: MovieWithActor)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertGenres(genre: Genre)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieWithGenres(movieWithGenres: MovieWithGenre)
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReview(review: ReviewEntity)
 
@@ -64,12 +106,12 @@ interface MovieDao {
     @Transaction
     suspend fun deleteMovieReviewAndVideo(movie: MovieEntity){
         Log.i("Dao", "movie to delete = $movie")
-        deleteMovieById(movie.id)
-        deleteReviewByMovieOwnerId(movie.id)
-        deleteVideoByMovieOwnerId(movie.id)
+        deleteMovieById(movie.movieId)
+        deleteReviewByMovieOwnerId(movie.movieId)
+        deleteVideoByMovieOwnerId(movie.movieId)
     }
 
-    @Query("DELETE FROM Movies WHERE id = :id")
+    @Query("DELETE FROM Movies WHERE movieId = :id")
     suspend fun deleteMovieById(id: Int)
 
     @Query("DELETE FROM Reviews WHERE movieOwnerID = :id")

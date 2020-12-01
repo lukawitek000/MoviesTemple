@@ -4,15 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.Review
-import com.lukasz.witkowski.android.moviestemple.models.Video
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
+import com.lukasz.witkowski.android.moviestemple.models.*
+import com.lukasz.witkowski.android.moviestemple.models.entities.*
 
 
-@Database(entities = [MovieEntity::class, ReviewEntity::class, VideoEntity::class], version = 13, exportSchema = false)
+@Database(entities = [MovieEntity::class, ReviewEntity::class, VideoEntity::class, Genre::class,
+    MovieWithGenre::class, Actor::class, MovieWithActor::class, Director::class, MovieWithDirector::class,
+                     Writer::class, MovieWithWriter::class],
+        version = 20, exportSchema = false)
 abstract class FavouriteMovieDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 

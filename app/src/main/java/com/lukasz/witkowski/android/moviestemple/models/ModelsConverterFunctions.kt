@@ -1,20 +1,18 @@
 package com.lukasz.witkowski.android.moviestemple.models
 
 import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieWithReviewsAndVideos
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieAllInformation
 import com.lukasz.witkowski.android.moviestemple.models.entities.ReviewEntity
 import com.lukasz.witkowski.android.moviestemple.models.entities.VideoEntity
-import com.lukasz.witkowski.android.moviestemple.models.responses.MovieGeneralInfoResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.ReviewResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.VideoResponse
+import com.lukasz.witkowski.android.moviestemple.models.responses.*
 
 
 fun Movie.toMovieEntity(): MovieEntity{
-    return MovieEntity(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+    return MovieEntity(posterPath, id, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
 }
 
 fun MovieGeneralInfoResponse.toMovie(): Movie {
-    return Movie(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+    return Movie(posterPath, id, originalTitle, title, voteAverage, voteCount,  overview, releaseDate)
 }
 
 
@@ -45,14 +43,69 @@ fun ReviewEntity.toReview(): Review{
     return  Review(author, content)
 }
 
-fun MovieWithReviewsAndVideos.toMovie(): Movie{
+fun MovieAllInformation.toMovie(): Movie{
     val videos = videos.map { it.toVideo() }
     val reviews = reviews.map { it.toReview() }
-    return Movie(movie.posterPath, movie.id, movie.originalTitle, movie.title, movie.voteAverage, movie.overview,
-    movie.releaseDate, emptyList(), videos, reviews)
+    return Movie(movie.posterPath, movie.movieId, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
+    movie.releaseDate, genres, videos, reviews, cast.sortedBy {
+        it.order
+    }, directors, writers)
 }
 
 
 fun MovieEntity.toMovie() : Movie {
-    return Movie(posterPath, id, originalTitle, title, voteAverage, overview, releaseDate)
+    return Movie(posterPath, movieId, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+}
+
+fun List<Genre>.toText(): String {
+    val textBuilder = StringBuilder()
+    this.forEachIndexed{ i, genre ->
+
+        if(i == this.size-1){
+            textBuilder.append(genre.name)
+        }else{
+            textBuilder.append(genre.name).append(", ")
+        }
+    }
+    return textBuilder.toString()
+}
+
+fun ActorResponse.toActor(): Actor{
+    return Actor(id, name, profilePath, character, order)
+}
+
+
+fun CrewMemberResponse.toDirector(): Director{
+    return Director(id, name, profilePath)
+}
+
+fun CrewMemberResponse.toWriter(): Writer {
+    return Writer(id, name, profilePath)
+}
+
+
+fun List<Director>.directorToString(): String {
+    val textBuilder = StringBuilder()
+    this.forEachIndexed{ i, director ->
+
+        if(i == this.size-1){
+            textBuilder.append(director.name)
+        }else{
+            textBuilder.append(director.name).append(", ")
+        }
+    }
+    return textBuilder.toString()
+}
+
+fun List<Writer>.writerToString(): String {
+    val textBuilder = StringBuilder()
+    this.forEachIndexed{ i, writer ->
+
+        if(i == this.size-1){
+            textBuilder.append(writer.name)
+        }else{
+            textBuilder.append(writer.name).append(", ")
+        }
+    }
+    return textBuilder.toString()
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="320dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/card">
+
+
+        <ImageView
+            android:id="@+id/actor_imageview"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/actor_photo_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/actor_name_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textColor="@color/darkYellow"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/character_name_textView"
+            app:layout_constraintEnd_toEndOf="@+id/actor_imageview"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/actor_imageview"
+            app:layout_constraintTop_toBottomOf="@+id/actor_imageview"
+            tools:text="Vin Diesel" />
+
+        <TextView
+            android:id="@+id/character_name_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/actor_imageview"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/actor_name_textview"
+            app:layout_constraintTop_toBottomOf="@+id/actor_name_textview"
+            tools:text="Dominic Toretto" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
