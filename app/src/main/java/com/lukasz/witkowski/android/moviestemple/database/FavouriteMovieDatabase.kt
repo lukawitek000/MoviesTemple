@@ -9,8 +9,8 @@ import com.lukasz.witkowski.android.moviestemple.models.entities.*
 
 
 @Database(entities = [MovieEntity::class, ReviewEntity::class, VideoEntity::class, Genre::class,
-    MovieWithGenre::class, Actor::class, MovieWithActor::class],
-        version = 18, exportSchema = false)
+    MovieWithGenre::class, Actor::class, MovieWithActor::class, Director::class, MovieWithDirector::class],
+        version = 19, exportSchema = false)
 abstract class FavouriteMovieDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 

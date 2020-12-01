@@ -45,5 +45,18 @@ data class MovieAllInformation(
                 entityColumn = "movieOwnerID",
                 entity = VideoEntity::class
         )
-        val videos: List<VideoEntity>
+        val videos: List<VideoEntity>,
+
+
+        @Relation(
+                parentColumn = "movieId",
+                entity = Director::class,
+                entityColumn = "directorId",
+                associateBy = Junction(
+                        value = MovieWithDirector::class,
+                        parentColumn = "movieId",
+                        entityColumn = "directorId"
+                )
+        )
+        var directors: List<Director>
 )
