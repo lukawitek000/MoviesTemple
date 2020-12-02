@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import com.lukasz.witkowski.android.moviestemple.MainActivity
-import com.lukasz.witkowski.android.moviestemple.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie

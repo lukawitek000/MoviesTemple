@@ -1,42 +1,23 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
-import com.lukasz.witkowski.android.moviestemple.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.RecommendedMoviesViewModelFactory
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
-
-
-    private val viewModel by viewModels<RecommendedMoviesViewModel> { RecommendedMoviesViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -60,15 +41,11 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
     private fun getRecommendedMovies() {
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModel.getRecommendationsBasedOnFavouriteMovies().collectLatest {
+            sharedViewModel.getRecommendationsBasedOnFavouriteMovies().collectLatest {
                 moviesAdapter.submitData(it)
             }
         }
     }
-
-
-
-
 
 
     override fun onClick(movie: Movie) {

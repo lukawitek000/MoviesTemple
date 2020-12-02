@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,16 +15,12 @@ import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.api.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModelFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
-
-    private val viewModel by viewModels<PopularMoviesViewModel> { (PopularMoviesViewModelFactory(requireActivity().application)) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -47,7 +41,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModel.getMovies(query).collectLatest {
+            sharedViewModel.getMovies(query).collectLatest {
                 moviesAdapter.submitData(it)
             }
         }

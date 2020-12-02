@@ -8,21 +8,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.api.TOP_RATED_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.viewModels.TopRatedMoviesViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.TopRatedMoviesViewModelFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 class TopRatedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
-
-    private val viewModel by viewModels<TopRatedMoviesViewModel> { TopRatedMoviesViewModelFactory(requireActivity().application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -44,7 +40,7 @@ class TopRatedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdap
     private fun getTopRatedMovies(){
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModel.getTopRatedMovies().collectLatest{
+            sharedViewModel.getMovies(TOP_RATED_MOVIES_QUERY).collectLatest{
                 moviesAdapter.submitData(it)
             }
         }

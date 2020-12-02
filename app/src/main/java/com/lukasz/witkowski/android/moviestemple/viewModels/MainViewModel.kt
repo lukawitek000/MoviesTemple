@@ -1,10 +1,10 @@
-package com.lukasz.witkowski.android.moviestemple
+package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.lukasz.witkowski.android.moviestemple.MainRepository
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -41,7 +41,6 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-
     fun deleteMovieFromDatabase(){
         viewModelScope.launch {
             repository.deleteMovieFromDatabase(_selectedMovie.value!!)
@@ -49,22 +48,17 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-
     private fun getDetailInformation(){
         viewModelScope.launch {
             try {
                 _requestDetailInformationStatus.value = Status.LOADING
-                Log.i("DetailInformation", "loading selectedmovie.value ${selectedMovie.value}")
                 _selectedMovie.value = repository.getDetailInformation(_selectedMovie.value!!)
                 _requestDetailInformationStatus.value = Status.SUCCESS
-                Log.i("DetailInformation", "success selectedmovie.value ${selectedMovie.value}")
             }catch (e: Exception){
-                Log.i("DetailInformation", "failure $e selectedmovie.value ${selectedMovie.value}")
                 _requestDetailInformationStatus.value = Status.FAILURE
             }
         }
     }
-
 
 
     fun isSelectedMovieInDatabase(): Boolean{
@@ -79,5 +73,13 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
+    fun getMovies(query: String): Flow<PagingData<Movie>>{
+        return repository.getPagingDataMovies(query).cachedIn(viewModelScope)
+    }
+
+
+    fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
+        return repository.getRecommendationsBasedOnFavouriteMovies()
+    }
 
 }

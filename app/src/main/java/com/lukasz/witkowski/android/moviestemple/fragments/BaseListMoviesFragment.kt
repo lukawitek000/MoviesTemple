@@ -11,10 +11,9 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lukasz.witkowski.android.moviestemple.MainActivity
-import com.lukasz.witkowski.android.moviestemple.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.Companion.MOVIE_POSTER

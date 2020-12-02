@@ -6,8 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -19,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.MainActivity
-import com.lukasz.witkowski.android.moviestemple.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.MainViewModelFactory
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
@@ -29,7 +27,6 @@ import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoCli
 import com.lukasz.witkowski.android.moviestemple.databinding.ActorCustomDialogBinding
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.squareup.picasso.Picasso
 
 
 class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.CastOnClickListener {
