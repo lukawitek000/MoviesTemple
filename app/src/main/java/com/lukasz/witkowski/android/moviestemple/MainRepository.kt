@@ -24,10 +24,6 @@ class MainRepository(application: Application) {
                 MainRepository(application)
             }
         }
-
-        /*const val TOP_RATED_MOVIES_QUERY = "top rated movies"
-        const val POPULAR_MOVIES_QUERY = "popular movies"
-        const val RECOMMENDATIONS_QUERY = "recommendations"*/
     }
 
 
@@ -138,19 +134,6 @@ class MainRepository(application: Application) {
 
 
 
-    fun getTopRatedMovies(): Flow<PagingData<Movie>> {
-        return Pager(
-                config = PagingConfig(
-                        pageSize = TMDB_PAGE_SIZE,
-                        enablePlaceholders = false,
-                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                        prefetchDistance = TMDB_PAGE_SIZE
-                ),
-                pagingSourceFactory = { MoviesPagingSource(TOP_RATED_MOVIES_QUERY) }
-        ).flow
-    }
-
-
 
     private suspend fun getFavouriteMoviesId(): List<Int> {
         return withContext(IO){
@@ -195,6 +178,6 @@ class MainRepository(application: Application) {
                 pagingSourceFactory = { MoviesPagingSource(query) }
         ).flow
     }
-    
+
 
 }

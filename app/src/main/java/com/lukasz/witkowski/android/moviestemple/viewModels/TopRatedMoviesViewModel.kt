@@ -10,6 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lukasz.witkowski.android.moviestemple.MainRepository
 import com.lukasz.witkowski.android.moviestemple.MainViewModel
+import com.lukasz.witkowski.android.moviestemple.api.TOP_RATED_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class TopRatedMoviesViewModel(application: Application): ViewModel() {
 
 
     fun getTopRatedMovies(): Flow<PagingData<Movie>> {
-        return repository.getTopRatedMovies().cachedIn(viewModelScope) // cached in keep data when rotating
+        return repository.getPagingDataMovies(TOP_RATED_MOVIES_QUERY).cachedIn(viewModelScope) // cached in keep data when rotating
     }
 
 }
