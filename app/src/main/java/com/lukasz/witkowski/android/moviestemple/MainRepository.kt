@@ -5,11 +5,9 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.lukasz.witkowski.android.moviestemple.api.MoviesPagingSource
+import com.lukasz.witkowski.android.moviestemple.api.*
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
-import com.lukasz.witkowski.android.moviestemple.api.TMDB_PAGE_SIZE
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
@@ -27,9 +25,9 @@ class MainRepository(application: Application) {
             }
         }
 
-        const val TOP_RATED_MOVIES_QUERY = "top rated movies"
+        /*const val TOP_RATED_MOVIES_QUERY = "top rated movies"
         const val POPULAR_MOVIES_QUERY = "popular movies"
-        const val RECOMMENDATIONS_QUERY = "recommendations"
+        const val RECOMMENDATIONS_QUERY = "recommendations"*/
     }
 
 
@@ -138,17 +136,6 @@ class MainRepository(application: Application) {
     }
 
 
-    fun getPopularMovies(): Flow<PagingData<Movie>> {
-        return Pager(
-                config = PagingConfig(
-                        pageSize = TMDB_PAGE_SIZE,
-                        enablePlaceholders = false,
-                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                        prefetchDistance = TMDB_PAGE_SIZE
-                ),
-                pagingSourceFactory = { MoviesPagingSource(POPULAR_MOVIES_QUERY) }
-        ).flow
-    }
 
 
     fun getTopRatedMovies(): Flow<PagingData<Movie>> {
@@ -197,15 +184,17 @@ class MainRepository(application: Application) {
         }
     }
 
-    fun getSearchedMovies(query: String): Flow<PagingData<Movie>> {
+    fun getPagingDataMovies(query: String): Flow<PagingData<Movie>> {
         return Pager(
                 config = PagingConfig(
-                        pageSize = 10,
-                        enablePlaceholders = false
+                        pageSize = TMDB_PAGE_SIZE,
+                        enablePlaceholders = false,
+                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                        prefetchDistance = TMDB_PAGE_SIZE
                 ),
-                pagingSourceFactory = { MoviesPagingSource(query)}
+                pagingSourceFactory = { MoviesPagingSource(query) }
         ).flow
-
     }
+    
 
 }

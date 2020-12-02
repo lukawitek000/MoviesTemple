@@ -13,9 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lukasz.witkowski.android.moviestemple.MainActivity
-import com.lukasz.witkowski.android.moviestemple.MainRepository.Companion.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.api.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModel
 import com.lukasz.witkowski.android.moviestemple.viewModels.PopularMoviesViewModelFactory
@@ -35,7 +35,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         setUpRecyclerView()
         refreshOnSwipe()
         initAdapter()
-        getPopularMovies()
+        getMovies();
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -43,22 +43,11 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
     private var job: Job? = null
 
-    private fun getPopularMovies() {
+
+    private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModel.getPopularMovies().collectLatest {
-                moviesAdapter.submitData(it)
-            }
-        }
-    }
-
-
-    private var searchJob: Job? = null
-
-    private fun getSearchedMovies(query: String){
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
-            viewModel.getSearchedMovies(query).collectLatest {
+            viewModel.getMovies(query).collectLatest {
                 moviesAdapter.submitData(it)
             }
         }
@@ -80,7 +69,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         searchView.setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        getSearchedMovies(query ?: POPULAR_MOVIES_QUERY)
+                        getMovies(query ?: POPULAR_MOVIES_QUERY)
                         val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                         inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                         return true
@@ -89,7 +78,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
                     override fun onQueryTextChange(newText: String?): Boolean {
                         Log.i("SearchTest", "on text changed $newText")
                         if(newText.isNullOrEmpty()){
-                            getPopularMovies()
+                            getMovies()
                         }
                         return true
                     }

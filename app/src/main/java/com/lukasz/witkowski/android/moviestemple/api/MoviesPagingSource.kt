@@ -2,9 +2,6 @@ package com.lukasz.witkowski.android.moviestemple.api
 
 import android.util.Log
 import androidx.paging.PagingSource
-import com.lukasz.witkowski.android.moviestemple.MainRepository.Companion.POPULAR_MOVIES_QUERY
-import com.lukasz.witkowski.android.moviestemple.MainRepository.Companion.RECOMMENDATIONS_QUERY
-import com.lukasz.witkowski.android.moviestemple.MainRepository.Companion.TOP_RATED_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.responses.TMDBResponse
 import com.lukasz.witkowski.android.moviestemple.models.toMovie

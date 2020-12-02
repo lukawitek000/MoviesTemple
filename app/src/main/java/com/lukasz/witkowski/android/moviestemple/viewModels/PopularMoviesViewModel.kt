@@ -21,12 +21,8 @@ class PopularMoviesViewModel(application: Application): ViewModel() {
 
     private val repository = MainRepository.getInstance(application)
 
-    fun getPopularMovies(): Flow<PagingData<Movie>>{
-        return repository.getPopularMovies().cachedIn(viewModelScope)
-    }
-
-    fun getSearchedMovies(query: String): Flow<PagingData<Movie>> {
-        return repository.getSearchedMovies(query).cachedIn(viewModelScope)
+    fun getMovies(query: String): Flow<PagingData<Movie>>{
+        return repository.getPagingDataMovies(query).cachedIn(viewModelScope)
     }
 
 }

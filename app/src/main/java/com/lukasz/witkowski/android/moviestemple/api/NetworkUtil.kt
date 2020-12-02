@@ -61,6 +61,13 @@ private const val APPEND_TO_RESPONSE = "append_to_response"
 const val TMDB_STARTING_PAGE_INDEX = 1
 const val TMDB_PAGE_SIZE = 20
 
+
+const val POPULAR_MOVIES_QUERY = "popular_movies_query"
+const val TOP_RATED_MOVIES_QUERY = "top_rated_movies_query"
+const val RECOMMENDATIONS_QUERY = "recommendations_query"
+
+
+
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
 private val retrofit = Retrofit.Builder()
