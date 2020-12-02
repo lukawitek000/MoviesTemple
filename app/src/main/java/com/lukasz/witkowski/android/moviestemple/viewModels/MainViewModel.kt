@@ -1,11 +1,13 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lukasz.witkowski.android.moviestemple.MainRepository
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
@@ -73,9 +75,21 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
+    private var currentQueryValue: String? = null
+    private var currentSearchResult: Flow<PagingData<Movie>>? = null
+
+
     fun getMovies(query: String): Flow<PagingData<Movie>>{
-        return repository.getPagingDataMovies(query).cachedIn(viewModelScope)
+        val lastResult = currentSearchResult
+        if(query == currentQueryValue && lastResult != null){
+            return lastResult
+        }
+        currentQueryValue = query
+        val newResult = repository.getPagingDataMovies(query).cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        return newResult
     }
+
 
 
     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {

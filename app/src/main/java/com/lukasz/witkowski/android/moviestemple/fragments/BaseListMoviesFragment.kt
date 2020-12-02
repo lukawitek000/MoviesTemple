@@ -61,6 +61,8 @@ open class BaseListMoviesFragment : Fragment() {
 
 
     protected fun initAdapter() {
+        moviesAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         moviesRecyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
                 footer = MoviesLoadStateAdapter{moviesAdapter.retry()},
                 header = MoviesLoadStateAdapter{moviesAdapter.retry()}
