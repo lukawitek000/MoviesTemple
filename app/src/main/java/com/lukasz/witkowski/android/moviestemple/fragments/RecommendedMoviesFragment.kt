@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.dialogs.RecommendationsInfoDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -59,27 +60,13 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
         return inflater.inflate(R.menu.recommendations_fragment_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.recommended_movies_info -> {
-            buildAlertDialog().show()
+            activity?.supportFragmentManager?.let { RecommendationsInfoDialogFragment().show(it, RecommendationsInfoDialogFragment.TAG) }
             true
         }
         else -> {
             false
         }
-    }
-
-    private fun buildAlertDialog(): AlertDialog {
-        val view = layoutInflater.inflate(R.layout.recommendations_info_dialog, null)
-
-
-        val builder = AlertDialog.Builder(requireContext())
-
-        builder.setView(view)
-        val dialog = builder.create()
-        view.findViewById<Button>(R.id.ok_button).setOnClickListener {
-            dialog.dismiss()
-        }
-        return dialog
     }
 }
