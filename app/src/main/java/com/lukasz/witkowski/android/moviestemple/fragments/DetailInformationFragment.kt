@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -55,9 +56,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         setHasOptionsMenu(true)
         setUpToolbarInfo()
 
-        /*if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            binding.appBarLayout.setExpanded(false)
-        }*/
 
         val toolbar = binding.detailInformationToolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -67,21 +65,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         return binding.root
     }
 
-    /*companion object{
-        const val TOOLBAR_STATUS_KEY = "TOOLBAR_STATUS_KEY"
-    }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        binding.appBarLayout.verticalScrollbarPosition = savedInstanceState?.getInt(TOOLBAR_STATUS_KEY) ?: 0
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-       // binding.appBarLayout.
-        binding.appBarLayout.
-        outState.putInt(TOOLBAR_STATUS_KEY, binding.appBarLayout.is)
-    }*/
 
     private fun setUpToolbarInfo() {
         Glide.with(requireContext())

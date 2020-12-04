@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/coordinator_layout"
         >
 
         <com.google.android.material.appbar.AppBarLayout
@@ -37,8 +37,8 @@
                         android:maxHeight="250dp"
                         android:maxWidth="170dp"
                         android:layout_gravity="end"
-                        android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
+                        tools:adjustViewBounds="true"
                         android:src="@drawable/ic_share_icon"
                         app:layout_collapseMode="pin" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
                 android:layout_width="match_parent"
