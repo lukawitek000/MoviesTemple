@@ -74,7 +74,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
 
         binding.getMoreInfoButton.setOnClickListener {
-           // Toast.makeText(requireContext(), "get detail info", Toast.LENGTH_SHORT).show()
             shareViewModel.getMoreInfoForFavouriteMovie()
             binding.nestedScrollView.smoothScrollTo(0, 0)
             binding.appBarLayout.setExpanded(true)
@@ -165,14 +164,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     }
 
     private fun isFullInformationInFavouriteMovie(): Boolean {
-        if(shareViewModel.isSelectedMovieInDatabase()){
-            Log.i("DetailInformation", "selected movie info ${selectedMovie.genres} ${selectedMovie.cast}")
-            if(selectedMovie.genres.isNullOrEmpty() && selectedMovie.cast.isNullOrEmpty() &&
-                    selectedMovie.directors.isNullOrEmpty() && selectedMovie.writers.isNullOrEmpty()
-                    && selectedMovie.videos.isNullOrEmpty() && selectedMovie.reviews.isNullOrEmpty()){
-                Log.i("DetailInformation", "selected movie info in if ${selectedMovie.genres} ${selectedMovie.cast}")
-                return false
-            }
+        if(selectedMovie.genres.isNullOrEmpty() && selectedMovie.cast.isNullOrEmpty()
+                && selectedMovie.directors.isNullOrEmpty() && selectedMovie.writers.isNullOrEmpty()
+                && selectedMovie.videos.isNullOrEmpty() && selectedMovie.reviews.isNullOrEmpty()){
+                    return false
         }
         return true
     }
