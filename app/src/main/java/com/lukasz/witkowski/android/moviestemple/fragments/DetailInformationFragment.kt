@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -47,21 +48,49 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
         selectedMovie = shareViewModel.selectedMovie.value!!
 
-        //setIsDetailInformationVisible(false)
         setUpObservers()
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
         setUpCastRecyclerView()
         setHasOptionsMenu(true)
+        setUpToolbarInfo()
+
+        /*if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            binding.appBarLayout.setExpanded(false)
+        }*/
 
         val toolbar = binding.detailInformationToolbar
-        binding.appBarLayout.setExpanded(true)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         return binding.root
     }
+
+    /*companion object{
+        const val TOOLBAR_STATUS_KEY = "TOOLBAR_STATUS_KEY"
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        binding.appBarLayout.verticalScrollbarPosition = savedInstanceState?.getInt(TOOLBAR_STATUS_KEY) ?: 0
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+       // binding.appBarLayout.
+        binding.appBarLayout.
+        outState.putInt(TOOLBAR_STATUS_KEY, binding.appBarLayout.is)
+    }*/
+
+    private fun setUpToolbarInfo() {
+        Glide.with(requireContext())
+                .load(selectedMovie.posterUri)
+                .placeholder(R.drawable.poster_placeholder)
+                .into(binding.toolbarPoster)
+        binding.detailInformationToolbar.title = selectedMovie.title
+    }
+
 
     private fun setUpCastRecyclerView() {
         castAdapter = CastAdapter(this)
@@ -109,12 +138,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 binding.directorTextView.text = it.directors.directorToString()
                 binding.writersTextView.text = it.writers.writerToString()
                 selectedMovie = it
-                Log.i("DetailInformation", "film makers = ${selectedMovie.cast}")
-                Glide.with(requireContext())
-                        .load(selectedMovie.posterUri)
-                        .placeholder(R.drawable.poster_placeholder)
-                        .into(binding.toolbarPoster)
-                binding.detailInformationToolbar.title = selectedMovie.title
+
             }
         })
     }
