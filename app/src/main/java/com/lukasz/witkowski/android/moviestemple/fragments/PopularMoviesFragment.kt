@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lukasz.witkowski.android.moviestemple.MainActivity
@@ -15,6 +16,7 @@ import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.api.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,16 +31,36 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         setUpRecyclerView()
         refreshOnSwipe()
         initAdapter()
-        getMovies();
+        setObservers()
+        Log.i("PopularMoviesFragment", "query ${sharedViewModel.currentQueryValue}")
+        if(sharedViewModel.toolbarState.value == MainViewModel.ToolbarState.SEARCH) {
+            getMovies(sharedViewModel.currentQueryValue ?: POPULAR_MOVIES_QUERY)
+        }else{
+            getMovies()
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
 
 
+    private fun setObservers(){
+       /* if(sharedViewModel.currentQueryValue != null && sharedViewModel.currentQueryValue != POPULAR_MOVIES_QUERY){
+            sharedViewModel.setToolbarState(MainViewModel.ToolbarState.SEARCH)
+        }*/
+        sharedViewModel.toolbarState.observe(viewLifecycleOwner,  {
+            Log.i("PopularMoviesFragment", "observer status $it")
+        })
+    }
+
     private var job: Job? = null
 
 
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
+        if(query != POPULAR_MOVIES_QUERY){
+            sharedViewModel.setToolbarState(MainViewModel.ToolbarState.SEARCH)
+        }
+
         job?.cancel()
         job = lifecycleScope.launch {
             sharedViewModel.getMovies(query).collectLatest {
@@ -60,19 +82,27 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         val menuItem = menu.findItem(R.id.search_icon)
         val searchView = menuItem.actionView as SearchView
         searchView.queryHint = "Search Here"
+        Log.i("PopularMoviesFragment", "on Create OPtions meny")
+        if(sharedViewModel.toolbarState.value == MainViewModel.ToolbarState.SEARCH){
+            menuItem.expandActionView()
+            searchView.isActivated = true
+            searchView.setQuery(sharedViewModel.currentQueryValue, true)
+            Log.i("PopularMoviesFragment", "activate search view")
+        }
         searchView.setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
+                        Log.i("PopularMoviesFragment", "on text submit $query")
                         getMovies(query ?: POPULAR_MOVIES_QUERY)
-                        val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                        hideKeyboard()
                         return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        Log.i("SearchTest", "on text changed $newText")
+
                         if(newText.isNullOrEmpty()){
-                            getMovies()
+                            Log.i("PopularMoviesFragment", "on text changed $newText")
+                            //getMovies()
                         }
                         return true
                     }
@@ -81,4 +111,14 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         )
     }
 
+
+    private fun hideKeyboard(){
+        val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideKeyboard()
+    }
 }

@@ -13,6 +13,21 @@ import kotlinx.coroutines.flow.Flow
 
 class MainViewModel(application: Application) : ViewModel() {
 
+
+    enum class ToolbarState{
+        SEARCH, NORMAL
+    }
+
+
+    private val _toolbarState = MutableLiveData<ToolbarState>(ToolbarState.NORMAL)
+    val toolbarState: LiveData<ToolbarState>
+        get() = _toolbarState
+
+
+    fun setToolbarState(toolbarState: ToolbarState){
+        _toolbarState.value = toolbarState
+    }
+
     enum class Status {
         LOADING, SUCCESS, FAILURE
     }
@@ -75,7 +90,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    private var currentQueryValue: String? = null
+    var currentQueryValue: String? = null
     private var currentSearchResult: Flow<PagingData<Movie>>? = null
 
 
