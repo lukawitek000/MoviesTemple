@@ -44,6 +44,9 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
     private lateinit var selectedMovie: Movie
 
+
+    private var showEnterAnimation = true
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
@@ -55,6 +58,14 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         setUpCastRecyclerView()
         setHasOptionsMenu(true)
         setUpToolbarInfo()
+
+        if(savedInstanceState != null){
+            showEnterAnimation = savedInstanceState.getBoolean(BOTTOM_MENU_STATE)
+        }
+
+        if(!showEnterAnimation){
+            (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, showEnterAnimation)
+        }
 
 
         val toolbar = binding.detailInformationToolbar
@@ -75,6 +86,15 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         binding.detailInformationToolbar.title = selectedMovie.title
     }
 
+
+    companion object{
+        const val BOTTOM_MENU_STATE = "BOTTOM_MENU_STATE"
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(BOTTOM_MENU_STATE, showEnterAnimation)
+    }
 
     private fun setUpCastRecyclerView() {
         castAdapter = CastAdapter(this)
@@ -233,7 +253,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         super.onStop()
     }
 
-    private var showEnterAnimation = true
+
+
+
+
 
     override fun onStart() {
         super.onStart()
