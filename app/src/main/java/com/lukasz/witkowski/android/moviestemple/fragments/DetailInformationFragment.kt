@@ -1,8 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
-import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -24,8 +22,8 @@ import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
-import com.lukasz.witkowski.android.moviestemple.databinding.ActorCustomDialogBinding
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
+import com.lukasz.witkowski.android.moviestemple.dialogs.ActorDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.*
 
 
@@ -275,34 +273,12 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     }
 
     override fun onClick(actor: Actor) {
-        createAlertDialog(actor).show()
+        activity?.supportFragmentManager?.let { createActorInfoDialog(actor).show(it, ActorDialogFragment.TAG) }
     }
 
 
-    private fun createAlertDialog(actor: Actor): AlertDialog {
-        val builder = AlertDialog.Builder(requireContext())
-
-        val view = layoutInflater.inflate(R.layout.actor_custom_dialog, null)
-        val binding = ActorCustomDialogBinding.bind(view)
-        builder.setView(view)
-        val dialog = builder.create()
-       binding.moreInfoButton.setOnClickListener {
-            //https://www.themoviedb.org/person/
-            //dialog.dismiss()
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("https://www.themoviedb.org/person/${actor.actorId}")
-            startActivity(intent)
-        }
-        binding.exitIcon.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        binding.actorName.text = actor.name
-        Glide.with(view)
-                .load(actor.actorPhoto)
-                .placeholder(R.drawable.actor_photo_default)
-                .into(binding.actorPhoto)
-        return dialog
-
+    private fun createActorInfoDialog(actor: Actor): ActorDialogFragment {
+        return ActorDialogFragment.newInstance(actor.name, actor.actorPhoto?.toString(),
+                "https://www.themoviedb.org/person/${actor.actorId}")
     }
 }

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/custom_dialog">
 
         <ImageView
             android:id="@+id/actor_photo"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="200dp"
             android:layout_marginStart="48dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
@@ -24,12 +24,11 @@
 
         <TextView
             android:id="@+id/actor_name"
-            android:layout_width="0dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:minWidth="200dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:textAlignment="center"
             android:textColor="@color/darkYellow"
             android:textSize="24sp"
@@ -45,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="32dp"
             android:background="@color/darkYellow"
             android:padding="2dp"
             android:text="More Info"
