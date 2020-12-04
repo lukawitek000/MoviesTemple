@@ -73,6 +73,14 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
+        binding.getMoreInfoButton.setOnClickListener {
+           // Toast.makeText(requireContext(), "get detail info", Toast.LENGTH_SHORT).show()
+            shareViewModel.getMoreInfoForFavouriteMovie()
+            binding.nestedScrollView.smoothScrollTo(0, 0)
+            binding.appBarLayout.setExpanded(true)
+        }
+
+
         return binding.root
     }
 
@@ -120,14 +128,16 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                         setDetailInformationVisible(false)
                         setMainInformationVisible(true)
                         setProgressBarVisible(false)
+                        if(!isFullInformationInFavouriteMovie()){
+                            Toast.makeText(requireContext(), "Oops!\nCheck your internet connection", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     else -> {
                         binding.detailInformationLayout.visibility = View.GONE
                         setDetailInformationVisible(false)
                         setMainInformationVisible(false)
                         setProgressBarVisible(true)
-                       // setProgressBarsVisibility(View.VISIBLE)
-                       // setIsDetailInformationVisible(false)
+
                     }
                 }
             }
@@ -143,8 +153,28 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 binding.writersTextView.text = it.writers.writerToString()
                 selectedMovie = it
 
+
+                if(!isFullInformationInFavouriteMovie()){
+                    binding.getMoreInfoButton.visibility = View.VISIBLE
+                }else{
+                    binding.getMoreInfoButton.visibility = View.GONE
+                }
+
             }
         })
+    }
+
+    private fun isFullInformationInFavouriteMovie(): Boolean {
+        if(shareViewModel.isSelectedMovieInDatabase()){
+            Log.i("DetailInformation", "selected movie info ${selectedMovie.genres} ${selectedMovie.cast}")
+            if(selectedMovie.genres.isNullOrEmpty() && selectedMovie.cast.isNullOrEmpty() &&
+                    selectedMovie.directors.isNullOrEmpty() && selectedMovie.writers.isNullOrEmpty()
+                    && selectedMovie.videos.isNullOrEmpty() && selectedMovie.reviews.isNullOrEmpty()){
+                Log.i("DetailInformation", "selected movie info in if ${selectedMovie.genres} ${selectedMovie.cast}")
+                return false
+            }
+        }
+        return true
     }
 
     private fun setProgressBarVisible(isVisible: Boolean) {

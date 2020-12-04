@@ -65,11 +65,24 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    private fun getDetailInformation(){
+     private fun getDetailInformation(){
         viewModelScope.launch {
             try {
                 _requestDetailInformationStatus.value = Status.LOADING
                 _selectedMovie.value = repository.getDetailInformation(_selectedMovie.value!!)
+                _requestDetailInformationStatus.value = Status.SUCCESS
+            }catch (e: Exception){
+                _requestDetailInformationStatus.value = Status.FAILURE
+            }
+        }
+    }
+
+    fun getMoreInfoForFavouriteMovie(){
+        viewModelScope.launch {
+            try {
+                _requestDetailInformationStatus.value = Status.LOADING
+                _selectedMovie.value = repository.getMovieDetailsFromApi(_selectedMovie.value!!)
+                addMovieToDatabase()
                 _requestDetailInformationStatus.value = Status.SUCCESS
             }catch (e: Exception){
                 _requestDetailInformationStatus.value = Status.FAILURE

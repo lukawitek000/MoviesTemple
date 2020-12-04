@@ -54,7 +54,7 @@ class MainRepository(application: Application) {
         }
     }
 
-    private suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
+    suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
         return withContext(IO) {
             val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movieId = movie.id)
             Log.i("MainRepository", "detail response credits = ${response.credits}")
