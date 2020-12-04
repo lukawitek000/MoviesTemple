@@ -12,6 +12,7 @@ import androidx.paging.PagingData
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.dialogs.DeleteAllFavouriteMoviesDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.toMovie
 import kotlinx.coroutines.Job
@@ -54,8 +55,6 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
 
 
 
-
-
     override fun onClick(movie: Movie) {
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
@@ -69,27 +68,13 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
         R.id.delete_all_item -> {
-            createAlertDialog().show()
+            activity?.supportFragmentManager?.let { createAlertDialog().show(it, DeleteAllFavouriteMoviesDialogFragment.TAG) }
             true
         }
         else -> false
     }
 
-    private fun createAlertDialog(): AlertDialog {
-        val builder = AlertDialog.Builder(requireContext())
-        val view = layoutInflater.inflate(R.layout.delete_all_custom_dialog, null)
-
-        builder.setView(view)
-        val dialog = builder.create()
-        view.findViewById<Button>(R.id.delete_all_yes_button).setOnClickListener {
-            sharedViewModel.deleteAllFavouriteMovies()
-            Toast.makeText(requireContext(), "All favourite movies deleted", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-        }
-        view.findViewById<Button>(R.id.delete_all_cancel_button).setOnClickListener {
-            dialog.dismiss()
-        }
-        return dialog
-
+    private fun createAlertDialog(): DeleteAllFavouriteMoviesDialogFragment {
+        return DeleteAllFavouriteMoviesDialogFragment()
     }
 }
