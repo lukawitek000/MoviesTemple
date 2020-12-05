@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -55,6 +56,7 @@ class MainViewModel(application: Application) : ViewModel() {
     fun addMovieToDatabase() {
         viewModelScope.launch {
             repository.insertMovieToDatabase(_selectedMovie.value!!)
+            favouriteMoviesHasChanged = true
         }
     }
 
@@ -62,6 +64,7 @@ class MainViewModel(application: Application) : ViewModel() {
     fun deleteMovieFromDatabase(){
         viewModelScope.launch {
             repository.deleteMovieFromDatabase(_selectedMovie.value!!)
+            favouriteMoviesHasChanged = true
         }
     }
 
@@ -100,6 +103,7 @@ class MainViewModel(application: Application) : ViewModel() {
     fun deleteAllFavouriteMovies(){
         viewModelScope.launch {
             repository.deleteAllFavouriteMovies()
+            favouriteMoviesHasChanged = true
         }
     }
 
@@ -151,9 +155,22 @@ class MainViewModel(application: Application) : ViewModel() {
         return newResult
     }
 
+    private var recommendedMovies: Flow<PagingData<Movie>>? = null
+    private var favouriteMoviesHasChanged = false
+
 
     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
-        return repository.getRecommendationsBasedOnFavouriteMovies()
+        Log.i("MainViewModel", "has favourite movies changed = $favouriteMoviesHasChanged $recommendedMovies")
+
+        if(!favouriteMoviesHasChanged && recommendedMovies != null){
+            Log.i("MainViewModel", "get saved data = ${recommendedMovies.toString()} $favouriteMoviesHasChanged")
+            return recommendedMovies as Flow<PagingData<Movie>>
+        }
+        Log.i("MainViewModel", "get new data = $recommendedMovies $favouriteMoviesHasChanged")
+        val newResult = repository.getRecommendationsBasedOnFavouriteMovies().cachedIn(viewModelScope)
+        recommendedMovies = newResult
+        favouriteMoviesHasChanged = false
+        return newResult
     }
 
 }

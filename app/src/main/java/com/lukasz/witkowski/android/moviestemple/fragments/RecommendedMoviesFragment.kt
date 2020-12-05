@@ -24,13 +24,11 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
 
-        moviesAdapter = MoviesAdapter((this))
+        moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-
         refreshOnSwipe()
-
         initAdapter()
-        setTextWhenFavouriteMoviesIsEmpty("Recommendations are based on your favourite movies. \nYou haven't got any yet.")
+        //setTextWhenFavouriteMoviesIsEmpty("Recommendations are based on your favourite movies. \nYou haven't got any yet.")
         getRecommendedMovies()
 
         setHasOptionsMenu(true)
