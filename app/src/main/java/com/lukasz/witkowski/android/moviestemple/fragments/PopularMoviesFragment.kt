@@ -7,8 +7,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lukasz.witkowski.android.moviestemple.MainActivity
@@ -33,7 +32,8 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         initAdapter()
         setObservers()
         Log.i("PopularMoviesFragment", "query ${sharedViewModel.currentQueryValue}")
-        if(sharedViewModel.toolbarState.value == MainViewModel.ToolbarState.SEARCH) {
+        Log.i("PopularMoviesFragment", "toolbar state ${sharedViewModel.toolbarState.name}")
+        if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH) {
             getMovies(sharedViewModel.currentQueryValue ?: POPULAR_MOVIES_QUERY)
         }else{
             getMovies()
@@ -45,12 +45,9 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
 
     private fun setObservers(){
-       /* if(sharedViewModel.currentQueryValue != null && sharedViewModel.currentQueryValue != POPULAR_MOVIES_QUERY){
-            sharedViewModel.setToolbarState(MainViewModel.ToolbarState.SEARCH)
-        }*/
-        sharedViewModel.toolbarState.observe(viewLifecycleOwner,  {
+        /*sharedViewModel.toolbarState.observe(viewLifecycleOwner,  {
             Log.i("PopularMoviesFragment", "observer status $it")
-        })
+        })*/
     }
 
     private var job: Job? = null
@@ -58,7 +55,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
         if(query != POPULAR_MOVIES_QUERY){
-            sharedViewModel.setToolbarState(MainViewModel.ToolbarState.SEARCH)
+            sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
         }
 
         job?.cancel()
@@ -83,7 +80,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         val searchView = menuItem.actionView as SearchView
         searchView.queryHint = "Search Here"
         Log.i("PopularMoviesFragment", "on Create OPtions meny")
-        if(sharedViewModel.toolbarState.value == MainViewModel.ToolbarState.SEARCH){
+        if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
             menuItem.expandActionView()
             searchView.isActivated = true
             searchView.setQuery(sharedViewModel.currentQueryValue, true)
@@ -109,7 +106,11 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
                 }
         )
+
     }
+
+
+
 
 
     private fun hideKeyboard(){

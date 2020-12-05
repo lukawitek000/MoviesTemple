@@ -1,13 +1,13 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lukasz.witkowski.android.moviestemple.MainRepository
+import com.lukasz.witkowski.android.moviestemple.api.POPULAR_MOVIES_QUERY
+import com.lukasz.witkowski.android.moviestemple.api.TOP_RATED_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.entities.MovieEntity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
@@ -19,14 +19,15 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    private val _toolbarState = MutableLiveData<ToolbarState>(ToolbarState.NORMAL)
+    var toolbarState = ToolbarState.NORMAL
+    /*private val _toolbarState = MutableLiveData<ToolbarState>(ToolbarState.NORMAL)
     val toolbarState: LiveData<ToolbarState>
         get() = _toolbarState
 
 
     fun setToolbarState(toolbarState: ToolbarState){
         _toolbarState.value = toolbarState
-    }
+    }*/
 
     enum class Status {
         LOADING, SUCCESS, FAILURE
@@ -103,11 +104,23 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
+
+    private var  popularMovies: Flow<PagingData<Movie>>? = null
+    private var topRatedMovies: Flow<PagingData<Movie>>? = null
+
     var currentQueryValue: String? = null
     private var currentSearchResult: Flow<PagingData<Movie>>? = null
 
-
     fun getMovies(query: String): Flow<PagingData<Movie>>{
+        if(query == POPULAR_MOVIES_QUERY){
+            return fetchPopularMovies()
+        }else if(query == TOP_RATED_MOVIES_QUERY){
+            return fetchTopRatedMovies()
+        }
+        return fetchSearchedMovies(query)
+    }
+
+    private fun fetchSearchedMovies(query: String): Flow<PagingData<Movie>> {
         val lastResult = currentSearchResult
         if(query == currentQueryValue && lastResult != null){
             return lastResult
@@ -118,6 +131,25 @@ class MainViewModel(application: Application) : ViewModel() {
         return newResult
     }
 
+    private fun fetchTopRatedMovies(): Flow<PagingData<Movie>> {
+        if(topRatedMovies != null){
+            return topRatedMovies!!
+        }
+        val newResult = repository.getPagingDataMovies(TOP_RATED_MOVIES_QUERY).cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        topRatedMovies = newResult
+        return newResult
+    }
+
+    private fun fetchPopularMovies(): Flow<PagingData<Movie>> {
+        if(popularMovies != null){
+            return popularMovies!!
+        }
+        val newResult = repository.getPagingDataMovies(POPULAR_MOVIES_QUERY).cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        popularMovies = newResult
+        return newResult
+    }
 
 
     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
