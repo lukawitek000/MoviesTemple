@@ -26,7 +26,7 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
 
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-        refreshOnSwipe()
+        retryOrRefreshList()
         initAdapter()
         //setTextWhenFavouriteMoviesIsEmpty("Recommendations are based on your favourite movies. \nYou haven't got any yet.")
         getRecommendedMovies()

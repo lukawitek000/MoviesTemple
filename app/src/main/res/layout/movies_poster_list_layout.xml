@@ -35,5 +35,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
+
+
+    <Button
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:background="@color/darkYellow"
+        android:textColor="@color/darkGrey"
+        android:padding="4dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/error_message_textview"
+        android:layout_marginTop="8dp"
+        />
+
 </RelativeLayout>
 </layout>

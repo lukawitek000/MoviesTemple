@@ -30,7 +30,7 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
 
-        refreshOnSwipe()
+        retryOrRefreshList()
         initAdapter()
         setTextWhenFavouriteMoviesIsEmpty("You don't have any favourite movies")
         getFavouriteMovies()

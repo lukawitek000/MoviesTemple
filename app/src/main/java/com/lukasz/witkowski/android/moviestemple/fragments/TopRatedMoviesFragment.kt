@@ -26,7 +26,7 @@ class TopRatedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdap
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-        refreshOnSwipe()
+        retryOrRefreshList()
 
         initAdapter()
         getTopRatedMovies()

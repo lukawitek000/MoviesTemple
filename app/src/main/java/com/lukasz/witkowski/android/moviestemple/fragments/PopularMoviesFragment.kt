@@ -28,7 +28,9 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-        refreshOnSwipe()
+
+        retryOrRefreshList()
+
         initAdapter()
         setObservers()
         Log.i("PopularMoviesFragment", "query ${sharedViewModel.currentQueryValue}")

@@ -46,8 +46,13 @@ open class BaseListMoviesFragment : Fragment() {
         moviesRecyclerView.setHasFixedSize(true)
     }
 
+    protected fun retryOrRefreshList(){
+        refreshOnSwipe()
+        setRetryButtonListener()
+    }
 
-    protected fun refreshOnSwipe(){
+
+    private fun refreshOnSwipe(){
 
         binding.swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(requireContext(), R.color.darkYellow))
         binding.swipeRefreshLayout.setColorSchemeColors(Color.BLACK)
@@ -97,6 +102,13 @@ open class BaseListMoviesFragment : Fragment() {
 
     }
 
+    private fun setRetryButtonListener(){
+        binding.retryButton.setOnClickListener {
+            moviesAdapter.retry()
+        }
+    }
+
+
     fun setTextWhenFavouriteMoviesIsEmpty(text: String){
         moviesAdapter.addLoadStateListener { loadState ->
             if(loadState.append.endOfPaginationReached){
@@ -108,21 +120,24 @@ open class BaseListMoviesFragment : Fragment() {
     }
 
 
-    fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
+    private fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
         binding.moviesRecyclerview.visibility = View.VISIBLE
         when (status) {
             MainViewModel.Status.SUCCESS -> {
                 binding.progressbar.visibility = View.GONE
                 binding.errorMessageTextview.visibility = View.GONE
+                binding.retryButton.visibility = View.GONE
             }
             MainViewModel.Status.LOADING -> {
                 binding.progressbar.visibility = View.VISIBLE
                 binding.errorMessageTextview.visibility = View.GONE
+                binding.retryButton.visibility = View.GONE
             }
             else -> {
                 binding.errorMessageTextview.text = failureMessage
                 binding.progressbar.visibility = View.GONE
                 binding.errorMessageTextview.visibility = View.VISIBLE
+                binding.retryButton.visibility = View.VISIBLE
             }
         }
     }
