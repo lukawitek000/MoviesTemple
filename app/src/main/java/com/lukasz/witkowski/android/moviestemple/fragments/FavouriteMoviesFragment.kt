@@ -47,7 +47,7 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
     }
 
 
-    override fun onClick(movie: Movie) {
+    override fun onMovieClick(movie: Movie) {
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.favourites_title))

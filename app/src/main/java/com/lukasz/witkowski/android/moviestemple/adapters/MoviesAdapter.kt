@@ -21,7 +21,7 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler)
     }
 
     interface MovieAdapterOnClickHandler {
-        fun onClick(movie: Movie)
+        fun onMovieClick(movie: Movie)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapterViewHolder {
@@ -57,7 +57,7 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler)
         }
 
         override fun onClick(view: View) {
-            clickHandler.onClick(movie!!)
+            clickHandler.onMovieClick(movie!!)
         }
 
         fun bind(movie: Movie?){

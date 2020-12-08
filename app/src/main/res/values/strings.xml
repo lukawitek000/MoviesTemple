@@ -33,4 +33,6 @@
     <string name="unknown_site_info">Unknown site</string>
     <string name="removed_from_favourite_info">Removed from favourites</string>
     <string name="added_to_favourite_info">Added to favourites</string>
+    <string name="search_hint">Search Here</string>
+    <string name="empty_recommendations_info">Recommendations are based on your favourite movies. \nYou haven't got any yet.</string>
 </resources>

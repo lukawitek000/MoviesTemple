@@ -27,7 +27,7 @@ import com.lukasz.witkowski.android.moviestemple.models.*
 
 
 class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.CastOnClickListener {
-    
+
     companion object{
         const val TAG: String = "DetailInformationFragment"
         const val BOTTOM_MENU_STATE = "BOTTOM_MENU_STATE"

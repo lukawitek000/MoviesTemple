@@ -2,12 +2,10 @@ package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lukasz.witkowski.android.moviestemple.MainActivity
@@ -28,29 +26,27 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-
         retryOrRefreshList()
         initAdapter()
+        initialGetMovies()
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun initialGetMovies() {
         if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH) {
             getMovies(sharedViewModel.currentQueryValue ?: POPULAR_MOVIES_QUERY)
         }else{
             getMovies()
         }
-
-        setHasOptionsMenu(true)
-        return binding.root
     }
-
 
 
     private var job: Job? = null
 
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
-        if(query != POPULAR_MOVIES_QUERY){
-            sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
-        }else{
-            sharedViewModel.toolbarState = MainViewModel.ToolbarState.NORMAL
-        }
+        setToolbarState(query)
+
         job?.cancel()
         job = lifecycleScope.launch {
             sharedViewModel.getMovies(query).collectLatest {
@@ -60,7 +56,16 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     }
 
 
-    override fun onClick(movie: Movie) {
+    private fun setToolbarState(query: String) {
+        if(query != POPULAR_MOVIES_QUERY){
+            sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
+        }else{
+            sharedViewModel.toolbarState = MainViewModel.ToolbarState.NORMAL
+        }
+    }
+
+
+    override fun onMovieClick(movie: Movie) {
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.popular_movie_title))
@@ -71,12 +76,22 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         inflater.inflate(R.menu.search_menu, menu)
         val menuItem = menu.findItem(R.id.search_icon)
         val searchView = menuItem.actionView as SearchView
-        searchView.queryHint = "Search Here"
+        searchView.queryHint = resources.getString(R.string.search_hint)
+        handleSearchStateToolbarView(searchView, menuItem)
+        setQueryListener(searchView)
+    }
+
+
+    private fun handleSearchStateToolbarView(searchView: SearchView, menuItem: MenuItem?) {
         if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
-            menuItem.expandActionView()
+            menuItem?.expandActionView()
             searchView.isActivated = true
             searchView.setQuery(sharedViewModel.currentQueryValue, true)
         }
+    }
+
+
+    private fun setQueryListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lukasz.witkowski.android.moviestemple.MainActivity
@@ -21,17 +20,13 @@ import kotlinx.coroutines.launch
 class TopRatedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
+                              savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
         retryOrRefreshList()
-
         initAdapter()
         getTopRatedMovies()
-
-
         return binding.root
     }
 
@@ -47,12 +42,9 @@ class TopRatedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdap
     }
 
 
-
-    override fun onClick(movie: Movie) {
+    override fun onMovieClick(movie: Movie) {
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_topRatedMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.top_rated_title))
     }
-
-
 }
