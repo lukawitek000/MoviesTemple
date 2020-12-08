@@ -9,8 +9,6 @@ import com.lukasz.witkowski.android.moviestemple.R
 
 class RecommendationsInfoDialogFragment: DialogFragment() {
 
-
-
     companion object{
         const val TAG = "RecommendationsInfoDialogFragment"
     }

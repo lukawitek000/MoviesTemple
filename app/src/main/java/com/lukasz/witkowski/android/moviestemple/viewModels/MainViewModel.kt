@@ -1,7 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -14,15 +13,15 @@ import kotlinx.coroutines.flow.Flow
 
 class MainViewModel(application: Application) : ViewModel() {
 
-
     enum class ToolbarState{
         SEARCH, NORMAL
     }
-    var toolbarState = ToolbarState.NORMAL
 
     enum class Status {
         LOADING, SUCCESS, FAILURE
     }
+
+    var toolbarState = ToolbarState.NORMAL
 
     private val repository = MainRepository.getInstance(application)
 
@@ -97,11 +96,8 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-
-
     private var  popularMovies: Flow<PagingData<Movie>>? = null
     private var topRatedMovies: Flow<PagingData<Movie>>? = null
-
     var currentQueryValue: String? = null
     private var currentSearchResult: Flow<PagingData<Movie>>? = null
 
@@ -146,15 +142,10 @@ class MainViewModel(application: Application) : ViewModel() {
     private var recommendedMovies: Flow<PagingData<Movie>>? = null
     private var favouriteMoviesHasChanged = false
 
-
     fun getRecommendationsBasedOnFavouriteMovies(): Flow<PagingData<Movie>> {
-        Log.i("MainViewModel", "has favourite movies changed = $favouriteMoviesHasChanged $recommendedMovies")
-
         if(!favouriteMoviesHasChanged && recommendedMovies != null){
-            Log.i("MainViewModel", "get saved data = ${recommendedMovies.toString()} $favouriteMoviesHasChanged")
             return recommendedMovies as Flow<PagingData<Movie>>
         }
-        Log.i("MainViewModel", "get new data = $recommendedMovies $favouriteMoviesHasChanged")
         val newResult = repository.getRecommendationsBasedOnFavouriteMovies().cachedIn(viewModelScope)
         recommendedMovies = newResult
         favouriteMoviesHasChanged = false

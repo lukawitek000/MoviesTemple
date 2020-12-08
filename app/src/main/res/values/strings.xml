@@ -27,4 +27,6 @@
     <string name="out_of_ten">/ 10.0</string>
     <string name="get_more_information">Get more information</string>
     <string name="movie_poster_content_description">Movie poster</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="all_favourite_movies_deleted_info">All favourite movies deleted</string>
 </resources>
