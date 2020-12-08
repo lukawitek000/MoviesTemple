@@ -1,21 +1,18 @@
-package com.lukasz.witkowski.android.moviestemple
+package com.lukasz.witkowski.android.moviestemple.repository
 
 import android.app.Application
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.lukasz.witkowski.android.moviestemple.api.MoviesPagingSource
+import com.lukasz.witkowski.android.moviestemple.api.*
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.api.TMDBApi
-import com.lukasz.witkowski.android.moviestemple.api.TMDB_PAGE_SIZE
+import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 
 class MainRepository(application: Application) {
-
 
     companion object {
         private val LOCK = Any()
@@ -26,17 +23,9 @@ class MainRepository(application: Application) {
                 MainRepository(application)
             }
         }
-
-        const val TOP_RATED_MOVIES_QUERY = "top rated movies"
-        const val POPULAR_MOVIES_QUERY = "popular movies"
-        const val RECOMMENDATIONS_QUERY = "recommendations"
     }
 
-
-
     private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
-
-
     val favouriteMovies = Pager(
             config = PagingConfig(
                     pageSize = 20,
@@ -47,23 +36,19 @@ class MainRepository(application: Application) {
 
 
 
-
     suspend fun getDetailInformation(movie: Movie): Movie{
         return withContext(IO) {
             if (isMovieInDatabase(movie.id)) {
-                Log.i("Database debug", "movie details from database ")
                 getMovieDetailsFromDatabase(movie.id)
             } else {
-                Log.i("Database debug", "movie details from api ")
                 getMovieDetailsFromApi(movie)
             }
         }
     }
 
-    private suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
+    suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
         return withContext(IO) {
             val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movieId = movie.id)
-            Log.i("MainRepository", "detail response credits = ${response.credits}")
             movie.reviews  = response.reviews.results.map {
                 it.toReview()
             }
@@ -71,43 +56,41 @@ class MainRepository(application: Application) {
                 it.toVideo()
             }
             movie.genres = response.genres
-            val filmMakers: MutableList<Actor> = response.credits.cast.map {
+            movie.directors = getDirectors(response)
+            movie.writers = getWriters(response)
+            movie.cast = response.credits.cast.map {
                 it.toActor()
             } as MutableList<Actor>
-            val director = response.credits.crew.filter {
-                it.job == "Director"
-            }
-            val writer = response.credits.crew.filter {
-                it.job == "Writer"
-            }
-            val producer = response.credits.crew.filter {
-                it.job == "Producer"
-            }
-            Log.i("MainRepo", "\ndirector = $director \n writer = $writer \n producer = $producer")
-            /*filmMakers.addAll(response.credits.crew.map {
-                it.toActor()
-            })*/
-            movie.directors = director.map {
-                it.toDirector()
-            }
-            movie.writers = writer.map {
-                it.toWriter()
-            }
-
-            movie.cast = filmMakers
-            Log.i("MainRepo", "whole detail info $movie")
-
             movie
         }
     }
 
+    private fun getDirectors(response: MovieDetailsResponse): List<Director>{
+        val director = response.credits.crew.filter {
+            it.job == "Director"
+        }
+        return director.map {
+            it.toDirector()
+        }
+    }
+
+    private fun getWriters(response: MovieDetailsResponse): List<Writer>{
+        val writer = response.credits.crew.filter {
+            it.job == "Writer"
+        }
+        return writer.map {
+            it.toWriter()
+        }
+    }
+
+
     private suspend fun getMovieDetailsFromDatabase(id: Int): Movie {
         return withContext(IO){
             val databaseEntity = database?.movieDao()?.getMovieWithVideosAndReviews(id)
-            Log.i("Database debug", "movie details ${databaseEntity}")
             databaseEntity!!.toMovie()
         }
     }
+
 
     private suspend fun isMovieInDatabase(id: Int): Boolean {
         return withContext(IO) {
@@ -116,12 +99,11 @@ class MainRepository(application: Application) {
     }
 
 
-     fun isMovieInFavourites(id: Int): Boolean {
+    fun isMovieInFavourites(id: Int): Boolean {
         return runBlocking {
             isMovieInDatabase(id)
         }
-     }
-
+    }
 
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
@@ -136,33 +118,6 @@ class MainRepository(application: Application) {
             database?.movieDao()?.insert(movie)
         }
     }
-
-
-    fun getPopularMovies(): Flow<PagingData<Movie>> {
-        return Pager(
-                config = PagingConfig(
-                        pageSize = TMDB_PAGE_SIZE,
-                        enablePlaceholders = false,
-                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                        prefetchDistance = TMDB_PAGE_SIZE
-                ),
-                pagingSourceFactory = { MoviesPagingSource(POPULAR_MOVIES_QUERY) }
-        ).flow
-    }
-
-
-    fun getTopRatedMovies(): Flow<PagingData<Movie>> {
-        return Pager(
-                config = PagingConfig(
-                        pageSize = TMDB_PAGE_SIZE,
-                        enablePlaceholders = false,
-                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
-                        prefetchDistance = TMDB_PAGE_SIZE
-                ),
-                pagingSourceFactory = { MoviesPagingSource(TOP_RATED_MOVIES_QUERY) }
-        ).flow
-    }
-
 
 
     private suspend fun getFavouriteMoviesId(): List<Int> {
@@ -190,22 +145,23 @@ class MainRepository(application: Application) {
     }
 
 
-
     suspend fun deleteAllFavouriteMovies(){
         withContext(IO){
             database?.movieDao()?.deleteAll()
         }
     }
 
-    fun getSearchedMovies(query: String): Flow<PagingData<Movie>> {
+
+    fun getPagingDataMovies(query: String): Flow<PagingData<Movie>> {
         return Pager(
                 config = PagingConfig(
-                        pageSize = 10,
-                        enablePlaceholders = false
+                        pageSize = TMDB_PAGE_SIZE,
+                        enablePlaceholders = false,
+                        initialLoadSize = 2 * TMDB_PAGE_SIZE,
+                        prefetchDistance = TMDB_PAGE_SIZE
                 ),
-                pagingSourceFactory = { MoviesPagingSource(query)}
+                pagingSourceFactory = { MoviesPagingSource(query) }
         ).flow
-
     }
 
 }

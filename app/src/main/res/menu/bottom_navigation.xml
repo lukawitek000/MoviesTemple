@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/popularMoviesFragment"
-        android:icon="@drawable/ic_popular_icon"
-        android:title="Popular" />
+        android:icon="@drawable/ic_popular"
+        android:title="@string/popular" />
     <item
         android:id="@+id/topRatedMoviesFragment"
-        android:icon="@drawable/ic_top_rated_icon"
-        android:title="Top rated" />
+        android:icon="@drawable/ic_top_rated"
+        android:title="@string/top_rated" />
     <item
         android:id="@+id/favouriteMoviesFragment"
-        android:icon="@drawable/id_favorite"
-        android:title="Favourites" />
+        android:icon="@drawable/ic_favorite"
+        android:title="@string/favourites" />
     <item
         android:id="@+id/recommendMoviesFragment"
-        android:icon="@drawable/ic_recommendation_icon"
-        android:title="Recommendations" />
+        android:icon="@drawable/ic_recommendation"
+        android:title="@string/recommendations" />
 </menu>

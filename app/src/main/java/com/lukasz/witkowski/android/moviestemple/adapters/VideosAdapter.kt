@@ -1,6 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.adapters
 
-import android.content.Context
+
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideosAdapterHolder
 import android.view.ViewGroup
@@ -19,17 +19,14 @@ class VideosAdapter(private val videoClickListener: VideoClickListener) : Recycl
 
     var videos: List<Video> = emptyList()
 
-    private var context: Context? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosAdapterHolder {
-        context = parent.context
-        val layoutInflater = LayoutInflater.from(context)
-        val view = layoutInflater.inflate(R.layout.videos_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.videos_list_item, parent, false)
         return VideosAdapterHolder(view)
     }
 
     override fun onBindViewHolder(holder: VideosAdapterHolder, position: Int) {
         val video = videos[position]
-        holder.videosText.text = video.name
+        holder.bind(video)
     }
 
     override fun getItemCount(): Int {
@@ -37,11 +34,16 @@ class VideosAdapter(private val videoClickListener: VideoClickListener) : Recycl
     }
 
     inner class VideosAdapterHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-        val videosText: TextView = itemView.findViewById(R.id.video_label)
+        private val videosText: TextView = itemView.findViewById(R.id.tv_video_label)
+        var video: Video? = null
+
+        fun bind(video: Video){
+            this.video = video
+            videosText.text = video.name
+        }
 
         override fun onClick(v: View) {
-            val adapterPosition = adapterPosition
-            videoClickListener.onVideoClicked(videos[adapterPosition])
+            videoClickListener.onVideoClicked(video!!)
         }
 
         init {

@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple
+package com.lukasz.witkowski.android.moviestemple.viewModels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

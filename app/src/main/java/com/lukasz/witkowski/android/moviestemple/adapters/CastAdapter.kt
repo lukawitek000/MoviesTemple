@@ -11,11 +11,9 @@ import com.lukasz.witkowski.android.moviestemple.models.Actor
 
 class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
-
     interface CastOnClickListener{
-        fun onClick(actor: Actor)
+        fun onActorClick(actor: Actor)
     }
-
 
     private var castList: List<Actor> = emptyList()
 
@@ -48,22 +46,20 @@ class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerVie
         private var actor: Actor? = null
 
         fun bind(actor: Actor){
-            Glide.with(binding.actorImageview.context)
+            Glide.with(binding.ivActorPhoto.context)
                     .load(actor.actorPhoto)
                     .placeholder(R.drawable.actor_photo_default)
-                    .into(binding.actorImageview)
+                    .into(binding.ivActorPhoto)
 
-            binding.actorNameTextview.text = actor.name
-            binding.characterNameTextView.text = actor.character
+            binding.tvActorName.text = actor.name
+            binding.tvCharacterName.text = actor.character
             this.actor = actor
         }
 
         override fun onClick(p0: View?) {
             if(actor != null){
-                onClickListener.onClick(actor!!)
+                onClickListener.onActorClick(actor!!)
             }
         }
     }
-
-
 }

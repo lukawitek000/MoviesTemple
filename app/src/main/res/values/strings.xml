@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Movies Temple</string>
-    <string name="sort_by_popularity">Sort By Popularity</string>
-    <string name="sort_by_top_rated">Sort By Top-rate</string>
-    <string name="share">Share</string>
     <string name="failure_message">Fail to connect with Movie Database</string>
     <string name="original_title_label">Original title:</string>
     <string name="vote_average_label">User rating:</string>
@@ -13,8 +10,6 @@
     <string name="recommended_movies_title">Recommended Movies</string>
     <string name="poster_description">Poster</string>
     <string name="favourites_title">Favourites</string>
-    <string name="remove_from_favourites">Remove from favourites</string>
-    <string name="add_to_favourites">Add to favourites</string>
     <string name="author_label">Author:</string>
     <string name="videos_label">VIDEOS</string>
     <string name="reviews_label">REVIEWS</string>
@@ -23,4 +18,38 @@
     <string name="cast_label">CAST</string>
     <string name="director_label">Director:</string>
     <string name="writers_label">Writer:</string>
+    <string name="detail_information_label">Detail Information</string>
+    <string name="out_of_ten">/ 10.0</string>
+    <string name="get_more_information">Get more information</string>
+    <string name="movie_poster_content_description">Movie poster</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="all_favourite_movies_deleted_info">All favourite movies deleted</string>
+    <string name="connection_error_message">Connection error</string>
+    <string name="refreshed_info">Refreshed</string>
+    <string name="cannot_connect_to_server_info">Cannot connect to server, check your favourite movies</string>
+    <string name="empty_favourite_movies_database_info">You don\'t have any favourite movies</string>
+    <string name="check_internet_connection_info">Oops! \nCheck your internet connection</string>
+    <string name="open_video_info">Open video %1$s</string>
+    <string name="unknown_site_info">Unknown site</string>
+    <string name="removed_from_favourite_info">Removed from favourites</string>
+    <string name="added_to_favourite_info">Added to favourites</string>
+    <string name="search_hint">Search Here</string>
+    <string name="empty_recommendations_info">Recommendations are based on your favourite movies. \nYou haven\'t got any yet.</string>
+    <string name="actor_photo">Actor photo</string>
+    <string name="more_info_about_actor">More Info about actor</string>
+    <string name="exit_dialog_button">Exit dialog button</string>
+    <string name="warning">Warning!!!</string>
+    <string name="do_you_want_to_delete_all_favourite_movies">Do you want to delete all favourite movies?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="info">Info</string>
+    <string name="recommendations_dialog_text">Recommendations are based on your favourite movies</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top rated</string>
+    <string name="favourites">Favourites</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="like">Like</string>
+    <string name="delete_all">Delete all</string>
+    <string name="search">Search</string>
 </resources>

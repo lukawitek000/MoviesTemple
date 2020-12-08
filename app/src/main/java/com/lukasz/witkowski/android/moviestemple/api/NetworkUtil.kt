@@ -1,9 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.api
 
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.ReviewsListResponse
 import com.lukasz.witkowski.android.moviestemple.models.responses.TMDBResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.VideosListResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -55,11 +53,19 @@ private const val API_KEY = "api_key"
 private const val api_key = "3b623a17f57eb4da612b3871d3f78ced"
 const val POSTER_BASE_URI = "http://image.tmdb.org/t/p/w500"
 const val VIDEO_BASE_URI = "https://www.youtube.com/watch?v="
+const val PERSON_BASE_URI = "https://www.themoviedb.org/person/"
 private const val append_to_response = "videos,reviews,credits"
 private const val APPEND_TO_RESPONSE = "append_to_response"
 
 const val TMDB_STARTING_PAGE_INDEX = 1
 const val TMDB_PAGE_SIZE = 20
+
+
+const val POPULAR_MOVIES_QUERY = "popular_movies_query"
+const val TOP_RATED_MOVIES_QUERY = "top_rated_movies_query"
+const val RECOMMENDATIONS_QUERY = "recommendations_query"
+
+
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 

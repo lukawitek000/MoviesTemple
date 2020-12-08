@@ -1,10 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.adapters
 
 
-import android.content.Context
-import android.util.Log
 import android.view.*
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -13,20 +10,18 @@ import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.MoviesAdapterViewHolder
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.squareup.picasso.Picasso
 
 
-class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : PagingDataAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
-
+class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler)
+    : PagingDataAdapter<Movie, MoviesAdapterViewHolder>(MoviesDiffCallback()) {
 
     companion object {
         const val MOVIE_POSTER = 1
         const val LOADING_FOOTER = 0
     }
 
-
     interface MovieAdapterOnClickHandler {
-        fun onClick(movie: Movie)
+        fun onMovieClick(movie: Movie)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapterViewHolder {
@@ -53,20 +48,17 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
     }
 
 
-
-
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-        private val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
-
-
+        private val posterImage: ImageView = itemView.findViewById(R.id.iv_movie_poster)
         private var movie: Movie? = null
 
-
-        override fun onClick(view: View) {
-            clickHandler.onClick(movie!!)
+        init {
+            itemView.setOnClickListener(this)
         }
 
-
+        override fun onClick(view: View) {
+            clickHandler.onMovieClick(movie!!)
+        }
 
         fun bind(movie: Movie?){
             if (movie != null){
@@ -83,13 +75,6 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler) : Pagi
                             .into(posterImage)
                 }
             }
-        }
-
-
-
-
-        init {
-            itemView.setOnClickListener(this)
         }
     }
 }
