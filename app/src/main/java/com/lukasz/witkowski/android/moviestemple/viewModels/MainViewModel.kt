@@ -140,7 +140,7 @@ class MainViewModel(application: Application) : ViewModel() {
             return topRatedMovies!!
         }
         val newResult = repository.getPagingDataMovies(TOP_RATED_MOVIES_QUERY).cachedIn(viewModelScope)
-        currentSearchResult = newResult
+       // currentSearchResult = newResult
         topRatedMovies = newResult
         return newResult
     }
@@ -150,7 +150,7 @@ class MainViewModel(application: Application) : ViewModel() {
             return popularMovies!!
         }
         val newResult = repository.getPagingDataMovies(POPULAR_MOVIES_QUERY).cachedIn(viewModelScope)
-        currentSearchResult = newResult
+       // currentSearchResult = newResult
         popularMovies = newResult
         return newResult
     }

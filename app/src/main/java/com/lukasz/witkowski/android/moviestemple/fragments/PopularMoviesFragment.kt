@@ -58,6 +58,8 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
         if(query != POPULAR_MOVIES_QUERY){
             sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
+        }else{
+            sharedViewModel.toolbarState = MainViewModel.ToolbarState.NORMAL
         }
 
         job?.cancel()
@@ -101,7 +103,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
                         if(newText.isNullOrEmpty()){
                             Log.i("PopularMoviesFragment", "on text changed $newText")
-                            //getMovies()
+                            getMovies()
                         }
                         return true
                     }
