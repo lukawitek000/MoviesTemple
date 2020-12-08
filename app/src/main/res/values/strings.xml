@@ -29,4 +29,5 @@
     <string name="movie_poster_content_description">Movie poster</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="all_favourite_movies_deleted_info">All favourite movies deleted</string>
+    <string name="connection_error_message">Connection error</string>
 </resources>

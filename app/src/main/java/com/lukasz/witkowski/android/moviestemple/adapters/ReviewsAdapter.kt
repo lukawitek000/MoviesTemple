@@ -10,7 +10,7 @@ import com.lukasz.witkowski.android.moviestemple.R
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.widget.TextView
 
-class ReviewsAdapter() : RecyclerView.Adapter<ReviewsAdapterViewHolder>() {
+class ReviewsAdapter : RecyclerView.Adapter<ReviewsAdapterViewHolder>() {
 
     var reviews: List<Review> = emptyList()
 
