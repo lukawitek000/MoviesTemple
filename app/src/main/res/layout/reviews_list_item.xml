@@ -11,7 +11,7 @@
 
 
     <TextView
-        android:id="@+id/authorLabel"
+        android:id="@+id/tv_author_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/author_label"
@@ -20,23 +20,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/authorValue"
+        android:id="@+id/tv_author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/authorLabel"
-        app:layout_constraintTop_toBottomOf="@+id/authorLabel"
+        app:layout_constraintStart_toStartOf="@+id/tv_author_label"
+        app:layout_constraintTop_toBottomOf="@+id/tv_author_label"
         tools:text="author Value" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/tv_review_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authorValue"
+        app:layout_constraintTop_toBottomOf="@+id/tv_author_name"
         tools:text="content place holder" />
 
 

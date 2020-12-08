@@ -64,9 +64,9 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
             (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, showEnterAnimation)
         }
 
-        binding.getMoreInfoButton.setOnClickListener {
+        binding.btGetMoreInfo.setOnClickListener {
             sharedViewModel.getMoreInfoForFavouriteMovie()
-            binding.nestedScrollView.smoothScrollTo(0, 0)
+            binding.nsvDetailInformation.smoothScrollTo(0, 0)
             binding.appBarLayout.setExpanded(true)
         }
 
@@ -89,33 +89,33 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         Glide.with(requireContext())
                 .load(selectedMovie.posterUri)
                 .placeholder(R.drawable.poster_placeholder)
-                .into(binding.toolbarPoster)
+                .into(binding.ivToolbarPoster)
         binding.detailInformationToolbar.title = selectedMovie.title
     }
 
 
     private fun setUpCastRecyclerView() {
         castAdapter = CastAdapter(this)
-        binding.castRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.castRecyclerView.adapter = castAdapter
-        binding.castRecyclerView.setHasFixedSize(true)
+        binding.rvCast.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvCast.adapter = castAdapter
+        binding.rvCast.setHasFixedSize(true)
     }
 
     private fun setUpVideosRecyclerView() {
         val videoManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         videosAdapter =  VideosAdapter(this)
-        binding.recyclerviewVideos.layoutManager = videoManager
-        binding.recyclerviewVideos.adapter = videosAdapter
-        binding.recyclerviewVideos.setHasFixedSize(true)
+        binding.rvVideos.layoutManager = videoManager
+        binding.rvVideos.adapter = videosAdapter
+        binding.rvVideos.setHasFixedSize(true)
     }
 
 
     private fun setUpReviewsRecyclerView() {
         val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         reviewsAdapter = ReviewsAdapter()
-        binding.recyclerviewReviews.layoutManager = linearLayoutManager
-        binding.recyclerviewReviews.adapter = reviewsAdapter
-        binding.recyclerviewReviews.setHasFixedSize(true)
+        binding.rvReviews.layoutManager = linearLayoutManager
+        binding.rvReviews.adapter = reviewsAdapter
+        binding.rvReviews.setHasFixedSize(true)
     }
 
 
@@ -162,10 +162,10 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 setDetailInformationVisible(true)
                 setMainInformationVisible(true)
                 setProgressBarVisible(false)
-                binding.detailInformationLayout.visibility = View.VISIBLE
+                binding.clDetailInformation.visibility = View.VISIBLE
             }
             MainViewModel.Status.FAILURE -> {
-                binding.detailInformationLayout.visibility = View.GONE
+                binding.clDetailInformation.visibility = View.GONE
                 setDetailInformationVisible(false)
                 setMainInformationVisible(true)
                 setProgressBarVisible(false)
@@ -176,7 +176,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 }
             }
             else -> {
-                binding.detailInformationLayout.visibility = View.GONE
+                binding.clDetailInformation.visibility = View.GONE
                 setDetailInformationVisible(false)
                 setMainInformationVisible(false)
                 setProgressBarVisible(true)
@@ -187,9 +187,9 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
     private fun showGetMoreInfoButton() {
         if(!isFullInformationInFavouriteMovie()){
-            binding.getMoreInfoButton.visibility = View.VISIBLE
+            binding.btGetMoreInfo.visibility = View.VISIBLE
         }else{
-            binding.getMoreInfoButton.visibility = View.GONE
+            binding.btGetMoreInfo.visibility = View.GONE
         }
     }
 
@@ -206,49 +206,43 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
     private fun setProgressBarVisible(isVisible: Boolean) {
         if(isVisible){
-            binding.progressBar.visibility = View.VISIBLE
+            binding.pbDetailInformation.visibility = View.VISIBLE
         }else{
-            binding.progressBar.visibility = View.GONE
+            binding.pbDetailInformation.visibility = View.GONE
         }
     }
 
 
     private fun setMainInformationVisible(isVisible: Boolean) {
         if(isVisible){
-            binding.detailInformationLayout.visibility = View.VISIBLE
+            binding.clDetailInformation.visibility = View.VISIBLE
         }else{
-            binding.detailInformationLayout.visibility = View.GONE
+            binding.clDetailInformation.visibility = View.GONE
         }
     }
 
 
     private fun setDetailInformationVisible(isVisible: Boolean) {
-        if(!isVisible){
-            binding.genreLabel.visibility = View.GONE
-            binding.genres.visibility = View.GONE
-            binding.directorLabel.visibility = View.GONE
-            binding.directorTextView.visibility = View.GONE
-            binding.writersLabel.visibility = View.GONE
-            binding.writersTextView.visibility = View.GONE
-            binding.castLabel.visibility = View.GONE
-            binding.castRecyclerView.visibility = View.GONE
-            binding.videosLabel.visibility = View.GONE
-            binding.recyclerviewVideos.visibility = View.GONE
-            binding.reviewsLabel.visibility = View.GONE
-            binding.recyclerviewReviews.visibility = View.GONE
+        binding.tvGenreLabel.visibility = setVisibility(selectedMovie.genres, isVisible)
+        binding.tvGenres.visibility = setVisibility(selectedMovie.genres, isVisible)
+        binding.tvDirectorLabel.visibility = setVisibility(selectedMovie.directors, isVisible)
+        binding.tvDirectors.visibility = setVisibility(selectedMovie.directors, isVisible)
+        binding.tvWritersLabel.visibility = setVisibility(selectedMovie.writers, isVisible)
+        binding.tvWriters.visibility = setVisibility(selectedMovie.writers, isVisible)
+        binding.tvCastLabel.visibility = setVisibility(selectedMovie.cast, isVisible)
+        binding.rvCast.visibility = setVisibility(selectedMovie.cast, isVisible)
+        binding.tvVideosLabel.visibility = setVisibility(selectedMovie.videos, isVisible)
+        binding.rvVideos.visibility = setVisibility(selectedMovie.videos, isVisible)
+        binding.tvReviewsLabel.visibility = setVisibility(selectedMovie.reviews, isVisible)
+        binding.rvReviews.visibility = setVisibility(selectedMovie.reviews, isVisible)
+    }
+
+
+    private fun <T> setVisibility(list: List<T>, visible: Boolean): Int {
+        return if(!visible){
+            View.GONE
         }else{
-            binding.genreLabel.visibility = checkListIfIsEmpty(selectedMovie.genres)
-            binding.genres.visibility = checkListIfIsEmpty(selectedMovie.genres)
-            binding.directorLabel.visibility = checkListIfIsEmpty(selectedMovie.directors)
-            binding.directorTextView.visibility = checkListIfIsEmpty(selectedMovie.directors)
-            binding.writersLabel.visibility = checkListIfIsEmpty(selectedMovie.writers)
-            binding.writersTextView.visibility = checkListIfIsEmpty(selectedMovie.writers)
-            binding.castLabel.visibility = checkListIfIsEmpty(selectedMovie.cast)
-            binding.castRecyclerView.visibility = checkListIfIsEmpty(selectedMovie.cast)
-            binding.videosLabel.visibility = checkListIfIsEmpty(selectedMovie.videos)
-            binding.recyclerviewVideos.visibility = checkListIfIsEmpty(selectedMovie.videos)
-            binding.reviewsLabel.visibility = checkListIfIsEmpty(selectedMovie.reviews)
-            binding.recyclerviewReviews.visibility = checkListIfIsEmpty(selectedMovie.reviews)
+            checkListIfIsEmpty(list)
         }
     }
 
@@ -262,17 +256,17 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
 
     private fun setDataToUI(movie: Movie){
-        binding.overview.text = movie.overview
-        binding.originalTitle.text = movie.originalTitle
-        binding.releaseDate.text = movie.releaseDate
-        binding.voteAverageTextview.text = movie.voteAverage.toString()
-        binding.votesNumber.text = movie.voteCount.toString()
-        binding.genres.text = movie.genres.toText()
+        binding.tvOverview.text = movie.overview
+        binding.tvOriginalTitle.text = movie.originalTitle
+        binding.tvReleaseDate.text = movie.releaseDate
+        binding.tvVoteAverage.text = movie.voteAverage.toString()
+        binding.tvVotesNumber.text = movie.voteCount.toString()
+        binding.tvGenres.text = movie.genres.toText()
         videosAdapter.videos = movie.videos
         reviewsAdapter.reviews = movie.reviews
         castAdapter.setCastAdapterList(movie.cast)
-        binding.directorTextView.text = movie.directors.toText()
-        binding.writersTextView.text = movie.writers.toText()
+        binding.tvDirectors.text = movie.directors.toText()
+        binding.tvWriters.text = movie.writers.toText()
     }
 
 

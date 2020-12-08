@@ -34,7 +34,7 @@ class VideosAdapter(private val videoClickListener: VideoClickListener) : Recycl
     }
 
     inner class VideosAdapterHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-        private val videosText: TextView = itemView.findViewById(R.id.video_label)
+        private val videosText: TextView = itemView.findViewById(R.id.tv_video_label)
         var video: Video? = null
 
         fun bind(video: Video){

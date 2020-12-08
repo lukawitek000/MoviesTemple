@@ -18,7 +18,7 @@ class RecommendationsInfoDialogFragment: DialogFragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setView(view)
         val dialog = builder.create()
-        view.findViewById<Button>(R.id.ok_button).setOnClickListener {
+        view.findViewById<Button>(R.id.bt_ok).setOnClickListener {
             dialog.dismiss()
         }
         return dialog

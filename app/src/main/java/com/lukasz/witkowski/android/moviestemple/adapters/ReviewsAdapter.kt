@@ -33,7 +33,7 @@ class ReviewsAdapter : RecyclerView.Adapter<ReviewsAdapterViewHolder>() {
 
 
     class ReviewsAdapterViewHolder(itemView: View) : ViewHolder(itemView) {
-        val author: TextView = itemView.findViewById(R.id.authorValue)
-        val content: TextView = itemView.findViewById(R.id.content)
+        val author: TextView = itemView.findViewById(R.id.tv_author_name)
+        val content: TextView = itemView.findViewById(R.id.tv_review_content)
     }
 }

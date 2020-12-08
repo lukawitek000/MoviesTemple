@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbarMain)
         navController.addOnDestinationChangedListener(this)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
@@ -80,8 +80,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
     fun changeToolbarTitle(title: String){
-        binding.toolbar.title = title
-        binding.toolbar.navigationIcon = null
+        binding.toolbarMain.title = title
+        binding.toolbarMain.navigationIcon = null
     }
 
 
@@ -92,8 +92,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if(!navHostFragment.childFragmentManager.fragments.isNullOrEmpty()) {
                 val currentFragment = navHostFragment.childFragmentManager.fragments[0]
                 if(currentFragment.javaClass.simpleName == DetailInformationFragment.TAG){
-                    binding.toolbar.setupWithNavController(controller, appBarConfiguration)
-                    setSupportActionBar(binding.toolbar)
+                    binding.toolbarMain.setupWithNavController(controller, appBarConfiguration)
+                    setSupportActionBar(binding.toolbarMain)
                     animateInToolbar()
                 }
             }
@@ -102,15 +102,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
     private fun animateInToolbar() {
-        val animation = TranslateAnimation(-binding.toolbar.width.toFloat(), 0f, 0f, 0f)
+        val animation = TranslateAnimation(-binding.toolbarMain.width.toFloat(), 0f, 0f, 0f)
         animation.duration = resources.getInteger(R.integer.slide_animation_time).toLong()
-        binding.toolbar.startAnimation(animation)
+        binding.toolbarMain.startAnimation(animation)
     }
 
 
     private fun animateOutToolbar() {
-        val animation = TranslateAnimation(0f, -binding.toolbar.width.toFloat(), 0f, 0f)
+        val animation = TranslateAnimation(0f, -binding.toolbarMain.width.toFloat(), 0f, 0f)
         animation.duration = resources.getInteger(R.integer.slide_animation_time).toLong()
-        binding.toolbar.startAnimation(animation)
+        binding.toolbarMain.startAnimation(animation)
     }
 }

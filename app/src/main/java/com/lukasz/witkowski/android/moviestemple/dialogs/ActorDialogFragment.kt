@@ -49,16 +49,16 @@ class ActorDialogFragment: DialogFragment() {
 
 
     private fun setUpView() {
-        binding.actorName.text = arguments?.getString(ACTOR_NAME_KEY)
+        binding.tvActorNameDialog.text = arguments?.getString(ACTOR_NAME_KEY)
         Glide.with(binding.root)
                 .load(Uri.parse(arguments?.getString(ACTOR_PHOTO_KEY)))
                 .placeholder(R.drawable.actor_photo_default)
-                .into(binding.actorPhoto)
+                .into(binding.ivActorPhotoDialog)
     }
 
 
     private fun setUpOnClickListeners() {
-        binding.moreInfoButton.setOnClickListener {
+        binding.btMoreInfoDialog.setOnClickListener {
             openTMDBPageAboutActor()
         }
         binding.exitIcon.setOnClickListener {

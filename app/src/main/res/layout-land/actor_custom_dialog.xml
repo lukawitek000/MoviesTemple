@@ -9,7 +9,7 @@
         android:background="@drawable/custom_dialog">
 
         <ImageView
-            android:id="@+id/actor_photo"
+            android:id="@+id/iv_actor_photo_dialog"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_marginStart="48dp"
@@ -20,10 +20,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/actor_photo_default" />
+            app:srcCompat="@drawable/actor_photo_default"
+            android:contentDescription="@string/actor_photo" />
 
         <TextView
-            android:id="@+id/actor_name"
+            android:id="@+id/tv_actor_name_dialog"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -32,27 +33,26 @@
             android:textAlignment="center"
             android:textColor="@color/darkYellow"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/more_info_button"
+            app:layout_constraintBottom_toTopOf="@+id/bt_more_info_dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/actor_photo"
+            app:layout_constraintStart_toEndOf="@+id/iv_actor_photo_dialog"
             app:layout_constraintTop_toBottomOf="@+id/exit_icon"
-            tools:text="Vin Diesel asf ds f sd f ds f  ds f  sd f sdfsdfs dfsdf sdf dsf " />
+            tools:text="Vin Diesel" />
 
         <Button
-            android:id="@+id/more_info_button"
+            android:id="@+id/bt_more_info_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="32dp"
-            android:background="@color/darkYellow"
-            android:padding="2dp"
-            android:text="More Info"
+            android:background="@drawable/custom_button"
+            android:text="@string/more_info_about_actor"
             android:textColor="@color/darkGrey"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/actor_name"
-            app:layout_constraintStart_toStartOf="@+id/actor_name"
-            app:layout_constraintTop_toBottomOf="@+id/actor_name" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_actor_name_dialog"
+            app:layout_constraintStart_toStartOf="@+id/tv_actor_name_dialog"
+            app:layout_constraintTop_toBottomOf="@+id/tv_actor_name_dialog" />
 
         <ImageView
             android:id="@+id/exit_icon"
@@ -62,6 +62,7 @@
             android:layout_marginEnd="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_close_24" />
+            app:srcCompat="@drawable/ic_baseline_close_24"
+            android:contentDescription="@string/exit_dialog_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -49,7 +49,7 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler)
 
 
     inner class MoviesAdapterViewHolder(itemView: View) : ViewHolder(itemView), View.OnClickListener {
-        private val posterImage: ImageView = itemView.findViewById(R.id.poster_image_view)
+        private val posterImage: ImageView = itemView.findViewById(R.id.iv_movie_poster)
         private var movie: Movie? = null
 
         init {

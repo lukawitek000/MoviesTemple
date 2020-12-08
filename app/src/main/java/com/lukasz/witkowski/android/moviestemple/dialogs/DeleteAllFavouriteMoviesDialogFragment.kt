@@ -31,12 +31,12 @@ class DeleteAllFavouriteMoviesDialogFragment: DialogFragment() {
 
 
     private fun setButtonClickListeners(view: View, dialog: AlertDialog){
-        view.findViewById<Button>(R.id.delete_all_yes_button).setOnClickListener {
+        view.findViewById<Button>(R.id.bt_delete_all_yes).setOnClickListener {
             sharedViewModel.deleteAllFavouriteMovies()
             Toast.makeText(requireContext(), R.string.all_favourite_movies_deleted_info, Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
-        view.findViewById<Button>(R.id.delete_all_cancel_button).setOnClickListener {
+        view.findViewById<Button>(R.id.bt_delete_all_cancel).setOnClickListener {
             dialog.dismiss()
         }
     }

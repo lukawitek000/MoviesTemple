@@ -34,5 +34,15 @@
     <string name="removed_from_favourite_info">Removed from favourites</string>
     <string name="added_to_favourite_info">Added to favourites</string>
     <string name="search_hint">Search Here</string>
-    <string name="empty_recommendations_info">Recommendations are based on your favourite movies. \nYou haven't got any yet.</string>
+    <string name="empty_recommendations_info">Recommendations are based on your favourite movies. \nYou haven\'t got any yet.</string>
+    <string name="actor_photo">Actor photo</string>
+    <string name="more_info_about_actor">More Info about actor</string>
+    <string name="exit_dialog_button">Exit dialog button</string>
+    <string name="warning">Warning!!!</string>
+    <string name="do_you_want_to_delete_all_favourite_movies">Do you want to delete all favourite movies?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="info">Info</string>
+    <string name="recommendations_dialog_text">Recommendations are based on your favourite movies</string>
 </resources>

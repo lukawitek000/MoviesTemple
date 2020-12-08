@@ -26,7 +26,7 @@ open class BaseListMoviesFragment : Fragment() {
     protected lateinit var binding: MoviesPosterListLayoutBinding
 
     protected fun setUpRecyclerView() {
-        moviesRecyclerView = binding.moviesRecyclerview
+        moviesRecyclerView = binding.rvMovies
         val spanCount = calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         matchGridSpan(layoutManager, spanCount)
@@ -87,7 +87,7 @@ open class BaseListMoviesFragment : Fragment() {
     }
 
     private fun setRetryButtonListener(){
-        binding.retryButton.setOnClickListener {
+        binding.btRetry.setOnClickListener {
             moviesAdapter.retry()
         }
     }
@@ -98,7 +98,7 @@ open class BaseListMoviesFragment : Fragment() {
             if(loadState.append.endOfPaginationReached){
                 if(moviesAdapter.itemCount < 1){
                     setVisibilityBaseOnStatus(MainViewModel.Status.FAILURE, text)
-                    binding.retryButton.visibility = View.GONE
+                    binding.btRetry.visibility = View.GONE
                 }
             }
         }
@@ -106,23 +106,23 @@ open class BaseListMoviesFragment : Fragment() {
 
 
     private fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
-        binding.moviesRecyclerview.visibility = View.VISIBLE
+        binding.rvMovies.visibility = View.VISIBLE
         when (status) {
             MainViewModel.Status.SUCCESS -> {
-                binding.progressbar.visibility = View.GONE
-                binding.errorMessageTextview.visibility = View.GONE
-                binding.retryButton.visibility = View.GONE
+                binding.pbMoviesList.visibility = View.GONE
+                binding.tvMoviesListErrorMessage.visibility = View.GONE
+                binding.btRetry.visibility = View.GONE
             }
             MainViewModel.Status.LOADING -> {
-                binding.progressbar.visibility = View.VISIBLE
-                binding.errorMessageTextview.visibility = View.GONE
-                binding.retryButton.visibility = View.GONE
+                binding.pbMoviesList.visibility = View.VISIBLE
+                binding.tvMoviesListErrorMessage.visibility = View.GONE
+                binding.btRetry.visibility = View.GONE
             }
             else -> {
-                binding.errorMessageTextview.text = failureMessage
-                binding.progressbar.visibility = View.GONE
-                binding.errorMessageTextview.visibility = View.VISIBLE
-                binding.retryButton.visibility = View.VISIBLE
+                binding.tvMoviesListErrorMessage.text = failureMessage
+                binding.pbMoviesList.visibility = View.GONE
+                binding.tvMoviesListErrorMessage.visibility = View.VISIBLE
+                binding.btRetry.visibility = View.VISIBLE
             }
         }
     }

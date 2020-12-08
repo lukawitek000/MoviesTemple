@@ -30,7 +30,7 @@ class MoviesLoadStateAdapter(private val context: Context, private val retry: ()
     ) : RecyclerView.ViewHolder(binding.root){
 
         init {
-            binding.retryButton.setOnClickListener {
+            binding.btRetry.setOnClickListener {
                 retry.invoke()
             }
         }
@@ -38,11 +38,11 @@ class MoviesLoadStateAdapter(private val context: Context, private val retry: ()
 
         fun bind(loadState: LoadState){
             if(loadState is LoadState.Error){
-                binding.errorMessage.text = context.getString(R.string.connection_error_message)
+                binding.tvFootErrorMessage.text = context.getString(R.string.connection_error_message)
             }
-            binding.moviesProgressbar.isVisible = loadState is LoadState.Loading
-            binding.errorMessage.isVisible = loadState !is LoadState.Loading
-            binding.retryButton.isVisible = loadState !is LoadState.Loading
+            binding.pbFooterMovies.isVisible = loadState is LoadState.Loading
+            binding.tvFootErrorMessage.isVisible = loadState !is LoadState.Loading
+            binding.btRetry.isVisible = loadState !is LoadState.Loading
         }
 
     }
