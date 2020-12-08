@@ -150,8 +150,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 videosAdapter.videos = it.videos
                 reviewsAdapter.reviews = it.reviews
                 castAdapter.setCastAdapterList(it.cast)
-                binding.directorTextView.text = it.directors.directorToString()
-                binding.writersTextView.text = it.writers.writerToString()
+                binding.directorTextView.text = it.directors.toText()
+                binding.writersTextView.text = it.writers.toText()
                 selectedMovie = it
 
 

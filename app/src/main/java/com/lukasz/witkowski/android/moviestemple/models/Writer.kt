@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Writers")
 data class Writer (
-    @PrimaryKey
-    var writerId: Int = 0,
-    var name: String = "",
-    var profilePath: String? = null,
-)
+        @PrimaryKey
+        var writerId: Int = 0,
+        override var name: String = "",
+        var profilePath: String? = null,
+): NameInterface

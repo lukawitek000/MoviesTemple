@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class Director(
         @PrimaryKey
         var directorId: Int = 0,
-        var name: String = "",
+        override var name: String = "",
         var profilePath: String? = null,
-)
+): NameInterface

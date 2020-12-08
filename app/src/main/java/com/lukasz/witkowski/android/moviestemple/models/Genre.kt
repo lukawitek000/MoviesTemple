@@ -9,5 +9,5 @@ data class Genre(
         @Json(name = "id")
         @PrimaryKey
         var genreId: Int = 0,
-        var name: String = ""
-)
+        override var name: String = ""
+): NameInterface

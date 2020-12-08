@@ -52,12 +52,11 @@ fun MovieAllInformation.toMovie(): Movie{
     }, directors, writers)
 }
 
-
 fun MovieEntity.toMovie() : Movie {
     return Movie(posterPath, movieId, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
 }
 
-fun List<Genre>.toText(): String {
+fun List<NameInterface>.toText(): String {
     val textBuilder = StringBuilder()
     this.forEachIndexed{ i, genre ->
 
@@ -81,31 +80,4 @@ fun CrewMemberResponse.toDirector(): Director{
 
 fun CrewMemberResponse.toWriter(): Writer {
     return Writer(id, name, profilePath)
-}
-
-
-fun List<Director>.directorToString(): String {
-    val textBuilder = StringBuilder()
-    this.forEachIndexed{ i, director ->
-
-        if(i == this.size-1){
-            textBuilder.append(director.name)
-        }else{
-            textBuilder.append(director.name).append(", ")
-        }
-    }
-    return textBuilder.toString()
-}
-
-fun List<Writer>.writerToString(): String {
-    val textBuilder = StringBuilder()
-    this.forEachIndexed{ i, writer ->
-
-        if(i == this.size-1){
-            textBuilder.append(writer.name)
-        }else{
-            textBuilder.append(writer.name).append(", ")
-        }
-    }
-    return textBuilder.toString()
 }
