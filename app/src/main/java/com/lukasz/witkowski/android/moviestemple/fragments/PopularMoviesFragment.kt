@@ -30,11 +30,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         setUpRecyclerView()
 
         retryOrRefreshList()
-
         initAdapter()
-        setObservers()
-        Log.i("PopularMoviesFragment", "query ${sharedViewModel.currentQueryValue}")
-        Log.i("PopularMoviesFragment", "toolbar state ${sharedViewModel.toolbarState.name}")
         if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH) {
             getMovies(sharedViewModel.currentQueryValue ?: POPULAR_MOVIES_QUERY)
         }else{
@@ -46,14 +42,8 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     }
 
 
-    private fun setObservers(){
-        /*sharedViewModel.toolbarState.observe(viewLifecycleOwner,  {
-            Log.i("PopularMoviesFragment", "observer status $it")
-        })*/
-    }
 
     private var job: Job? = null
-
 
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
         if(query != POPULAR_MOVIES_QUERY){
@@ -61,7 +51,6 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         }else{
             sharedViewModel.toolbarState = MainViewModel.ToolbarState.NORMAL
         }
-
         job?.cancel()
         job = lifecycleScope.launch {
             sharedViewModel.getMovies(query).collectLatest {
@@ -83,44 +72,35 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         val menuItem = menu.findItem(R.id.search_icon)
         val searchView = menuItem.actionView as SearchView
         searchView.queryHint = "Search Here"
-        Log.i("PopularMoviesFragment", "on Create OPtions meny")
         if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
             menuItem.expandActionView()
             searchView.isActivated = true
             searchView.setQuery(sharedViewModel.currentQueryValue, true)
-            Log.i("PopularMoviesFragment", "activate search view")
         }
         searchView.setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        Log.i("PopularMoviesFragment", "on text submit $query")
                         getMovies(query ?: POPULAR_MOVIES_QUERY)
                         hideKeyboard()
                         return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-
                         if(newText.isNullOrEmpty()){
-                            Log.i("PopularMoviesFragment", "on text changed $newText")
                             getMovies()
                         }
                         return true
                     }
-
                 }
         )
-
     }
-
-
-
 
 
     private fun hideKeyboard(){
         val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

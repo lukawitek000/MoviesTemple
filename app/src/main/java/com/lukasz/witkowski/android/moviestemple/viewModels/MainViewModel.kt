@@ -18,17 +18,7 @@ class MainViewModel(application: Application) : ViewModel() {
     enum class ToolbarState{
         SEARCH, NORMAL
     }
-
-
     var toolbarState = ToolbarState.NORMAL
-    /*private val _toolbarState = MutableLiveData<ToolbarState>(ToolbarState.NORMAL)
-    val toolbarState: LiveData<ToolbarState>
-        get() = _toolbarState
-
-
-    fun setToolbarState(toolbarState: ToolbarState){
-        _toolbarState.value = toolbarState
-    }*/
 
     enum class Status {
         LOADING, SUCCESS, FAILURE
@@ -140,7 +130,6 @@ class MainViewModel(application: Application) : ViewModel() {
             return topRatedMovies!!
         }
         val newResult = repository.getPagingDataMovies(TOP_RATED_MOVIES_QUERY).cachedIn(viewModelScope)
-       // currentSearchResult = newResult
         topRatedMovies = newResult
         return newResult
     }
@@ -150,7 +139,6 @@ class MainViewModel(application: Application) : ViewModel() {
             return popularMovies!!
         }
         val newResult = repository.getPagingDataMovies(POPULAR_MOVIES_QUERY).cachedIn(viewModelScope)
-       // currentSearchResult = newResult
         popularMovies = newResult
         return newResult
     }
