@@ -31,6 +31,13 @@ import com.lukasz.witkowski.android.moviestemple.models.*
 
 class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.CastOnClickListener {
 
+
+    companion object{
+        const val TAG: String = "DetailInformationFragment"
+        const val BOTTOM_MENU_STATE = "BOTTOM_MENU_STATE"
+    }
+
+
     private lateinit var castAdapter: CastAdapter
 
 
@@ -91,11 +98,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                 .placeholder(R.drawable.poster_placeholder)
                 .into(binding.toolbarPoster)
         binding.detailInformationToolbar.title = selectedMovie.title
-    }
-
-
-    companion object{
-        const val BOTTOM_MENU_STATE = "BOTTOM_MENU_STATE"
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

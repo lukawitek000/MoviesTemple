@@ -3,12 +3,9 @@ package com.lukasz.witkowski.android.moviestemple
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -16,14 +13,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.lukasz.witkowski.android.moviestemple.api.IMAGE_WIDTH
 import com.lukasz.witkowski.android.moviestemple.databinding.ActivityMainBinding
+import com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment
 
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
 
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var  navHostFragment: NavHostFragment
     private val appBarConfiguration = AppBarConfiguration(
             setOf(
                     R.id.popularMoviesFragment,
@@ -33,45 +30,36 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             )
     )
 
-    private lateinit var  navHostFragment: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-
         setSupportActionBar(binding.toolbar)
         navController.addOnDestinationChangedListener(this)
-
         setupActionBarWithNavController(navController, appBarConfiguration)
-
     }
-
-
-
 
 
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.fragment_container).navigateUp() || super.onSupportNavigateUp()
     }
 
+
     fun setBottomNavigationVisibility(value: Int, isAnimated: Boolean){
         val collapseListener = object : Animation.AnimationListener {
-            override fun onAnimationStart(p0: Animation?) {
-            }
+            override fun onAnimationStart(p0: Animation?) {}
 
             override fun onAnimationEnd(p0: Animation?) {
                 binding.bottomNavigation.visibility = value
             }
 
-            override fun onAnimationRepeat(p0: Animation?) {
-            }
+            override fun onAnimationRepeat(p0: Animation?) {}
 
         }
         val anim: TranslateAnimation
@@ -79,8 +67,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             anim = TranslateAnimation(0.0f, -binding.bottomNavigation.width.toFloat(), 0.0f, 0.0f)
         }else{
             binding.bottomNavigation.visibility = value
-           anim = TranslateAnimation(-binding.bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
-
+            anim = TranslateAnimation(-binding.bottomNavigation.width.toFloat(), 0.0f , 0.0f, 0.0f)
         }
         anim.setAnimationListener(collapseListener)
         if(isAnimated) {
@@ -91,12 +78,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         binding.bottomNavigation.startAnimation(anim)
     }
 
-    fun calculateSpanCount(): Int {
-        val displayWidth = resources.displayMetrics.widthPixels
-        val dp = displayWidth / resources.displayMetrics.density;
-        Log.i("PopularMoviesFragment", "display width : $displayWidth dp: $dp")
-        return displayWidth/ IMAGE_WIDTH + 1
-    }
 
     fun changeToolbarTitle(title: String){
         binding.toolbar.title = title
@@ -105,16 +86,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
-
-        //Log.i("MainActivity", "onDestinationChanged dest ${destination.label}")
-        if(destination.label == "Detail Information"){
+        if(destination.label == resources.getString(R.string.detail_information_label)){
             animateOutToolbar()
         }else{
             if(!navHostFragment.childFragmentManager.fragments.isNullOrEmpty()) {
                 val currentFragment = navHostFragment.childFragmentManager.fragments[0]
-                //Log.i("MainActivity", "onDestinationChanged current fragment ${currentFragment.javaClass.simpleName}")
-                if(currentFragment.javaClass.simpleName == "DetailInformationFragment"){
-                   // Log.i("MainActivity", "onDestinationChange set up with nav controller")
+                if(currentFragment.javaClass.simpleName == DetailInformationFragment.TAG){
                     binding.toolbar.setupWithNavController(controller, appBarConfiguration)
                     setSupportActionBar(binding.toolbar)
                     animateInToolbar()
@@ -123,16 +100,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
+
     private fun animateInToolbar() {
         val animation = TranslateAnimation(-binding.toolbar.width.toFloat(), 0f, 0f, 0f)
         animation.duration = resources.getInteger(R.integer.slide_animation_time).toLong()
         binding.toolbar.startAnimation(animation)
     }
 
+
     private fun animateOutToolbar() {
         val animation = TranslateAnimation(0f, -binding.toolbar.width.toFloat(), 0f, 0f)
         animation.duration = resources.getInteger(R.integer.slide_animation_time).toLong()
         binding.toolbar.startAnimation(animation)
     }
-
 }

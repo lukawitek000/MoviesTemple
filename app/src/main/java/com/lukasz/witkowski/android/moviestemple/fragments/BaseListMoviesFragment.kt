@@ -18,6 +18,7 @@ import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.Companion.MOVIE_POSTER
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesLoadStateAdapter
+import com.lukasz.witkowski.android.moviestemple.api.IMAGE_WIDTH
 import com.lukasz.witkowski.android.moviestemple.databinding.MoviesPosterListLayoutBinding
 
 open class BaseListMoviesFragment : Fragment() {
@@ -33,7 +34,7 @@ open class BaseListMoviesFragment : Fragment() {
 
     protected fun setUpRecyclerView() {
         moviesRecyclerView = binding.moviesRecyclerview
-        val spanCount = (activity as MainActivity).calculateSpanCount()
+        val spanCount = calculateSpanCount()
         val layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
             override fun getSpanSize(position: Int): Int {
@@ -45,6 +46,12 @@ open class BaseListMoviesFragment : Fragment() {
         moviesRecyclerView.layoutManager = layoutManager
         moviesRecyclerView.setHasFixedSize(true)
     }
+
+    private fun calculateSpanCount(): Int {
+        val displayWidth = resources.displayMetrics.widthPixels
+        return displayWidth/ IMAGE_WIDTH + 1
+    }
+
 
     protected fun retryOrRefreshList(){
         refreshOnSwipe()

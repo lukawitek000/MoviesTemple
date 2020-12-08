@@ -23,4 +23,5 @@
     <string name="cast_label">CAST</string>
     <string name="director_label">Director:</string>
     <string name="writers_label">Writer:</string>
+    <string name="detail_information_label">Detail Information</string>
 </resources>

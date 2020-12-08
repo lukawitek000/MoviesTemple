@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.lukasz.witkowski.android.moviestemple.MainRepository
+import com.lukasz.witkowski.android.moviestemple.repository.MainRepository
 import com.lukasz.witkowski.android.moviestemple.api.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.api.TOP_RATED_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
