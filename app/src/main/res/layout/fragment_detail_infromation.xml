@@ -40,7 +40,8 @@
                         android:scaleType="fitCenter"
                         tools:adjustViewBounds="true"
                         android:src="@drawable/ic_share_icon"
-                        app:layout_collapseMode="pin" />
+                        app:layout_collapseMode="pin"
+                        android:contentDescription="@string/movie_poster_content_description" />
 
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/detail_information_toolbar"
@@ -79,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/detail_information_layout"
                     android:visibility="gone"
+                    tools:visibility="visible"
                     android:padding="8dp">
 
                     <TextView
@@ -92,9 +94,10 @@
 
                     <TextView
                         android:id="@+id/original_title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/original_title_label"
                         app:layout_constraintTop_toBottomOf="@+id/original_title_label"
                         tools:text="Fast and furious" />
@@ -164,7 +167,7 @@
                         android:id="@+id/vote_average_max"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" / 10.0"
+                        android:text="@string/out_of_ten"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toBottomOf="@+id/vote_average_textview"
                         app:layout_constraintStart_toEndOf="@+id/vote_average_textview"
@@ -202,9 +205,10 @@
 
                     <TextView
                         android:id="@+id/overview"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/overview_label"
                         tools:text="Lopsum ipsum" />
@@ -221,13 +225,14 @@
 
                     <TextView
                         android:id="@+id/director_textView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:textSize="24sp"
-                        tools:text="Woody Allen"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/director_label" />
+                        app:layout_constraintTop_toBottomOf="@+id/director_label"
+                        tools:text="Woody Allen" />
 
                     <TextView
                         android:id="@+id/writers_label"
@@ -241,13 +246,14 @@
 
                     <TextView
                         android:id="@+id/writers_textView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="24sp"
                         android:layout_marginTop="8dp"
-                        tools:text="Quentin Tarantino"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/writers_label" />
+                        app:layout_constraintTop_toBottomOf="@+id/writers_label"
+                        tools:text="Quentin Tarantino" />
 
 
 
@@ -317,7 +323,7 @@
                         android:id="@+id/get_more_info_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Get more information"
+                        android:text="@string/get_more_information"
                         android:background="@color/darkYellow"
                         android:textColor="@color/darkGrey"
                         android:padding="4dp"
