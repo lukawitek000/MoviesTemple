@@ -1,18 +1,14 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -24,47 +20,41 @@ import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
+import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.dialogs.ActorDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.*
 
 
 class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.CastOnClickListener {
-
-
+    
     companion object{
         const val TAG: String = "DetailInformationFragment"
         const val BOTTOM_MENU_STATE = "BOTTOM_MENU_STATE"
     }
 
-
     private lateinit var castAdapter: CastAdapter
-
-
     private lateinit var videosAdapter: VideosAdapter
-
     private lateinit var reviewsAdapter: ReviewsAdapter
 
-    private val shareViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
 
     private lateinit var binding: FragmentDetailInfromationBinding
 
     private lateinit var selectedMovie: Movie
-
-
     private var showEnterAnimation = true
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_infromation, container, false)
 
-        selectedMovie = shareViewModel.selectedMovie.value!!
+        selectedMovie = sharedViewModel.selectedMovie.value!!
 
         setUpObservers()
         setUpReviewsRecyclerView()
         setUpVideosRecyclerView()
         setUpCastRecyclerView()
         setHasOptionsMenu(true)
-        setUpToolbarInfo()
+        setUpToolbar()
 
         if(savedInstanceState != null){
             showEnterAnimation = savedInstanceState.getBoolean(BOTTOM_MENU_STATE)
@@ -74,23 +64,26 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
             (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, showEnterAnimation)
         }
 
-
-        val toolbar = binding.detailInformationToolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
         binding.getMoreInfoButton.setOnClickListener {
-            shareViewModel.getMoreInfoForFavouriteMovie()
+            sharedViewModel.getMoreInfoForFavouriteMovie()
             binding.nestedScrollView.smoothScrollTo(0, 0)
             binding.appBarLayout.setExpanded(true)
         }
 
-
         return binding.root
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(BOTTOM_MENU_STATE, showEnterAnimation)
+    }
 
+    private fun setUpToolbar(){
+        val toolbar = binding.detailInformationToolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setUpToolbarInfo()
+    }
 
     private fun setUpToolbarInfo() {
         Glide.with(requireContext())
@@ -100,10 +93,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         binding.detailInformationToolbar.title = selectedMovie.title
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(BOTTOM_MENU_STATE, showEnterAnimation)
-    }
 
     private fun setUpCastRecyclerView() {
         castAdapter = CastAdapter(this)
@@ -112,58 +101,98 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         binding.castRecyclerView.setHasFixedSize(true)
     }
 
+    private fun setUpVideosRecyclerView() {
+        val videoManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        videosAdapter =  VideosAdapter(this)
+        binding.recyclerviewVideos.layoutManager = videoManager
+        binding.recyclerviewVideos.adapter = videosAdapter
+        binding.recyclerviewVideos.setHasFixedSize(true)
+    }
+
+
+    private fun setUpReviewsRecyclerView() {
+        val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        reviewsAdapter = ReviewsAdapter()
+        binding.recyclerviewReviews.layoutManager = linearLayoutManager
+        binding.recyclerviewReviews.adapter = reviewsAdapter
+        binding.recyclerviewReviews.setHasFixedSize(true)
+    }
+
+
+    override fun onVideoClicked(video: Video) {
+        Toast.makeText(requireContext(), resources.getString(R.string.open_video_info, video.name), Toast.LENGTH_SHORT).show()
+        val intent = Intent(Intent.ACTION_VIEW)
+        if(video.site == "YouTube") {
+            intent.data = video.videoUri
+            startActivity(intent)
+        }else{
+            Toast.makeText(requireContext(), resources.getString(R.string.unknown_site_info), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onActorClick(actor: Actor) {
+        activity?.supportFragmentManager?.let { createActorInfoDialog(actor).show(it, ActorDialogFragment.TAG) }
+    }
+
+
+    private fun createActorInfoDialog(actor: Actor): ActorDialogFragment {
+        return ActorDialogFragment.newInstance(actor.name, actor.actorPhoto?.toString(),
+                PERSON_BASE_URI + actor.actorId)
+    }
+
 
     private fun setUpObservers() {
-        shareViewModel.requestDetailInformationStatus.observe(viewLifecycleOwner, Observer {
+        sharedViewModel.requestDetailInformationStatus.observe(viewLifecycleOwner,  {
             if (it != null) {
-                setDataToUI()
-                when (it) {
-                    MainViewModel.Status.SUCCESS -> {
-                        setDetailInformationVisible(true)
-                        setMainInformationVisible(true)
-                        setProgressBarVisible(false)
-                        binding.detailInformationLayout.visibility = View.VISIBLE
-                    }
-                    MainViewModel.Status.FAILURE -> {
-                        binding.detailInformationLayout.visibility = View.GONE
-                        setDetailInformationVisible(false)
-                        setMainInformationVisible(true)
-                        setProgressBarVisible(false)
-                        if(!isFullInformationInFavouriteMovie()){
-                            Toast.makeText(requireContext(), "Oops!\nCheck your internet connection", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    else -> {
-                        binding.detailInformationLayout.visibility = View.GONE
-                        setDetailInformationVisible(false)
-                        setMainInformationVisible(false)
-                        setProgressBarVisible(true)
-
-                    }
-                }
+                setViewsVisibility(it)
             }
         })
-
-        shareViewModel.selectedMovie.observe(viewLifecycleOwner, Observer {
+        sharedViewModel.selectedMovie.observe(viewLifecycleOwner,  {
             if (it != null) {
-                Log.i("DetailInformation", "observer ${it}")
-                videosAdapter.videos = it.videos
-                reviewsAdapter.reviews = it.reviews
-                castAdapter.setCastAdapterList(it.cast)
-                binding.directorTextView.text = it.directors.toText()
-                binding.writersTextView.text = it.writers.toText()
+                setDataToUI(it)
                 selectedMovie = it
-
-
-                if(!isFullInformationInFavouriteMovie()){
-                    binding.getMoreInfoButton.visibility = View.VISIBLE
-                }else{
-                    binding.getMoreInfoButton.visibility = View.GONE
-                }
-
+                showGetMoreInfoButton()
             }
         })
     }
+
+    private fun setViewsVisibility(status: MainViewModel.Status) {
+        when (status) {
+            MainViewModel.Status.SUCCESS -> {
+                setDetailInformationVisible(true)
+                setMainInformationVisible(true)
+                setProgressBarVisible(false)
+                binding.detailInformationLayout.visibility = View.VISIBLE
+            }
+            MainViewModel.Status.FAILURE -> {
+                binding.detailInformationLayout.visibility = View.GONE
+                setDetailInformationVisible(false)
+                setMainInformationVisible(true)
+                setProgressBarVisible(false)
+                if(!isFullInformationInFavouriteMovie()){
+                    Toast.makeText(requireContext(),
+                            resources.getString(R.string.check_internet_connection_info),
+                            Toast.LENGTH_SHORT).show()
+                }
+            }
+            else -> {
+                binding.detailInformationLayout.visibility = View.GONE
+                setDetailInformationVisible(false)
+                setMainInformationVisible(false)
+                setProgressBarVisible(true)
+            }
+        }
+    }
+
+
+    private fun showGetMoreInfoButton() {
+        if(!isFullInformationInFavouriteMovie()){
+            binding.getMoreInfoButton.visibility = View.VISIBLE
+        }else{
+            binding.getMoreInfoButton.visibility = View.GONE
+        }
+    }
+
 
     private fun isFullInformationInFavouriteMovie(): Boolean {
         if(selectedMovie.genres.isNullOrEmpty() && selectedMovie.cast.isNullOrEmpty()
@@ -174,6 +203,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         return true
     }
 
+
     private fun setProgressBarVisible(isVisible: Boolean) {
         if(isVisible){
             binding.progressBar.visibility = View.VISIBLE
@@ -182,6 +212,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         }
     }
 
+
     private fun setMainInformationVisible(isVisible: Boolean) {
         if(isVisible){
             binding.detailInformationLayout.visibility = View.VISIBLE
@@ -189,6 +220,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
             binding.detailInformationLayout.visibility = View.GONE
         }
     }
+
 
     private fun setDetailInformationVisible(isVisible: Boolean) {
         if(!isVisible){
@@ -229,96 +261,37 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     }
 
 
-    private fun setDataToUI(){
-        binding.overview.text = selectedMovie.overview
-        binding.originalTitle.text = selectedMovie.originalTitle
-        binding.releaseDate.text = selectedMovie.releaseDate
-        binding.voteAverageTextview.text = selectedMovie.voteAverage.toString()
-        binding.votesNumber.text = selectedMovie.voteCount.toString()
-        Log.i("DetailInformation", "genres ${selectedMovie.genres}")
-        binding.genres.text = selectedMovie.genres.toText()
+    private fun setDataToUI(movie: Movie){
+        binding.overview.text = movie.overview
+        binding.originalTitle.text = movie.originalTitle
+        binding.releaseDate.text = movie.releaseDate
+        binding.voteAverageTextview.text = movie.voteAverage.toString()
+        binding.votesNumber.text = movie.voteCount.toString()
+        binding.genres.text = movie.genres.toText()
+        videosAdapter.videos = movie.videos
+        reviewsAdapter.reviews = movie.reviews
+        castAdapter.setCastAdapterList(movie.cast)
+        binding.directorTextView.text = movie.directors.toText()
+        binding.writersTextView.text = movie.writers.toText()
     }
-
-
-
-
-    private fun setUpVideosRecyclerView() {
-        val videoManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        videosAdapter =  VideosAdapter(this)
-        binding.recyclerviewVideos.layoutManager = videoManager
-        binding.recyclerviewVideos.adapter = videosAdapter
-        binding.recyclerviewVideos.setHasFixedSize(true)
-    }
-
-    private fun setUpReviewsRecyclerView() {
-        val  linearLayoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        Log.i("DetailInformation", "set up recycler view reviews = ${selectedMovie.reviews}")
-        reviewsAdapter = ReviewsAdapter()
-        binding.recyclerviewReviews.layoutManager = linearLayoutManager
-        binding.recyclerviewReviews.adapter = reviewsAdapter
-        binding.recyclerviewReviews.setHasFixedSize(true)
-    }
-
-
-
-    override fun onVideoClicked(video: Video) {
-        Toast.makeText(requireContext(), "Open video ${video.name}", Toast.LENGTH_SHORT).show()
-        val intent = Intent(Intent.ACTION_VIEW)
-        if(video.site == "YouTube") {
-            intent.data = video.videoUri
-            startActivity(intent)
-        }else{
-            Toast.makeText(requireContext(), "Unknown site", Toast.LENGTH_SHORT).show()
-        }
-
-    }
-
-
-
-    override fun onStop() {
-        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
-        super.onStop()
-    }
-
-
-
-
-
-
-    override fun onStart() {
-        super.onStart()
-        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, showEnterAnimation)
-        showEnterAnimation = false
-    }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.detail_menu, menu)
         val item = menu.findItem(R.id.like_item)
-        Log.i("DetailInformationFra", "on create menu ${item?.itemId}")
         if(item != null) {
-            if (shareViewModel.isSelectedMovieInDatabase()) {
+            if (sharedViewModel.isSelectedMovieInDatabase()) {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
             } else {
                 item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
             }
         }
-
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
         R.id.like_item -> {
-            if (shareViewModel.isSelectedMovieInDatabase()) {
-                shareViewModel.deleteMovieFromDatabase()
-                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
-                Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()
-            } else {
-                shareViewModel.addMovieToDatabase()
-                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
-                Toast.makeText(requireContext(), "Added to favourites", Toast.LENGTH_SHORT).show()
-            }
+            handleLikeItemClick(item)
             true
         }
         android.R.id.home -> {
@@ -326,17 +299,34 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
             true
         }
         else -> false
-
-
-    }
-
-    override fun onClick(actor: Actor) {
-        activity?.supportFragmentManager?.let { createActorInfoDialog(actor).show(it, ActorDialogFragment.TAG) }
     }
 
 
-    private fun createActorInfoDialog(actor: Actor): ActorDialogFragment {
-        return ActorDialogFragment.newInstance(actor.name, actor.actorPhoto?.toString(),
-                "https://www.themoviedb.org/person/${actor.actorId}")
+    private fun handleLikeItemClick(item: MenuItem) {
+        if (sharedViewModel.isSelectedMovieInDatabase()) {
+            sharedViewModel.deleteMovieFromDatabase()
+            item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
+            Toast.makeText(requireContext(),
+                    resources.getString(R.string.removed_from_favourite_info),
+                    Toast.LENGTH_SHORT).show()
+        } else {
+            sharedViewModel.addMovieToDatabase()
+            item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
+            Toast.makeText(requireContext(),
+                    resources.getString(R.string.added_to_favourite_info),
+                    Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    override fun onStop() {
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
+        super.onStop()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE, showEnterAnimation)
+        showEnterAnimation = false
     }
 }

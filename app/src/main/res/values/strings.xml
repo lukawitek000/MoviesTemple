@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Movies Temple</string>
-    <string name="sort_by_popularity">Sort By Popularity</string>
-    <string name="sort_by_top_rated">Sort By Top-rate</string>
-    <string name="share">Share</string>
     <string name="failure_message">Fail to connect with Movie Database</string>
     <string name="original_title_label">Original title:</string>
     <string name="vote_average_label">User rating:</string>
@@ -13,8 +10,6 @@
     <string name="recommended_movies_title">Recommended Movies</string>
     <string name="poster_description">Poster</string>
     <string name="favourites_title">Favourites</string>
-    <string name="remove_from_favourites">Remove from favourites</string>
-    <string name="add_to_favourites">Add to favourites</string>
     <string name="author_label">Author:</string>
     <string name="videos_label">VIDEOS</string>
     <string name="reviews_label">REVIEWS</string>
@@ -30,4 +25,12 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="all_favourite_movies_deleted_info">All favourite movies deleted</string>
     <string name="connection_error_message">Connection error</string>
+    <string name="refreshed_info">Refreshed</string>
+    <string name="cannot_connect_to_server_info">Cannot connect to server, check your favourite movies</string>
+    <string name="empty_favourite_movies_database_info">You don\'t have any favourite movies</string>
+    <string name="check_internet_connection_info">Oops! \nCheck your internet connection</string>
+    <string name="open_video_info">Open video %1$s</string>
+    <string name="unknown_site_info">Unknown site</string>
+    <string name="removed_from_favourite_info">Removed from favourites</string>
+    <string name="added_to_favourite_info">Added to favourites</string>
 </resources>

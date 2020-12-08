@@ -1,6 +1,5 @@
 package com.lukasz.witkowski.android.moviestemple.api
 
-import android.util.Log
 import androidx.paging.PagingSource
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.responses.TMDBResponse
@@ -8,7 +7,6 @@ import com.lukasz.witkowski.android.moviestemple.models.toMovie
 import java.lang.Exception
 
 class MoviesPagingSource(private val query: String, private val favouriteMoviesIds: List<Int> = emptyList()) : PagingSource<Int, Movie>()  {
-
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         val position = params.key ?: TMDB_STARTING_PAGE_INDEX
@@ -24,6 +22,7 @@ class MoviesPagingSource(private val query: String, private val favouriteMoviesI
         }
     }
 
+
     private suspend fun getResponse(position: Int): List<Movie> {
         if(query != RECOMMENDATIONS_QUERY){
             val response: TMDBResponse = when(query){
@@ -33,13 +32,11 @@ class MoviesPagingSource(private val query: String, private val favouriteMoviesI
                     TMDBApi.retrofitService.getSearchMovies(query = query, page = position)
                 }
             }
-
-             return response.movies.map {
+            return response.movies.map {
                 it.toMovie()
             }
         }
         return getRecommendationsResponse(position)
-
     }
 
 
@@ -51,8 +48,6 @@ class MoviesPagingSource(private val query: String, private val favouriteMoviesI
                 listOfMovies.addAll(response.movies.map { it.toMovie() })
             }
         }
-        Log.i("RecommendedMoviesModel", "paging source $listOfMovies")
         return listOfMovies
-
     }
 }

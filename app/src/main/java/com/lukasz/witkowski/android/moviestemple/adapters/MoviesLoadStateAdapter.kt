@@ -1,5 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -9,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.databinding.MoviesLoadStateFooterViewItemBinding
 
-class MoviesLoadStateAdapter(private val retry: () -> Unit): LoadStateAdapter<MoviesLoadStateAdapter.MoviesLoadStateViewHolder>() {
+class MoviesLoadStateAdapter(private val context: Context, private val retry: () -> Unit)
+    : LoadStateAdapter<MoviesLoadStateAdapter.MoviesLoadStateViewHolder>() {
 
 
     override fun onBindViewHolder(holder: MoviesLoadStateViewHolder, loadState: LoadState) {
@@ -36,7 +38,7 @@ class MoviesLoadStateAdapter(private val retry: () -> Unit): LoadStateAdapter<Mo
 
         fun bind(loadState: LoadState){
             if(loadState is LoadState.Error){
-                binding.errorMessage.text = contextgetString(R.string.connection_error_message)
+                binding.errorMessage.text = context.getString(R.string.connection_error_message)
             }
             binding.moviesProgressbar.isVisible = loadState is LoadState.Loading
             binding.errorMessage.isVisible = loadState !is LoadState.Loading

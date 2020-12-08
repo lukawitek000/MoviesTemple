@@ -1,10 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,19 +19,15 @@ import kotlinx.coroutines.launch
 
 class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapterOnClickHandler{
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_poster_list_layout, container, false)
-
         moviesAdapter = MoviesAdapter(this)
         setUpRecyclerView()
-
         retryOrRefreshList()
         initAdapter()
-        setTextWhenFavouriteMoviesIsEmpty("You don't have any favourite movies")
+        setTextWhenFavouriteMoviesIsEmpty(resources.getString(R.string.empty_favourite_movies_database_info))
         getFavouriteMovies()
-
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -54,7 +47,6 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
     }
 
 
-
     override fun onClick(movie: Movie) {
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_favouriteMoviesFragment_to_detailInformationFragment)
@@ -65,6 +57,7 @@ class FavouriteMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAda
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         return inflater.inflate(R.menu.favourite_fragment_menu, menu)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when(item.itemId){
         R.id.delete_all_item -> {

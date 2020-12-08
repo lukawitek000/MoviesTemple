@@ -12,7 +12,7 @@ import com.lukasz.witkowski.android.moviestemple.models.Actor
 class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
     interface CastOnClickListener{
-        fun onClick(actor: Actor)
+        fun onActorClick(actor: Actor)
     }
 
     private var castList: List<Actor> = emptyList()
@@ -58,7 +58,7 @@ class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerVie
 
         override fun onClick(p0: View?) {
             if(actor != null){
-                onClickListener.onClick(actor!!)
+                onClickListener.onActorClick(actor!!)
             }
         }
     }
