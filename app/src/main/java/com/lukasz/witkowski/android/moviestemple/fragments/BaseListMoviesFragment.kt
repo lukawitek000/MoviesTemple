@@ -114,6 +114,7 @@ open class BaseListMoviesFragment : Fragment() {
             if(loadState.append.endOfPaginationReached){
                 if(moviesAdapter.itemCount < 1){
                     setVisibilityBaseOnStatus(MainViewModel.Status.FAILURE, text)
+                    binding.retryButton.visibility = View.GONE
                 }
             }
         }
