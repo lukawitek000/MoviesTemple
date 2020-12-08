@@ -45,4 +45,11 @@
     <string name="retry">Retry</string>
     <string name="info">Info</string>
     <string name="recommendations_dialog_text">Recommendations are based on your favourite movies</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top rated</string>
+    <string name="favourites">Favourites</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="like">Like</string>
+    <string name="delete_all">Delete all</string>
+    <string name="search">Search</string>
 </resources>

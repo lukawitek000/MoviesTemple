@@ -37,7 +37,7 @@
                         android:layout_gravity="end"
                         android:scaleType="fitCenter"
                         tools:adjustViewBounds="true"
-                        android:src="@drawable/ic_share_icon"
+                        android:src="@drawable/default_movie_poster"
                         app:layout_collapseMode="pin"
                         android:contentDescription="@string/movie_poster_content_description" />
 

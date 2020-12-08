@@ -275,9 +275,9 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
         val item = menu.findItem(R.id.like_item)
         if(item != null) {
             if (sharedViewModel.isSelectedMovieInDatabase()) {
-                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_favorite, null)
             } else {
-                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite, null)
             }
         }
     }
@@ -299,13 +299,13 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     private fun handleLikeItemClick(item: MenuItem) {
         if (sharedViewModel.isSelectedMovieInDatabase()) {
             sharedViewModel.deleteMovieFromDatabase()
-            item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite_icon, null)
+            item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_empty_favourite, null)
             Toast.makeText(requireContext(),
                     resources.getString(R.string.removed_from_favourite_info),
                     Toast.LENGTH_SHORT).show()
         } else {
             sharedViewModel.addMovieToDatabase()
-            item.icon = ResourcesCompat.getDrawable(resources, R.drawable.id_favorite, null)
+            item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_favorite, null)
             Toast.makeText(requireContext(),
                     resources.getString(R.string.added_to_favourite_info),
                     Toast.LENGTH_SHORT).show()
