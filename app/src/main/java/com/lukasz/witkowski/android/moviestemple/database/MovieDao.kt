@@ -9,63 +9,80 @@ import com.lukasz.witkowski.android.moviestemple.models.entities.*
 @Dao
 interface MovieDao {
 
-
     @Query("SELECT * FROM Movies ORDER BY movieId DESC")
     fun getAllMoviesPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM Movies")
     suspend fun getAllMovies(): List<MovieEntity>
 
-
     @Transaction
     @Query("SELECT * FROM Movies WHERE movieId = :id")
     suspend fun getMovieWithVideosAndReviews(id: Int): MovieAllInformation
 
-
     @Query("SELECT EXISTS (SELECT 1 FROM Movies WHERE movieId = :id)")
     suspend fun isMovieInDatabase(id: Int): Boolean
 
-
-
     @Transaction
     suspend fun insert(movie: Movie){
-
-        movie.writers.forEach {
-            insertMovieWithWriter(MovieWithWriter(movie.id, it.writerId))
-            insertWriter(it)
-        }
-
-        movie.directors.forEach {
-            insertMovieWithDirector(MovieWithDirector(movie.id, it.directorId))
-            insertDirector(it)
-        }
-
-        movie.cast.forEach {
-            insertMovieWithActor(MovieWithActor(movie.id, it.actorId))
-            insertActor(it)
-        }
-
-        movie.genres.forEach {
-            insertMovieWithGenres(MovieWithGenre(movie.id, it.genreId))
-            insertGenres(it)
-        }
-
+        insertMovieWriters(movie)
+        insertMovieDirectors(movie)
+        insertMovieCast(movie)
+        insertMovieGenres(movie)
         insertMovie(movie.toMovieEntity())
-        val videos = movie.videos
-        videos.forEach {
-            val videoEntity = it.toVideoEntity()
-            videoEntity.movieOwnerID = movie.id.toLong()
-            insertVideo(videoEntity)
-        }
-        val reviews = movie.reviews
-        reviews.forEach {
+        insertMovieVideos(movie)
+        insertMovieReviews(movie)
+    }
+
+    @Transaction
+    suspend fun insertMovieReviews(movie: Movie) {
+        movie.reviews.forEach {
             val reviewEntity = it.toReviewEntity()
             reviewEntity.movieOwnerID = movie.id.toLong()
             insertReview(reviewEntity)
         }
-
-
     }
+
+    @Transaction
+    suspend fun insertMovieVideos(movie: Movie) {
+        movie.videos.forEach {
+            val videoEntity = it.toVideoEntity()
+            videoEntity.movieOwnerID = movie.id.toLong()
+            insertVideo(videoEntity)
+        }
+    }
+
+    @Transaction
+    suspend fun insertMovieGenres(movie: Movie) {
+        movie.genres.forEach {
+            insertMovieWithGenres(MovieWithGenre(movie.id, it.genreId))
+            insertGenres(it)
+        }
+    }
+
+    @Transaction
+    suspend fun insertMovieCast(movie: Movie) {
+        movie.cast.forEach {
+            insertMovieWithActor(MovieWithActor(movie.id, it.actorId))
+            insertActor(it)
+        }
+    }
+
+    @Transaction
+    suspend fun insertMovieDirectors(movie: Movie) {
+        movie.directors.forEach {
+            insertMovieWithDirector(MovieWithDirector(movie.id, it.directorId))
+            insertDirector(it)
+        }
+    }
+
+    @Transaction
+    suspend fun insertMovieWriters(movie: Movie){
+        movie.writers.forEach {
+            insertMovieWithWriter(MovieWithWriter(movie.id, it.writerId))
+            insertWriter(it)
+        }
+    }
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWriter(writer: Writer)
