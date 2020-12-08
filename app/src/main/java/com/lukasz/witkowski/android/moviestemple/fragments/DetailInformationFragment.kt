@@ -86,10 +86,18 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     }
 
     private fun setUpToolbarInfo() {
-        Glide.with(requireContext())
-                .load(selectedMovie.posterUri)
-                .placeholder(R.drawable.poster_placeholder)
-                .into(binding.ivToolbarPoster)
+        if(selectedMovie.posterUri != null){
+            Glide.with(requireContext())
+                    .load(selectedMovie.posterUri)
+                    .placeholder(R.drawable.poster_placeholder)
+                    .into(binding.ivToolbarPoster)
+        }else{
+            Glide.with(requireContext())
+                    .load(R.drawable.default_movie_poster)
+                    .placeholder(R.drawable.poster_placeholder)
+                    .into(binding.ivToolbarPoster)
+        }
+
         binding.detailInformationToolbar.title = selectedMovie.title
     }
 
