@@ -2,6 +2,7 @@ package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -322,6 +323,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
 
     override fun onStop() {
+        sharedViewModel.isDetailInfoClicked = true
         (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
         super.onStop()
     }
