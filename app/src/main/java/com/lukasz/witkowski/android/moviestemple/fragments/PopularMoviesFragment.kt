@@ -1,6 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -67,17 +68,20 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
 
     override fun onMovieClick(movie: Movie) {
+        //(activity as MainActivity).hideKeyboard()
+        //hideKeyboard()
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.popular_movie_title))
     }
 
 
+    private lateinit var searchView: SearchView
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         val menuItem = menu.findItem(R.id.search_icon)
-        val searchView = menuItem.actionView as SearchView
+        searchView = menuItem.actionView as SearchView
         searchView.queryHint = resources.getString(R.string.search_hint)
         handleSearchStateToolbarView(searchView, menuItem)
         setQueryListener(searchView)
@@ -107,6 +111,9 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
+                        if(!newText.isNullOrEmpty()){
+                            sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
+                        }
                         return true
                     }
                 }
@@ -114,7 +121,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
         searchView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
             override fun onViewAttachedToWindow(v: View?) {
-                sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
+                //sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
             }
 
             override fun onViewDetachedFromWindow(v: View?) {
@@ -127,18 +134,22 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
             }
 
         })
+
     }
 
 
     private fun hideKeyboard(){
-        val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+        val manager = (activity as MainActivity).getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow((activity as MainActivity).currentFocus?.windowToken, 0)
+        if(::searchView.isInitialized) {
+            searchView.clearFocus()
+        }
     }
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
         sharedViewModel.isDetailInfoClicked = false
         hideKeyboard()
+        super.onDestroyView()
     }
 }
