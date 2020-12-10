@@ -29,7 +29,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         retryOrRefreshList()
         initAdapter()
         initialGetMovies()
-        setTextWhenMoviesAdapterIsEmpty("There is no such movies")
+        setTextWhenMoviesAdapterIsEmpty(resources.getString(R.string.no_movies_info))
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -65,28 +65,28 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
     private lateinit var searchView: SearchView
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         val menuItem = menu.findItem(R.id.search_icon)
         searchView = menuItem.actionView as SearchView
         searchView.queryHint = resources.getString(R.string.search_hint)
-        handleSearchStateToolbarView(searchView, menuItem)
+        handleSearchStateToolbarView(menuItem)
         setQueryListener(searchView)
     }
 
 
-    private fun handleSearchStateToolbarView(searchView: SearchView, menuItem: MenuItem?) {
+    private fun handleSearchStateToolbarView(menuItem: MenuItem?) {
         if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
+
             menuItem?.expandActionView()
-            searchView.isActivated = true
+            hideKeyboard()
             if(sharedViewModel.isDetailInfoClicked){
                 searchViewText = sharedViewModel.currentQueryValue ?: searchViewText
             }
             searchView.setQuery(searchViewText, true)
-            hideKeyboard()
             sharedViewModel.currentQueryValue?.let { getMovies(it) }
             sharedViewModel.isDetailInfoClicked = false
-
         }else{
             getMovies()
         }
