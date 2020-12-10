@@ -1,5 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -93,7 +94,7 @@ open class BaseListMoviesFragment : Fragment() {
     }
 
 
-    fun setTextWhenFavouriteMoviesIsEmpty(text: String){
+    fun setTextWhenMoviesAdapterIsEmpty(text: String){
         moviesAdapter.addLoadStateListener { loadState ->
             if(loadState.append.endOfPaginationReached){
                 if(moviesAdapter.itemCount < 1){

@@ -1,9 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
@@ -31,6 +29,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         retryOrRefreshList()
         initAdapter()
         initialGetMovies()
+        setTextWhenMoviesAdapterIsEmpty("There is no such movies")
         setHasOptionsMenu(true)
         return binding.root
     }
