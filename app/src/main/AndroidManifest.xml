@@ -15,7 +15,8 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m"
         tools:ignore="AllowBackup">
-        <activity android:name="com.lukasz.witkowski.android.moviestemple.MainActivity">
+        <activity android:name="com.lukasz.witkowski.android.moviestemple.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

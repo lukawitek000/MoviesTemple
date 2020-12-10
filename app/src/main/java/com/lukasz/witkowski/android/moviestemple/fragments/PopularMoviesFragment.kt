@@ -47,8 +47,6 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     private var job: Job? = null
 
     private fun getMovies(query: String = POPULAR_MOVIES_QUERY){
-        //setToolbarState(query)
-
         job?.cancel()
         job = lifecycleScope.launch {
             sharedViewModel.getMovies(query).collectLatest {
@@ -58,18 +56,8 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
     }
 
 
-    private fun setToolbarState(query: String) {
-        if(query != POPULAR_MOVIES_QUERY){
-            sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
-        }else{
-            sharedViewModel.toolbarState = MainViewModel.ToolbarState.NORMAL
-        }
-    }
-
 
     override fun onMovieClick(movie: Movie) {
-        //(activity as MainActivity).hideKeyboard()
-        //hideKeyboard()
         sharedViewModel.selectMovie(movie)
         findNavController().navigate(R.id.action_popularMoviesFragment_to_detailInformationFragment)
         (activity as MainActivity).changeToolbarTitle(resources.getString(R.string.popular_movie_title))
@@ -92,9 +80,14 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
             menuItem?.expandActionView()
             searchView.isActivated = true
-            searchView.setQuery(sharedViewModel.currentQueryValue, true)
+            if(sharedViewModel.isDetailInfoClicked){
+                searchViewText = sharedViewModel.currentQueryValue ?: searchViewText
+            }
+            searchView.setQuery(searchViewText, true)
+            hideKeyboard()
             sharedViewModel.currentQueryValue?.let { getMovies(it) }
             sharedViewModel.isDetailInfoClicked = false
+
         }else{
             getMovies()
         }
@@ -106,6 +99,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         getMovies(query ?: POPULAR_MOVIES_QUERY)
+                        searchViewText = query ?: ""
                         hideKeyboard()
                         return true
                     }
@@ -114,6 +108,7 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
                         if(!newText.isNullOrEmpty()){
                             sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
                         }
+                        searchViewText = newText ?: ""
                         return true
                     }
                 }
@@ -121,7 +116,6 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
 
         searchView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
             override fun onViewAttachedToWindow(v: View?) {
-                //sharedViewModel.toolbarState = MainViewModel.ToolbarState.SEARCH
             }
 
             override fun onViewDetachedFromWindow(v: View?) {
@@ -129,7 +123,10 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
                     if(searchView.query.isNullOrEmpty()) {
                         getMovies()
                         sharedViewModel.toolbarState = MainViewModel.ToolbarState.NORMAL
+                        sharedViewModel.currentQueryValue = null
                     }
+                }else{
+                    searchViewText = searchView.query.toString()
                 }
             }
 
@@ -151,5 +148,23 @@ class PopularMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieAdapt
         sharedViewModel.isDetailInfoClicked = false
         hideKeyboard()
         super.onDestroyView()
+    }
+
+
+    companion object{
+        const val SEARCH_VIEW_KEY = "SEARCH_VIEW_KEY"
+    }
+
+    private var searchViewText = ""
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        searchViewText = savedInstanceState?.getString(SEARCH_VIEW_KEY) ?: ""
+        super.onViewStateRestored(savedInstanceState)
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(SEARCH_VIEW_KEY, searchViewText)
+        super.onSaveInstanceState(outState)
     }
 }
