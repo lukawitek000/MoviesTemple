@@ -10,14 +10,15 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.Companion.MOVIE_POSTER
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesLoadStateAdapter
 import com.lukasz.witkowski.android.moviestemple.api.IMAGE_WIDTH
 import com.lukasz.witkowski.android.moviestemple.databinding.MoviesPosterListLayoutBinding
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
 
 open class BaseListMoviesFragment : Fragment() {
 
@@ -72,13 +73,13 @@ open class BaseListMoviesFragment : Fragment() {
     protected fun initAdapter() {
         moviesAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         moviesRecyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
-                footer = MoviesLoadStateAdapter(requireContext()){moviesAdapter.retry()},
-                header = MoviesLoadStateAdapter(requireContext()){moviesAdapter.retry()}
+                footer = MoviesLoadStateAdapter(requireContext()) { moviesAdapter.retry() },
+                header = MoviesLoadStateAdapter(requireContext()) { moviesAdapter.retry() }
         )
 
         moviesAdapter.addLoadStateListener { loadState ->
-            when(loadState.source.refresh){
-                is LoadState.Loading ->  setVisibilityBaseOnStatus(MainViewModel.Status.LOADING, "")
+            when(loadState.refresh){
+                is LoadState.Loading -> setVisibilityBaseOnStatus(MainViewModel.Status.LOADING, "")
                 is LoadState.NotLoading -> setVisibilityBaseOnStatus(MainViewModel.Status.SUCCESS, "")
                 is LoadState.Error -> setVisibilityBaseOnStatus(
                         MainViewModel.Status.FAILURE,
@@ -107,23 +108,37 @@ open class BaseListMoviesFragment : Fragment() {
 
 
     private fun setVisibilityBaseOnStatus(status: MainViewModel.Status, failureMessage: String) {
-        binding.rvMovies.visibility = View.VISIBLE
         when (status) {
             MainViewModel.Status.SUCCESS -> {
                 binding.pbMoviesList.visibility = View.GONE
                 binding.tvMoviesListErrorMessage.visibility = View.GONE
                 binding.btRetry.visibility = View.GONE
+                binding.rvMovies.visibility = View.VISIBLE
+                if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
             }
             MainViewModel.Status.LOADING -> {
                 binding.pbMoviesList.visibility = View.VISIBLE
                 binding.tvMoviesListErrorMessage.visibility = View.GONE
                 binding.btRetry.visibility = View.GONE
+                binding.rvMovies.visibility = View.VISIBLE
+                if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
+                    binding.swipeRefreshLayout.isRefreshing = true
+                    binding.pbMoviesList.visibility = View.INVISIBLE
+                }
             }
             else -> {
                 binding.tvMoviesListErrorMessage.text = failureMessage
                 binding.pbMoviesList.visibility = View.GONE
                 binding.tvMoviesListErrorMessage.visibility = View.VISIBLE
                 binding.btRetry.visibility = View.VISIBLE
+                if(sharedViewModel.toolbarState == MainViewModel.ToolbarState.SEARCH){
+                    binding.rvMovies.visibility = View.INVISIBLE
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }else{
+                    binding.rvMovies.visibility = View.VISIBLE
+                }
             }
         }
     }
