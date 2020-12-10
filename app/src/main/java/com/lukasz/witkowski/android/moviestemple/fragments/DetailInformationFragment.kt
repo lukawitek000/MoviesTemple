@@ -231,22 +231,36 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
 
     private fun setDetailInformationVisible(isVisible: Boolean) {
-        binding.tvGenreLabel.visibility = setVisibility(selectedMovie.genres, isVisible)
-        binding.tvGenres.visibility = setVisibility(selectedMovie.genres, isVisible)
-        binding.tvDirectorLabel.visibility = setVisibility(selectedMovie.directors, isVisible)
-        binding.tvDirectors.visibility = setVisibility(selectedMovie.directors, isVisible)
-        binding.tvWritersLabel.visibility = setVisibility(selectedMovie.writers, isVisible)
-        binding.tvWriters.visibility = setVisibility(selectedMovie.writers, isVisible)
-        binding.tvCastLabel.visibility = setVisibility(selectedMovie.cast, isVisible)
-        binding.rvCast.visibility = setVisibility(selectedMovie.cast, isVisible)
-        binding.tvVideosLabel.visibility = setVisibility(selectedMovie.videos, isVisible)
-        binding.rvVideos.visibility = setVisibility(selectedMovie.videos, isVisible)
-        binding.tvReviewsLabel.visibility = setVisibility(selectedMovie.reviews, isVisible)
-        binding.rvReviews.visibility = setVisibility(selectedMovie.reviews, isVisible)
+        binding.tvOriginalTitle.visibility = setVisibility(selectedMovie.originalTitle)
+        binding.tvOriginalTitleLabel.visibility = setVisibility(selectedMovie.originalTitle)
+        binding.tvReleaseDate.visibility = setVisibility(selectedMovie.releaseDate)
+        binding.tvReleaseDateLabel.visibility = setVisibility(selectedMovie.releaseDate)
+        binding.tvOverview.visibility = setVisibility(selectedMovie.overview)
+        binding.tvOverviewLabel.visibility = setVisibility(selectedMovie.overview)
+        binding.tvGenreLabel.visibility = setListVisibility(selectedMovie.genres, isVisible)
+        binding.tvGenres.visibility = setListVisibility(selectedMovie.genres, isVisible)
+        binding.tvDirectorLabel.visibility = setListVisibility(selectedMovie.directors, isVisible)
+        binding.tvDirectors.visibility = setListVisibility(selectedMovie.directors, isVisible)
+        binding.tvWritersLabel.visibility = setListVisibility(selectedMovie.writers, isVisible)
+        binding.tvWriters.visibility = setListVisibility(selectedMovie.writers, isVisible)
+        binding.tvCastLabel.visibility = setListVisibility(selectedMovie.cast, isVisible)
+        binding.rvCast.visibility = setListVisibility(selectedMovie.cast, isVisible)
+        binding.tvVideosLabel.visibility = setListVisibility(selectedMovie.videos, isVisible)
+        binding.rvVideos.visibility = setListVisibility(selectedMovie.videos, isVisible)
+        binding.tvReviewsLabel.visibility = setListVisibility(selectedMovie.reviews, isVisible)
+        binding.rvReviews.visibility = setListVisibility(selectedMovie.reviews, isVisible)
+    }
+
+    private fun setVisibility(value: String): Int{
+        return if(value.isEmpty()){
+            View.GONE
+        }else{
+            View.VISIBLE
+        }
     }
 
 
-    private fun <T> setVisibility(list: List<T>, visible: Boolean): Int {
+    private fun <T> setListVisibility(list: List<T>, visible: Boolean): Int {
         return if(!visible){
             View.GONE
         }else{
@@ -322,6 +336,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
 
     override fun onStop() {
+        sharedViewModel.isDetailInfoClicked = true
         (requireActivity() as MainActivity).setBottomNavigationVisibility(View.VISIBLE, true)
         super.onStop()
     }

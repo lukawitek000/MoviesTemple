@@ -23,6 +23,8 @@ class MainViewModel(application: Application) : ViewModel() {
 
     var toolbarState = ToolbarState.NORMAL
 
+    var isDetailInfoClicked = false
+
     private val repository = MainRepository.getInstance(application)
 
     val favouriteMovies = repository.favouriteMovies.cachedIn(viewModelScope)

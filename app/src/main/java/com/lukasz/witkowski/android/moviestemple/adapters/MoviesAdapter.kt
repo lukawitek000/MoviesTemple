@@ -64,12 +64,12 @@ class MoviesAdapter(private val clickHandler: MovieAdapterOnClickHandler)
             if (movie != null){
                 this.movie = movie
                 if(movie.posterUri != null) {
-                    Glide.with(posterImage.context)
+                    Glide.with(itemView.context)
                             .load(movie.posterUri)
                             .placeholder(R.drawable.poster_placeholder)
                             .into(posterImage)
                 }else{
-                    Glide.with(posterImage.context)
+                    Glide.with(itemView.context)
                             .load(R.drawable.default_movie_poster)
                             .placeholder(R.drawable.poster_placeholder)
                             .into(posterImage)

@@ -52,4 +52,5 @@
     <string name="like">Like</string>
     <string name="delete_all">Delete all</string>
     <string name="search">Search</string>
+    <string name="no_movies_info">There is no such movies</string>
 </resources>

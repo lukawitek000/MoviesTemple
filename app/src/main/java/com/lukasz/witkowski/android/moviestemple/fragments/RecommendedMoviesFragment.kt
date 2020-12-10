@@ -26,7 +26,7 @@ class RecommendedMoviesFragment : BaseListMoviesFragment(), MoviesAdapter.MovieA
         setUpRecyclerView()
         retryOrRefreshList()
         initAdapter()
-        setTextWhenFavouriteMoviesIsEmpty(resources.getString(R.string.empty_recommendations_info))
+        setTextWhenMoviesAdapterIsEmpty(resources.getString(R.string.empty_recommendations_info))
         getRecommendedMovies()
 
         setHasOptionsMenu(true)
