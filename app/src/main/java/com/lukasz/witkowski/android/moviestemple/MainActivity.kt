@@ -21,7 +21,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.lukasz.witkowski.android.moviestemple.databinding.ActivityMainBinding
 import com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 

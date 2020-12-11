@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.MainActivity
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
@@ -24,8 +23,9 @@ import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.dialogs.ActorDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.*
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.CastOnClickListener {
 
     companion object{

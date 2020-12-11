@@ -10,15 +10,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class DeleteAllFavouriteMoviesDialogFragment: DialogFragment() {
 
     companion object{
         const val TAG = "DeleteAllFavouriteMoviesDialogFragment"
     }
 
-    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val sharedViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())

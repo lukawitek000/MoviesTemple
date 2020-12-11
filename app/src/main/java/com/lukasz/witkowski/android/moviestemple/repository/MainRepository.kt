@@ -144,7 +144,7 @@ constructor(
                              initialLoadSize = 2 * TMDB_PAGE_SIZE,
                              prefetchDistance = TMDB_PAGE_SIZE
                      ),
-                     pagingSourceFactory = { MoviesPagingSource(RECOMMENDATIONS_QUERY, listOfIds) }
+                     pagingSourceFactory = { MoviesPagingSource(tmdbService, RECOMMENDATIONS_QUERY, listOfIds) }
              ).flow
          }
     }
@@ -165,7 +165,7 @@ constructor(
                         initialLoadSize = 2 * TMDB_PAGE_SIZE,
                         prefetchDistance = TMDB_PAGE_SIZE
                 ),
-                pagingSourceFactory = { MoviesPagingSource(query) }
+                pagingSourceFactory = { MoviesPagingSource(tmdbService, query) }
         ).flow
     }
 

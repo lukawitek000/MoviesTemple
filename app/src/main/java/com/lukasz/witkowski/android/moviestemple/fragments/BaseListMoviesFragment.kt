@@ -18,8 +18,9 @@ import com.lukasz.witkowski.android.moviestemple.adapters.MoviesLoadStateAdapter
 import com.lukasz.witkowski.android.moviestemple.api.IMAGE_WIDTH
 import com.lukasz.witkowski.android.moviestemple.databinding.MoviesPosterListLayoutBinding
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 open class BaseListMoviesFragment : Fragment() {
 
     protected lateinit var moviesAdapter: MoviesAdapter
