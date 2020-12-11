@@ -37,7 +37,7 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     private lateinit var videosAdapter: VideosAdapter
     private lateinit var reviewsAdapter: ReviewsAdapter
 
-    private val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    private val sharedViewModel: MainViewModel by activityViewModels()
 
     private lateinit var binding: FragmentDetailInfromationBinding
 

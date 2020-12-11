@@ -24,7 +24,7 @@ open class BaseListMoviesFragment : Fragment() {
 
     protected lateinit var moviesAdapter: MoviesAdapter
     private lateinit var moviesRecyclerView: RecyclerView
-    protected val sharedViewModel by activityViewModels<MainViewModel> { MainViewModelFactory(requireActivity().application) }
+    protected val sharedViewModel: MainViewModel by activityViewModels()
     protected lateinit var binding: MoviesPosterListLayoutBinding
 
     protected fun setUpRecyclerView() {
