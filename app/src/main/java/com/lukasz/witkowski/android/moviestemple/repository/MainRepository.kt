@@ -6,15 +6,20 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.lukasz.witkowski.android.moviestemple.api.*
 import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
+import com.lukasz.witkowski.android.moviestemple.database.MovieDao
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 
-class MainRepository(application: Application) {
+class MainRepository
+constructor(
+        private val movieDao: MovieDao,
+        private val tmdbService: TMDBService
+) {
 
-    companion object {
+   /* companion object {
         private val LOCK = Any()
         @Volatile
         private var instance: MainRepository? = null
@@ -23,15 +28,15 @@ class MainRepository(application: Application) {
                 MainRepository(application)
             }
         }
-    }
+    }*/
 
-    private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
+   // private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
     val favouriteMovies = Pager(
             config = PagingConfig(
                     pageSize = 20,
                     enablePlaceholders = false
             ),
-            pagingSourceFactory = { database!!.movieDao().getAllMoviesPagingSource() }
+            pagingSourceFactory = { movieDao.getAllMoviesPagingSource() }
     ).flow
 
 
@@ -48,7 +53,7 @@ class MainRepository(application: Application) {
 
     suspend fun getMovieDetailsFromApi(movie: Movie): Movie {
         return withContext(IO) {
-            val response = TMDBApi.retrofitService.getMovieDetailsVideosReviewsById(movieId = movie.id)
+            val response = tmdbService.getMovieDetailsVideosReviewsById(movieId = movie.id)
             movie.reviews  = response.reviews.results.map {
                 it.toReview()
             }
@@ -86,15 +91,15 @@ class MainRepository(application: Application) {
 
     private suspend fun getMovieDetailsFromDatabase(id: Int): Movie {
         return withContext(IO){
-            val databaseEntity = database?.movieDao()?.getMovieWithVideosAndReviews(id)
-            databaseEntity!!.toMovie()
+            val databaseEntity = movieDao.getMovieWithVideosAndReviews(id)
+            databaseEntity.toMovie()
         }
     }
 
 
     private suspend fun isMovieInDatabase(id: Int): Boolean {
         return withContext(IO) {
-            database?.movieDao()?.isMovieInDatabase(id) ?: false
+            movieDao.isMovieInDatabase(id) ?: false
         }
     }
 
@@ -108,21 +113,21 @@ class MainRepository(application: Application) {
 
     suspend fun deleteMovieFromDatabase(movie: Movie){
         withContext(IO){
-            database!!.movieDao().deleteMovieReviewAndVideo(movie.toMovieEntity())
+            movieDao.deleteMovieReviewAndVideo(movie.toMovieEntity())
         }
     }
 
 
     suspend fun insertMovieToDatabase(movie: Movie){
         withContext(IO){
-            database?.movieDao()?.insert(movie)
+            movieDao.insert(movie)
         }
     }
 
 
     private suspend fun getFavouriteMoviesId(): List<Int> {
         return withContext(IO){
-            val listOfIds: List<Int> =  database!!.movieDao().getAllMovies().map {
+            val listOfIds: List<Int> =  movieDao.getAllMovies().map {
                 it.movieId
             }
             listOfIds
@@ -147,7 +152,7 @@ class MainRepository(application: Application) {
 
     suspend fun deleteAllFavouriteMovies(){
         withContext(IO){
-            database?.movieDao()?.deleteAll()
+            movieDao.deleteAll()
         }
     }
 
