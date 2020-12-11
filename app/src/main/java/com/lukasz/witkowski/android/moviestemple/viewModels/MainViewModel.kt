@@ -1,6 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
-import android.app.Application
+
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -33,7 +33,6 @@ constructor(
 
     var isDetailInfoClicked = false
 
-   // private val repository = MainRepository.getInstance(application)
 
     val favouriteMovies = repository.favouriteMovies.cachedIn(viewModelScope)
 

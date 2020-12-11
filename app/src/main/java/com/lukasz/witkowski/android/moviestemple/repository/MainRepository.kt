@@ -1,11 +1,9 @@
 package com.lukasz.witkowski.android.moviestemple.repository
 
-import android.app.Application
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.lukasz.witkowski.android.moviestemple.api.*
-import com.lukasz.witkowski.android.moviestemple.database.FavouriteMovieDatabase
 import com.lukasz.witkowski.android.moviestemple.database.MovieDao
 import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
@@ -19,18 +17,6 @@ constructor(
         private val tmdbService: TMDBService
 ) {
 
-   /* companion object {
-        private val LOCK = Any()
-        @Volatile
-        private var instance: MainRepository? = null
-        fun getInstance(application: Application): MainRepository {
-            return instance ?: synchronized(LOCK){
-                MainRepository(application)
-            }
-        }
-    }*/
-
-   // private val database = FavouriteMovieDatabase.getInstance(application.applicationContext)
     val favouriteMovies = Pager(
             config = PagingConfig(
                     pageSize = 20,
@@ -99,7 +85,7 @@ constructor(
 
     private suspend fun isMovieInDatabase(id: Int): Boolean {
         return withContext(IO) {
-            movieDao.isMovieInDatabase(id) ?: false
+            movieDao.isMovieInDatabase(id)
         }
     }
 

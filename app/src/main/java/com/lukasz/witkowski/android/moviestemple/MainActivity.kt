@@ -1,16 +1,11 @@
 package com.lukasz.witkowski.android.moviestemple
 
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -20,7 +15,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.lukasz.witkowski.android.moviestemple.databinding.ActivityMainBinding
 import com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 

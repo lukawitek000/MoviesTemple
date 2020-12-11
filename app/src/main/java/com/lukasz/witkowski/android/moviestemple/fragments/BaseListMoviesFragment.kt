@@ -1,6 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.fragments
 
-import android.util.Log
+
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -10,7 +10,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.Companion.MOVIE_POSTER
