@@ -16,8 +16,8 @@ abstract class FavouriteMovieDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 
     companion object {
-        private const val DATABASE_NAME = "FAVOURITE_MOVIES"
-        private val LOCK = Any()
+        const val DATABASE_NAME = "FAVOURITE_MOVIES"
+       /* private val LOCK = Any()
 
         @Volatile
         private var instance: FavouriteMovieDatabase? = null
@@ -32,6 +32,6 @@ abstract class FavouriteMovieDatabase : RoomDatabase() {
                 }
             }
             return instance
-        }
+        }*/
     }
 }
