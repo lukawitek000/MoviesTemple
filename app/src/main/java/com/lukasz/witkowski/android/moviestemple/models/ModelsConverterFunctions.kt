@@ -47,9 +47,7 @@ fun MovieAllInformation.toMovie(): Movie{
     val videos = videos.map { it.toVideo() }
     val reviews = reviews.map { it.toReview() }
     return Movie(movie.posterPath, movie.movieId, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
-    movie.releaseDate, genres, videos, reviews, cast.sortedBy {
-        it.order
-    }, directors, writers)
+    movie.releaseDate, genres.toGenreList(), videos, reviews, cast.toActorList().sortByOrder(), directors.toDirectorList(), writers.toWriterList())
 }
 
 fun MovieEntity.toMovie() : Movie {

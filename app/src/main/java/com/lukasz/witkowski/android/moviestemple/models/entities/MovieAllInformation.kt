@@ -3,7 +3,6 @@ package com.lukasz.witkowski.android.moviestemple.models.entities
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import com.lukasz.witkowski.android.moviestemple.models.*
 
 
 data class MovieAllInformation(
@@ -12,7 +11,7 @@ data class MovieAllInformation(
 
         @Relation(
                 parentColumn = "movieId",
-                entity = Actor::class,
+                entity = ActorEntity::class,
                 entityColumn = "actorId",
                 associateBy = Junction(
                         value = MovieWithActor::class,
@@ -20,11 +19,11 @@ data class MovieAllInformation(
                         entityColumn = "actorId"
                 )
         )
-        var cast: List<Actor>,
+        var cast: List<ActorEntity>,
 
         @Relation(
                 parentColumn = "movieId",
-                entity = Genre::class,
+                entity = GenreEntity::class,
                 entityColumn = "genreId",
                 associateBy = Junction(
                         value = MovieWithGenre::class,
@@ -32,7 +31,7 @@ data class MovieAllInformation(
                         entityColumn = "genreId"
                 )
         )
-        var genres: List<Genre>,
+        var genres: List<GenreEntity>,
 
         @Relation(
                 parentColumn = "movieId",
@@ -50,7 +49,7 @@ data class MovieAllInformation(
 
         @Relation(
                 parentColumn = "movieId",
-                entity = Director::class,
+                entity = DirectorEntity::class,
                 entityColumn = "directorId",
                 associateBy = Junction(
                         value = MovieWithDirector::class,
@@ -58,11 +57,11 @@ data class MovieAllInformation(
                         entityColumn = "directorId"
                 )
         )
-        var directors: List<Director>,
+        var directors: List<DirectorEntity>,
 
         @Relation(
                 parentColumn = "movieId",
-                entity = Writer::class,
+                entity = WriterEntity::class,
                 entityColumn = "writerId",
                 associateBy = Junction(
                         value = MovieWithWriter::class,
@@ -70,5 +69,5 @@ data class MovieAllInformation(
                         entityColumn = "writerId"
                 )
         )
-        var writers: List<Writer>
+        var writers: List<WriterEntity>
 )
