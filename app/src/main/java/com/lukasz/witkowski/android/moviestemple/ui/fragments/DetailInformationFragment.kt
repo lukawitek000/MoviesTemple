@@ -23,6 +23,7 @@ import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.ui.dialogs.ActorDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.*
+import com.lukasz.witkowski.android.moviestemple.util.toText
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

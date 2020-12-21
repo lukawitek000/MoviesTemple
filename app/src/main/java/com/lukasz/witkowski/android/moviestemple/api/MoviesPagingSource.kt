@@ -3,7 +3,7 @@ package com.lukasz.witkowski.android.moviestemple.api
 import androidx.paging.PagingSource
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.api.responses.TMDBResponse
-import com.lukasz.witkowski.android.moviestemple.models.toMovie
+import com.lukasz.witkowski.android.moviestemple.util.toMovie
 import java.lang.Exception
 
 class MoviesPagingSource(private val tmdbService: TMDBService, private val query: String, private val favouriteMoviesIds: List<Int> = emptyList()) : PagingSource<Int, Movie>()  {

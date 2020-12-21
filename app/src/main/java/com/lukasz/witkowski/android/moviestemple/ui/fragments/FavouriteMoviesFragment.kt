@@ -11,7 +11,7 @@ import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.dialogs.DeleteAllFavouriteMoviesDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.Movie
-import com.lukasz.witkowski.android.moviestemple.models.toMovie
+import com.lukasz.witkowski.android.moviestemple.util.toMovie
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

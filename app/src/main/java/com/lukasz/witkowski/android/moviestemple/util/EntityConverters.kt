@@ -1,12 +1,36 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.util
 
-import com.lukasz.witkowski.android.moviestemple.database.entities.ActorEntity
-import com.lukasz.witkowski.android.moviestemple.database.entities.DirectorEntity
-import com.lukasz.witkowski.android.moviestemple.database.entities.GenreEntity
-import com.lukasz.witkowski.android.moviestemple.database.entities.WriterEntity
+import com.lukasz.witkowski.android.moviestemple.database.entities.*
+import com.lukasz.witkowski.android.moviestemple.models.*
+
+fun Movie.toMovieEntity(): MovieEntity {
+    return MovieEntity(posterPath, id, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+}
+
+fun VideoEntity.toVideo(): Video {
+    return Video(key, name, site)
+}
+
+fun Video.toVideoEntity(): VideoEntity {
+    return VideoEntity(0L, 0L, key, name, site)
+}
+
+fun MovieEntity.toMovie() : Movie {
+    return Movie(posterPath, movieId, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+}
 
 
-fun GenreEntity.toGenre(): Genre{
+fun Review.toReviewEntity(): ReviewEntity{
+    return ReviewEntity(0L, 0L, author, content)
+}
+
+
+fun ReviewEntity.toReview(): Review {
+    return  Review(author, content)
+}
+
+
+fun GenreEntity.toGenre(): Genre {
     return Genre(genreId, name)
 }
 
@@ -23,7 +47,7 @@ fun Genre.toGenreEntity(): GenreEntity{
 
 
 
-fun DirectorEntity.toDirector(): Director{
+fun DirectorEntity.toDirector(): Director {
     return Director(directorId, name, profilePath)
 }
 
@@ -38,7 +62,7 @@ fun Director.toDirectorEntity(): DirectorEntity{
 }
 
 
-fun WriterEntity.toWriter(): Writer{
+fun WriterEntity.toWriter(): Writer {
     return Writer(writerId, name, profilePath)
 }
 
@@ -54,7 +78,7 @@ fun Writer.toWriterEntity(): WriterEntity{
 }
 
 
-fun ActorEntity.toActor(): Actor{
+fun ActorEntity.toActor(): Actor {
     return Actor(actorId, name, profilePath, character, order)
 }
 
@@ -69,9 +93,5 @@ fun Actor.toActorEntity(): ActorEntity{
 }
 
 
-fun List<Actor>.sortByOrder(): List<Actor>{
-    return this.sortedBy {
-        it.order
-    }
-}
+
 
