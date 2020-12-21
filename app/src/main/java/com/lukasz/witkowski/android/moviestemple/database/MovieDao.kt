@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.models.entities.*
+import com.lukasz.witkowski.android.moviestemple.database.entities.*
+import com.lukasz.witkowski.android.moviestemple.util.*
 
 @Dao
 interface MovieDao {
@@ -55,7 +56,7 @@ interface MovieDao {
     suspend fun insertMovieGenres(movie: Movie) {
         movie.genres.forEach {
             insertMovieWithGenres(MovieWithGenre(movie.id, it.genreId))
-            insertGenres(it)
+            insertGenres(it.toGenreEntity())
         }
     }
 
@@ -63,7 +64,7 @@ interface MovieDao {
     suspend fun insertMovieCast(movie: Movie) {
         movie.cast.forEach {
             insertMovieWithActor(MovieWithActor(movie.id, it.actorId))
-            insertActor(it)
+            insertActor(it.toActorEntity())
         }
     }
 
@@ -71,7 +72,7 @@ interface MovieDao {
     suspend fun insertMovieDirectors(movie: Movie) {
         movie.directors.forEach {
             insertMovieWithDirector(MovieWithDirector(movie.id, it.directorId))
-            insertDirector(it)
+            insertDirector(it.toDirectorEntity())
         }
     }
 
@@ -79,32 +80,32 @@ interface MovieDao {
     suspend fun insertMovieWriters(movie: Movie){
         movie.writers.forEach {
             insertMovieWithWriter(MovieWithWriter(movie.id, it.writerId))
-            insertWriter(it)
+            insertWriter(it.toWriterEntity())
         }
     }
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertWriter(writer: Writer)
+    suspend fun insertWriter(writer: WriterEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovieWithWriter(movieWithWriter: MovieWithWriter)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertDirector(director: Director)
+    suspend fun insertDirector(director: DirectorEntity)
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovieWithDirector(movieWithDirector: MovieWithDirector)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertActor(actor: Actor)
+    suspend fun insertActor(actor: ActorEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovieWithActor(movieWithActor: MovieWithActor)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertGenres(genre: Genre)
+    suspend fun insertGenres(genre: GenreEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovieWithGenres(movieWithGenres: MovieWithGenre)

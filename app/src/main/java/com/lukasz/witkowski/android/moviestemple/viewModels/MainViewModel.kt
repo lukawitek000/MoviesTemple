@@ -1,6 +1,8 @@
 package com.lukasz.witkowski.android.moviestemple.viewModels
 
-import android.app.Application
+
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -11,7 +13,13 @@ import com.lukasz.witkowski.android.moviestemple.models.Movie
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
-class MainViewModel(application: Application) : ViewModel() {
+
+class MainViewModel
+@ViewModelInject
+constructor(
+        private val repository: MainRepository,
+        @Assisted private val savedStateHandle: SavedStateHandle
+): ViewModel() {
 
     enum class ToolbarState{
         SEARCH, NORMAL
@@ -25,7 +33,6 @@ class MainViewModel(application: Application) : ViewModel() {
 
     var isDetailInfoClicked = false
 
-    private val repository = MainRepository.getInstance(application)
 
     val favouriteMovies = repository.favouriteMovies.cachedIn(viewModelScope)
 

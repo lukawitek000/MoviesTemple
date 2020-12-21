@@ -1,11 +1,12 @@
-package com.lukasz.witkowski.android.moviestemple.models
+package com.lukasz.witkowski.android.moviestemple.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.lukasz.witkowski.android.moviestemple.models.NameInterface
 import com.squareup.moshi.Json
 
-
-data class Genre(
+@Entity(tableName = "Genres")
+data class GenreEntity(
         @Json(name = "id")
         @PrimaryKey
         var genreId: Int = 0,
