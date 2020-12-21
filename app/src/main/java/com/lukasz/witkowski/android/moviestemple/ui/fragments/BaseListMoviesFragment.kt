@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.fragments
+package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 
 import android.view.View
@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.witkowski.android.moviestemple.R
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.Companion.MOVIE_POSTER
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesLoadStateAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter.Companion.MOVIE_POSTER
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesLoadStateAdapter
 import com.lukasz.witkowski.android.moviestemple.api.IMAGE_WIDTH
 import com.lukasz.witkowski.android.moviestemple.databinding.MoviesPosterListLayoutBinding
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel

@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.fragments
+package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -8,9 +8,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.lukasz.witkowski.android.moviestemple.MainActivity
+import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.api.POPULAR_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel

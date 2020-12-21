@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.fragments
+package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.lukasz.witkowski.android.moviestemple.MainActivity
+import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter
 import com.lukasz.witkowski.android.moviestemple.api.TOP_RATED_MOVIES_QUERY
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import kotlinx.coroutines.Job

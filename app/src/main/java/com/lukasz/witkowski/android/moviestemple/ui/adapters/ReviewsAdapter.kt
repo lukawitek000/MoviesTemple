@@ -1,7 +1,7 @@
-package com.lukasz.witkowski.android.moviestemple.adapters
+package com.lukasz.witkowski.android.moviestemple.ui.adapters
 
 import androidx.recyclerview.widget.RecyclerView
-import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter.ReviewsAdapterViewHolder
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.ReviewsAdapter.ReviewsAdapterViewHolder
 import com.lukasz.witkowski.android.moviestemple.models.Review
 import android.view.ViewGroup
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.fragments
+package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 import android.os.Bundle
 import android.view.*
@@ -6,10 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
-import com.lukasz.witkowski.android.moviestemple.MainActivity
+import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
 import com.lukasz.witkowski.android.moviestemple.R
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter
-import com.lukasz.witkowski.android.moviestemple.dialogs.DeleteAllFavouriteMoviesDialogFragment
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.dialogs.DeleteAllFavouriteMoviesDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.models.toMovie
 import kotlinx.coroutines.Job

@@ -1,8 +1,8 @@
-package com.lukasz.witkowski.android.moviestemple.adapters
+package com.lukasz.witkowski.android.moviestemple.ui.adapters
 
 
 import androidx.recyclerview.widget.RecyclerView
-import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideosAdapterHolder
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter.VideosAdapterHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View

@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.adapters
+package com.lukasz.witkowski.android.moviestemple.ui.adapters
 
 
 import android.view.*
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.R
-import com.lukasz.witkowski.android.moviestemple.adapters.MoviesAdapter.MoviesAdapterViewHolder
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.MoviesAdapter.MoviesAdapterViewHolder
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 
 

@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.fragments
+package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,16 +12,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.lukasz.witkowski.android.moviestemple.MainActivity
+import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
 import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.R
-import com.lukasz.witkowski.android.moviestemple.adapters.CastAdapter
-import com.lukasz.witkowski.android.moviestemple.adapters.ReviewsAdapter
-import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter
-import com.lukasz.witkowski.android.moviestemple.adapters.VideosAdapter.VideoClickListener
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.CastAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.ReviewsAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter
+import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter.VideoClickListener
 import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
-import com.lukasz.witkowski.android.moviestemple.dialogs.ActorDialogFragment
+import com.lukasz.witkowski.android.moviestemple.ui.dialogs.ActorDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.*
 import dagger.hilt.android.AndroidEntryPoint
 

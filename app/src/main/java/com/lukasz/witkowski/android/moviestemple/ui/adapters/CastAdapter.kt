@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.adapters
+package com.lukasz.witkowski.android.moviestemple.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View

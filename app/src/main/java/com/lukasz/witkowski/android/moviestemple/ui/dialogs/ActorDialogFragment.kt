@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.dialogs
+package com.lukasz.witkowski.android.moviestemple.ui.dialogs
 
 import android.content.Intent
 import android.net.Uri

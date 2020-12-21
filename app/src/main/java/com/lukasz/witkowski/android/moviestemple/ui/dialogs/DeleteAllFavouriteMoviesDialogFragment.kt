@@ -1,4 +1,4 @@
-package com.lukasz.witkowski.android.moviestemple.dialogs
+package com.lukasz.witkowski.android.moviestemple.ui.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
