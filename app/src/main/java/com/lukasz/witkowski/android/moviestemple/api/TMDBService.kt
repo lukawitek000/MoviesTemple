@@ -1,7 +1,7 @@
 package com.lukasz.witkowski.android.moviestemple.api
 
-import com.lukasz.witkowski.android.moviestemple.models.responses.MovieDetailsResponse
-import com.lukasz.witkowski.android.moviestemple.models.responses.TMDBResponse
+import com.lukasz.witkowski.android.moviestemple.api.responses.MovieDetailsResponse
+import com.lukasz.witkowski.android.moviestemple.api.responses.TMDBResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

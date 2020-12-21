@@ -1,0 +1,81 @@
+package com.lukasz.witkowski.android.moviestemple.models
+
+import com.lukasz.witkowski.android.moviestemple.database.entities.MovieEntity
+import com.lukasz.witkowski.android.moviestemple.database.entities.MovieAllInformation
+import com.lukasz.witkowski.android.moviestemple.database.entities.ReviewEntity
+import com.lukasz.witkowski.android.moviestemple.database.entities.VideoEntity
+import com.lukasz.witkowski.android.moviestemple.api.responses.*
+
+
+fun Movie.toMovieEntity(): MovieEntity{
+    return MovieEntity(posterPath, id, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+}
+
+fun MovieGeneralInfoResponse.toMovie(): Movie {
+    return Movie(posterPath, id, originalTitle, title, voteAverage, voteCount,  overview, releaseDate)
+}
+
+
+fun ReviewResponse.toReview(): Review {
+    return Review(author, content)
+}
+
+fun VideoResponse.toVideo(): Video{
+    return Video(key, name, site)
+}
+
+
+fun VideoEntity.toVideo(): Video {
+    return Video(key, name, site)
+}
+
+fun Video.toVideoEntity(): VideoEntity {
+    return VideoEntity(0L, 0L, key, name, site)
+}
+
+
+fun Review.toReviewEntity(): ReviewEntity{
+    return ReviewEntity(0L, 0L, author, content)
+}
+
+
+fun ReviewEntity.toReview(): Review{
+    return  Review(author, content)
+}
+
+fun MovieAllInformation.toMovie(): Movie{
+    val videos = videos.map { it.toVideo() }
+    val reviews = reviews.map { it.toReview() }
+    return Movie(movie.posterPath, movie.movieId, movie.originalTitle, movie.title, movie.voteAverage, movie.voteCount, movie.overview,
+    movie.releaseDate, genres.toGenreList(), videos, reviews, cast.toActorList().sortByOrder(), directors.toDirectorList(), writers.toWriterList())
+}
+
+fun MovieEntity.toMovie() : Movie {
+    return Movie(posterPath, movieId, originalTitle, title, voteAverage, voteCount, overview, releaseDate)
+}
+
+fun List<NameInterface>.toText(): String {
+    val textBuilder = StringBuilder()
+    this.forEachIndexed{ i, genre ->
+
+        if(i == this.size-1){
+            textBuilder.append(genre.name)
+        }else{
+            textBuilder.append(genre.name).append(", ")
+        }
+    }
+    return textBuilder.toString()
+}
+
+fun ActorResponse.toActor(): Actor{
+    return Actor(id, name, profilePath, character, order)
+}
+
+
+fun CrewMemberResponse.toDirector(): Director{
+    return Director(id, name, profilePath)
+}
+
+fun CrewMemberResponse.toWriter(): Writer {
+    return Writer(id, name, profilePath)
+}

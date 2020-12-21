@@ -2,8 +2,7 @@ package com.lukasz.witkowski.android.moviestemple.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.models.entities.*
+import com.lukasz.witkowski.android.moviestemple.database.entities.*
 
 
 @Database(entities = [MovieEntity::class, ReviewEntity::class, VideoEntity::class, GenreEntity::class,

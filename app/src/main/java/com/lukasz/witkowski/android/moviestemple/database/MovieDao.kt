@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.lukasz.witkowski.android.moviestemple.models.*
-import com.lukasz.witkowski.android.moviestemple.models.entities.*
+import com.lukasz.witkowski.android.moviestemple.database.entities.*
 
 @Dao
 interface MovieDao {

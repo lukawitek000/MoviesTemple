@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/popularMoviesFragment"
-        android:name="com.lukasz.witkowski.android.moviestemple.fragments.PopularMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.ui.fragments.PopularMoviesFragment"
         android:label="Popular Movies" >
         <action
             android:id="@+id/action_popularMoviesFragment_to_detailInformationFragment"
@@ -18,11 +18,11 @@
     </fragment>
     <fragment
         android:id="@+id/detailInformationFragment"
-        android:name="com.lukasz.witkowski.android.moviestemple.fragments.DetailInformationFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.ui.fragments.DetailInformationFragment"
         android:label="Detail Information" />
     <fragment
         android:id="@+id/favouriteMoviesFragment"
-        android:name="com.lukasz.witkowski.android.moviestemple.fragments.FavouriteMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.ui.fragments.FavouriteMoviesFragment"
         android:label="Favourite Movies">
         <action
             android:id="@+id/action_favouriteMoviesFragment_to_detailInformationFragment"
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/topRatedMoviesFragment"
-        android:name="com.lukasz.witkowski.android.moviestemple.fragments.TopRatedMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.ui.fragments.TopRatedMoviesFragment"
         android:label="Top Rated Movies">
         <action
             android:id="@+id/action_topRatedMoviesFragment_to_detailInformationFragment"
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/recommendMoviesFragment"
-        android:name="com.lukasz.witkowski.android.moviestemple.fragments.RecommendedMoviesFragment"
+        android:name="com.lukasz.witkowski.android.moviestemple.ui.fragments.RecommendedMoviesFragment"
         android:label="@string/recommended_movies_title">
         <action
             android:id="@+id/action_recommendMoviesFragment_to_detailInformationFragment"
