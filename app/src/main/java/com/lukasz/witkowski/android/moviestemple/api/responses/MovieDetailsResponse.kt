@@ -1,7 +1,6 @@
 package com.lukasz.witkowski.android.moviestemple.api.responses
 
 import androidx.room.PrimaryKey
-import com.lukasz.witkowski.android.moviestemple.models.Genre
 import com.squareup.moshi.Json
 
 data class MovieDetailsResponse(
@@ -11,7 +10,7 @@ data class MovieDetailsResponse(
         @Json(name="belongs_to_collection")
         var belongsToCollection: Any? = null,
         var budget: Long = 0L,
-        var genres: List<Genre> = emptyList(),
+        var genres: List<GenreResponse> = emptyList(),
         var homePage: String? = null,
         @PrimaryKey
         var id: Long = 0L,

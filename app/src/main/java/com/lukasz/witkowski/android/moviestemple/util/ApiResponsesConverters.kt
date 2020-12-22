@@ -60,3 +60,20 @@ fun CrewMemberResponse.toDirector(): Director {
 fun CrewMemberResponse.toWriter(): Writer {
     return Writer(id, name, profilePath)
 }
+
+fun List<GenreResponse>.toGenreList(): List<Genre>{
+    return this.map {
+        it.toGenre()
+    }
+}
+
+
+fun GenreResponse.toGenre(): Genre {
+    return Genre(genreId, name)
+}
+
+fun List<MovieGeneralInfoResponse>.toMovieList(): List<Movie>{
+    return this.map {
+        it.toMovie()
+    }
+}

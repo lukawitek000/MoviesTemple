@@ -12,6 +12,7 @@
 
         <item name="colorControlNormal">@color/darkGrey</item>
         <item name="windowActionBar">false</item>
+        <item name="android:navigationBarColor">@color/lightBlack</item>
     </style>
 
     <style name="labels" parent="android:TextAppearance">

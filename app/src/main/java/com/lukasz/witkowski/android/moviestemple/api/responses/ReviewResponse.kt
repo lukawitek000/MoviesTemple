@@ -5,5 +5,4 @@ data class ReviewResponse(
         var content: String = "",
         var id: String,
         var url: String
-) {
-}
+)
