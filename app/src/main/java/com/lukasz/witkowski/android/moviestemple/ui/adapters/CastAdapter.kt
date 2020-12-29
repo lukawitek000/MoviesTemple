@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.databinding.CastListItemBinding
 import com.lukasz.witkowski.android.moviestemple.models.Actor
+import com.lukasz.witkowski.android.moviestemple.util.GlideApp
 
 class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
@@ -46,7 +47,7 @@ class CastAdapter(private val onClickListener: CastOnClickListener): RecyclerVie
         private var actor: Actor? = null
 
         fun bind(actor: Actor){
-            Glide.with(binding.ivActorPhoto.context)
+            GlideApp.with(binding.ivActorPhoto.context)
                     .load(actor.actorPhoto)
                     .placeholder(R.drawable.actor_photo_default)
                     .into(binding.ivActorPhoto)

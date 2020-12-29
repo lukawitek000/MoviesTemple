@@ -24,6 +24,7 @@ import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
 import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.ui.dialogs.ActorDialogFragment
 import com.lukasz.witkowski.android.moviestemple.models.*
+import com.lukasz.witkowski.android.moviestemple.util.GlideApp
 import com.lukasz.witkowski.android.moviestemple.util.toText
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -89,12 +90,12 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
 
     private fun setUpToolbarInfo() {
         if(selectedMovie.posterUri != null){
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                     .load(selectedMovie.posterUri)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(binding.ivToolbarPoster)
         }else{
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                     .load(R.drawable.default_movie_poster)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(binding.ivToolbarPoster)
