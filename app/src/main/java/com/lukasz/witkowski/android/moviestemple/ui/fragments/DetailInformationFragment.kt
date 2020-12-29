@@ -2,6 +2,7 @@ package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -80,8 +81,8 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     }
 
     private fun setUpToolbar(){
-        val toolbar = binding.detailInformationToolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.detailInformationToolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = selectedMovie.title
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setUpToolbarInfo()
     }
@@ -98,8 +99,6 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
                     .placeholder(R.drawable.poster_placeholder)
                     .into(binding.ivToolbarPoster)
         }
-
-        binding.detailInformationToolbar.title = selectedMovie.title
     }
 
 
