@@ -1,10 +1,9 @@
 package com.lukasz.witkowski.android.moviestemple.database
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.database.entities.*
+import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.util.*
 
 @Dao
@@ -123,7 +122,6 @@ interface MovieDao {
 
     @Transaction
     suspend fun deleteMovieReviewAndVideo(movie: MovieEntity){
-        Log.i("Dao", "movie to delete = $movie")
         deleteMovieById(movie.movieId)
         deleteReviewByMovieOwnerId(movie.movieId)
         deleteVideoByMovieOwnerId(movie.movieId)

@@ -5,4 +5,4 @@ import com.bumptech.glide.module.AppGlideModule
 
 
 @GlideModule
-class MoviesTempleGlideModule: AppGlideModule() {}
+class MoviesTempleGlideModule: AppGlideModule()

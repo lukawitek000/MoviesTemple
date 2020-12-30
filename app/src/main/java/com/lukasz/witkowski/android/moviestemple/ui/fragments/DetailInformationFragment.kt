@@ -2,7 +2,6 @@ package com.lukasz.witkowski.android.moviestemple.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,20 +11,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.R
+import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
+import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
+import com.lukasz.witkowski.android.moviestemple.models.Actor
+import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.models.Video
+import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter.VideoClickListener
-import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
-import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.ui.dialogs.ActorDialogFragment
-import com.lukasz.witkowski.android.moviestemple.models.*
 import com.lukasz.witkowski.android.moviestemple.util.GlideApp
 import com.lukasz.witkowski.android.moviestemple.util.toText
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

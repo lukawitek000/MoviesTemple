@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.databinding.ActorCustomDialogBinding
 import com.lukasz.witkowski.android.moviestemple.util.GlideApp
-import java.lang.NullPointerException
 
 class ActorDialogFragment: DialogFragment() {
 
