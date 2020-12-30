@@ -28,11 +28,12 @@
         <TextView
             android:id="@+id/tv_actor_name"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
             android:textColor="@color/darkYellow"
             android:textSize="18sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/tv_character_name"
             app:layout_constraintEnd_toEndOf="@+id/iv_actor_photo"
             app:layout_constraintHorizontal_bias="0.5"
