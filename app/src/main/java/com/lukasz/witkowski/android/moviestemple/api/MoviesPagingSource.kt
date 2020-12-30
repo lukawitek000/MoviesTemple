@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import com.lukasz.witkowski.android.moviestemple.models.Movie
 import com.lukasz.witkowski.android.moviestemple.api.responses.TMDBResponse
 import com.lukasz.witkowski.android.moviestemple.util.toMovie
+import com.lukasz.witkowski.android.moviestemple.util.toMovieList
 import java.lang.Exception
 
 class MoviesPagingSource(private val tmdbService: TMDBService, private val query: String, private val favouriteMoviesIds: List<Int> = emptyList()) : PagingSource<Int, Movie>()  {
@@ -45,7 +46,7 @@ class MoviesPagingSource(private val tmdbService: TMDBService, private val query
         if(favouriteMoviesIds.isNotEmpty()){
             favouriteMoviesIds.forEach { movieId ->
                 val response = tmdbService.getRecommendationsBaseOnMovieID(movieId = movieId, page = position)
-                listOfMovies.addAll(response.movies.map { it.toMovie() })
+                listOfMovies.addAll(response.movies.toMovieList())
             }
         }
         return listOfMovies

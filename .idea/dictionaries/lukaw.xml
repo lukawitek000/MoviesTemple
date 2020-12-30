@@ -2,8 +2,15 @@
   <dictionary name="lukaw">
     <words>
       <w>imdb</w>
+      <w>lukasz</w>
       <w>moshi</w>
+      <w>moviestemple</w>
+      <w>popularmovies</w>
+      <w>tagline</w>
+      <w>tarantino</w>
       <w>tmdb</w>
+      <w>toretto</w>
+      <w>witkowski</w>
     </words>
   </dictionary>
 </component>

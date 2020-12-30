@@ -11,19 +11,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
-import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import com.lukasz.witkowski.android.moviestemple.R
+import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
+import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
+import com.lukasz.witkowski.android.moviestemple.models.Actor
+import com.lukasz.witkowski.android.moviestemple.models.Movie
+import com.lukasz.witkowski.android.moviestemple.models.Video
+import com.lukasz.witkowski.android.moviestemple.ui.MainActivity
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.CastAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.ReviewsAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter
 import com.lukasz.witkowski.android.moviestemple.ui.adapters.VideosAdapter.VideoClickListener
-import com.lukasz.witkowski.android.moviestemple.api.PERSON_BASE_URI
-import com.lukasz.witkowski.android.moviestemple.databinding.FragmentDetailInfromationBinding
 import com.lukasz.witkowski.android.moviestemple.ui.dialogs.ActorDialogFragment
-import com.lukasz.witkowski.android.moviestemple.models.*
+import com.lukasz.witkowski.android.moviestemple.util.GlideApp
 import com.lukasz.witkowski.android.moviestemple.util.toText
+import com.lukasz.witkowski.android.moviestemple.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,26 +82,24 @@ class DetailInformationFragment : Fragment(), VideoClickListener, CastAdapter.Ca
     }
 
     private fun setUpToolbar(){
-        val toolbar = binding.detailInformationToolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.detailInformationToolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = selectedMovie.title
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setUpToolbarInfo()
     }
 
     private fun setUpToolbarInfo() {
         if(selectedMovie.posterUri != null){
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                     .load(selectedMovie.posterUri)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(binding.ivToolbarPoster)
         }else{
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                     .load(R.drawable.default_movie_poster)
                     .placeholder(R.drawable.poster_placeholder)
                     .into(binding.ivToolbarPoster)
         }
-
-        binding.detailInformationToolbar.title = selectedMovie.title
     }
 
 

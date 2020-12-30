@@ -10,5 +10,4 @@ data class ReviewEntity(
         var movieOwnerID: Long = 0L,
         var author: String = "",
         var content: String = "",
-) {
-}
+)

@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.lukasz.witkowski.android.moviestemple.R
 import com.lukasz.witkowski.android.moviestemple.databinding.ActorCustomDialogBinding
+import com.lukasz.witkowski.android.moviestemple.util.GlideApp
 
 class ActorDialogFragment: DialogFragment() {
 
@@ -50,10 +50,19 @@ class ActorDialogFragment: DialogFragment() {
 
     private fun setUpView() {
         binding.tvActorNameDialog.text = arguments?.getString(ACTOR_NAME_KEY)
-        Glide.with(binding.root)
-                .load(Uri.parse(arguments?.getString(ACTOR_PHOTO_KEY)))
-                .placeholder(R.drawable.actor_photo_default)
-                .into(binding.ivActorPhotoDialog)
+        try{
+            val uri = Uri.parse(arguments?.getString(ACTOR_PHOTO_KEY))
+            GlideApp.with(binding.root)
+                    .load(uri)
+                    .placeholder(R.drawable.actor_photo_default)
+                    .into(binding.ivActorPhotoDialog)
+        }catch(e: NullPointerException){
+            GlideApp.with(binding.root)
+                    .load(R.drawable.actor_photo_default)
+                    .placeholder(R.drawable.poster_placeholder)
+                    .into(binding.ivActorPhotoDialog)
+        }
+        
     }
 
 

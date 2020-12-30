@@ -47,7 +47,7 @@ constructor(
             movie.videos = response.videos.results.map {
                 it.toVideo()
             }
-            movie.genres = response.genres
+            movie.genres = response.genres.toGenreList()
             movie.directors = getDirectors(response)
             movie.writers = getWriters(response)
             movie.cast = response.credits.cast.map {

@@ -30,9 +30,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:textAlignment="center"
             android:textColor="@color/darkYellow"
             android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/bt_more_info_dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_actor_photo_dialog"
@@ -40,17 +42,15 @@
 
         <Button
             android:id="@+id/bt_more_info_dialog"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="32dp"
             android:background="@drawable/custom_button"
             android:text="@string/more_info_about_actor"
             android:textColor="@color/darkGrey"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tv_actor_name_dialog"
-            app:layout_constraintStart_toStartOf="@+id/tv_actor_name_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/tv_actor_name_dialog" />
+            app:layout_constraintEnd_toEndOf="@+id/iv_actor_photo_dialog"
+            app:layout_constraintStart_toStartOf="@+id/iv_actor_photo_dialog" />
 
         <ImageView
             android:id="@+id/exit_icon"

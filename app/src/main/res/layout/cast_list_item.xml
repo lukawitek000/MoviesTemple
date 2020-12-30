@@ -5,9 +5,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="320dp"
+        android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:background="@drawable/card">
+        android:background="@drawable/card"
+        android:minHeight="320dp">
 
         <ImageView
             android:id="@+id/iv_actor_photo"
@@ -17,21 +18,22 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/actor_photo"
             android:scaleType="fitCenter"
             android:src="@drawable/actor_photo_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/actor_photo" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_actor_name"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
             android:textColor="@color/darkYellow"
             android:textSize="18sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/tv_character_name"
             app:layout_constraintEnd_toEndOf="@+id/iv_actor_photo"
             app:layout_constraintHorizontal_bias="0.5"
