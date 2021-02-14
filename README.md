@@ -9,10 +9,10 @@ To run application you have to create account on the ThemovieDB website( https:/
 Application get data from TheMmovieDB : https://www.themoviedb.org/
 
 
-![ScreenShot](/screenshots/ss_final (1).png?raw=true)
+![ScreenShot](/screenshots/ss_final(1).png?raw=true)
 
-![ScreenShot](/screenshots/ss_final (2).png?raw=true)
+![ScreenShot](/screenshots/ss_final(2).png?raw=true)
 
-![ScreenShot](/screenshots/ss_final (3).png?raw=true)
+![ScreenShot](/screenshots/ss_final(3).png?raw=true)
 
-![ScreenShot](/screenshots/ss_final (4).png?raw=true)
+![ScreenShot](/screenshots/ss_final(4).png?raw=true)
