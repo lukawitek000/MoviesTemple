@@ -1,6 +1,6 @@
 # Movies Temple
 Android application written in Kotlin
-It used to be a part of the project in Udacity course (https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801), howerever I decided to convert it completely to newer technology.
+It used to be a part of the project in Udacity course (https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801), howerever I decided to convert it completely to newer technology and add new features.
 
 As the result the complete application is available on Google Play store: https://play.google.com/store/apps/details?id=com.lukasz.witkowski.android.moviestemple
 
